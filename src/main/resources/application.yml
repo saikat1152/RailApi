@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: BEFTN
+  zipkin:
+    base-url: http://172.17.22.63:9411/
+  # datasource:
+  #   hikari:
+  #     minimumIdle: 2
+  #     maximumPoolSize: 20
+  #     idleTimeout: 150000
+  #     connectionTimeout: 300000
+  #     leakDetectionThreshold: 300000
+
+
+
+
+# eureka:
+#   client:
+#     register-with-eureka: true
+#     fetch-registry: true
+#     service-url:
+#       defaultZone: http://localhost:8087/eureka/
+#   instance:
+#     hostname: localhost
+
+
+logging:
+  file: 
+   path: src\main\webapp\WEB-INF\logfiles
+  #  name: \src\main\resources\logfiles\test.log
+
+
+  
+
+
+

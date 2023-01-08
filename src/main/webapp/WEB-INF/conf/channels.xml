@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<!-- DOCTYPE CHANNEL SYSTEM "../dtd/channel.dtd" -->
+
+<!-- GLOBUS Connector communications channels definitions -->
+<!-- I&A Department 2002 -->
+
+<CHANNELS>
+    <CHANNEL>
+        <NAME>ISOLIST</NAME>
+        <TIMEOUT>60</TIMEOUT>
+        <ADAPTER>
+            <TYPE>tcp</TYPE>
+            <PORT>7020</PORT>
+            <SUPPLIER>
+                <INITIATOR>
+                    <HOSTNAME>10.180.10.60</HOSTNAME>
+                </INITIATOR>
+            </SUPPLIER>
+            <CONSUMER>
+                <MAX_SESSION>5</MAX_SESSION>
+                <ACCEPTOR>
+                    <BACKLOG>30</BACKLOG>
+                </ACCEPTOR>
+            </CONSUMER>
+        </ADAPTER>
+    </CHANNEL>
+
+    <CHANNEL>
+        <NAME>ISOLIST2</NAME>
+        <TIMEOUT>30</TIMEOUT>
+        <ADAPTER>
+            <TYPE>tcp</TYPE>
+            <PORT>7008</PORT>
+            <SUPPLIER>
+                <INITIATOR>
+                    <HOSTNAME>10.180.10.60</HOSTNAME>
+                </INITIATOR>
+            </SUPPLIER>
+            <CONSUMER>
+                <MAX_SESSION>5</MAX_SESSION>
+                <ACCEPTOR>
+                    <BACKLOG>30</BACKLOG>
+                </ACCEPTOR>
+            </CONSUMER>
+        </ADAPTER>
+    </CHANNEL>
+
+    <CHANNEL>
+        <NAME>ABCD</NAME>
+        <TIMEOUT>120</TIMEOUT>
+        <ADAPTER>
+            <TYPE>tcp</TYPE>
+            <PORT>5151</PORT>
+            <SUPPLIER>
+                <INITIATOR>
+                    <HOSTNAME>10.180.10.12</HOSTNAME>
+                </INITIATOR>
+            </SUPPLIER>
+            <CONSUMER>
+                <MAX_SESSION>5</MAX_SESSION>
+                <ACCEPTOR>
+                    <BACKLOG>30</BACKLOG>
+                </ACCEPTOR>
+            </CONSUMER>
+        </ADAPTER>
+    </CHANNEL>
+
+</CHANNELS>
