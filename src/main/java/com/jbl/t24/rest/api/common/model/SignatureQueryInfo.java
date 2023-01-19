@@ -34,10 +34,10 @@ public class SignatureQueryInfo extends CommonQueryInfo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "sign_query_id", unique = true, nullable = false)
 	int signQueryId;
-	
+
+    //@Pattern(regexp = "^[0-9]{12}$|^[0-9]{13}$|^[0-9]{16}$", message = "Credit Account Length Not Valid")
 	@Column(name = "account_number", length = 63)
     @NotEmpty
-    @Pattern(regexp = "^[0-9]{12}$|^[0-9]{13}$|^[0-9]{16}$", message = "Credit Account Length Not Valid")
     String accountNumber;
 
 }

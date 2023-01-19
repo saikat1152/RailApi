@@ -20,24 +20,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.jbl.t24.rest.api.model.RtgsInfoOutward;
-import com.jbl.t24.rest.api.service.BeftnInfoService;
+
+import com.jbl.t24.rest.api.model.RtgsInfoInward;
 import com.jbl.t24.rest.api.service.FtHandlerService;
-import com.jbl.t24.rest.api.service.RtgsHandlerService;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/rtgs_out")
+@RequestMapping("/rtgs_in")
 @Validated
-public class RtgsOutwardTransaction {
+public class RtgsInwardTransaction {
 
 	@Autowired
 	private FtHandlerService ftHandlerService;
 
-	@RequestMapping(value = "/out", method = RequestMethod.GET)
-
-	public ResponseEntity<?> beftnTrasferOutward(@Valid @RequestParam Map<String, String> requestParams,
+	public ResponseEntity<?> rtgsTrasferInward(@Valid @RequestParam Map<String, String> requestParams,
 			HttpServletRequest httpServletRequest) throws Exception {
 
 		/**
@@ -76,25 +73,26 @@ public class RtgsOutwardTransaction {
 
 	}
 
-	@RequestMapping(value = "/outward", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	
+	@RequestMapping(value = "/inward", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 
-	public ResponseEntity<?> rtgsTrasferOutward(@Valid @RequestBody RtgsInfoOutward rtgsInfoOut,
+	public ResponseEntity<?> rtgsTrasferInward(@Valid @RequestBody RtgsInfoInward rtgsInfoInward,
 			HttpServletRequest httpServletRequest) throws Exception {
 
-		String uniqueFtId = rtgsInfoOut.getUniqueOutwardRtgsId();
-		String coCode = rtgsInfoOut.getCoCode();
-		String companyCode = rtgsInfoOut.getCompanyCode() + coCode;
-		rtgsInfoOut.setCompanyCode(companyCode);
-		String txType = rtgsInfoOut.getTxType();
-		String debitAccNo = rtgsInfoOut.getDebitAccNo();
-		String currency = rtgsInfoOut.getCurrency();
-		String debitAmount = String.format("%.2f", rtgsInfoOut.getDebitAmount());
-		String creditAccNo = rtgsInfoOut.getCreditAccNo();
-		String debitDetails = rtgsInfoOut.getDebitDetails();
-		String creditDetails = rtgsInfoOut.getCreditDetails();
+		String uniqueFtId = rtgsInfoInward.getUniqueInwardRtgsId();
+		String coCode = rtgsInfoInward.getCoCode();
+		String companyCode = rtgsInfoInward.getCompanyCode() + coCode;
+		rtgsInfoInward.setCompanyCode(companyCode);
+		String txType = rtgsInfoInward.getTxType();
+		String debitAccNo = rtgsInfoInward.getDebitAccNo();
+		String currency = rtgsInfoInward.getCurrency();
+		String debitAmount = String.format("%.2f", rtgsInfoInward.getDebitAmount());
+		String creditAccNo = rtgsInfoInward.getCreditAccNo();
+		String debitDetails = rtgsInfoInward.getDebitDetails();
+		String creditDetails = rtgsInfoInward.getCreditDetails();
 		String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
 		Timestamp t = new Timestamp(new Date().getTime());
-		rtgsInfoOut.setIssueDate(t);
+		rtgsInfoInward.setIssueDate(t);
 
 		Objects.requireNonNull(uniqueFtId);
 		Objects.requireNonNull(coCode);
@@ -122,13 +120,13 @@ public class RtgsOutwardTransaction {
 				+ "LOCAL.REF:3:1=,"
 				+ "LOCAL.REF:94:1=" + uniqueFtId;
 
-		ResponseEntity<?> response = ftHandlerService.handleRtgsOutwardTransaction(requestOFS, rtgsInfoOut, httpServletRequest);
+		ResponseEntity<?> response = ftHandlerService.handleRtgsInwardTransaction(requestOFS, rtgsInfoInward, httpServletRequest);
 		
 		System.out.println(response.getBody());
 		// return ResponseEntity.status(HttpStatus.OK).body(response);
 		return response;
 
 	}
-
+	
 
 }

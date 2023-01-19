@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.envers.Audited;
+import org.hibernate.validator.constraints.Range;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +28,8 @@ import lombok.ToString;
 @Audited
 public abstract class CommonFtInfo {
 
-	@Transient
-    private final String ACCOUNT_NUMBER_PATTERN = "(^BDT[0-9]{13}$)|((^[0-9]{12}$)|(^[0-9]{13}$)|(^[0-9]{16}$))";
+	//@Transient
+    //private final String ACCOUNT_NUMBER_PATTERN = "(^BDT[0-9]{13}$)|((^[0-9]{12}$)|(^[0-9]{13}$)|(^[0-9]{16}$))";
 
     @Transient
     @NotNull(message = "Branch Code Missing")
@@ -43,7 +44,7 @@ public abstract class CommonFtInfo {
 
 
 
-    @Pattern(regexp = ACCOUNT_NUMBER_PATTERN, message = "Debit Account Pattern Not Valid")
+   // @Pattern(regexp = ACCOUNT_NUMBER_PATTERN, message = "Debit Account Pattern Not Valid")
 	@Column(name = "debit_account", length = 63)
     private String debitAccNo;
 
@@ -53,13 +54,14 @@ public abstract class CommonFtInfo {
     
     @NotNull(message = "Debit Amount is Missing")
 	@Column(name = "debit_amount", length = 23)
+    @Range(min =100000)
     private double debitAmount;
 
     @CreationTimestamp
     @Column(name = "issue_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, nullable = false)
     private Timestamp issueDate;
 
-    @Pattern(regexp = ACCOUNT_NUMBER_PATTERN, message = "Credit Account Pattern Not Valid")
+    //@Pattern(regexp = ACCOUNT_NUMBER_PATTERN, message = "Credit Account Pattern Not Valid")
 	@Column(name = "credit_account", length = 63)
     private String creditAccNo;
 
