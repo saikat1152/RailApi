@@ -92,6 +92,7 @@ public class RtgsOutwardTransaction {
 		String creditAccNo = rtgsInfoOut.getCreditAccNo();
 		String debitDetails = rtgsInfoOut.getDebitDetails();
 		String creditDetails = rtgsInfoOut.getCreditDetails();
+		String commissionType = rtgsInfoOut.getCommissionType();
 		String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
 		Timestamp t = new Timestamp(new Date().getTime());
 		rtgsInfoOut.setIssueDate(t);
@@ -117,7 +118,7 @@ public class RtgsOutwardTransaction {
 				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,"
 				+ "FT.DR.DETAILS=" + debitDetails + ","
 				+ "FT.CR.DETAILS=" + creditDetails + ","
-				+ "COMMISSION.TYPE=,"
+				+ "COMMISSION.TYPE="+ commissionType +","
 				+ "CHEQUE.NUMBER=,"
 				+ "LOCAL.REF:3:1=,"
 				+ "LOCAL.REF:94:1=" + uniqueFtId;

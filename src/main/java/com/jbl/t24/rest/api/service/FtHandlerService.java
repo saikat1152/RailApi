@@ -206,7 +206,8 @@ public class FtHandlerService {
          TccUtility tccUtility = new TccUtility();
 
          RtgsInfoOutward rtgsInfoExist = new RtgsInfoOutward();
-         RtgsInfoOutward rtgsInfoSave = new RtgsInfoOutward();
+//         RtgsInfoOutward rtgsInfoSave = new RtgsInfoOutward();
+         RtgsInfoOutward rtgsInfoSave = rtgsInfoOutward;
          rtgsInfoExist = rtgsInfoOutwardService.findByUniqueOutwardRtgsId(rtgsInfoOutward.getUniqueOutwardRtgsId());
          int statusExist = rtgsInfoExist == null ? 0 : rtgsInfoExist.getStatus();
          /**
@@ -240,7 +241,8 @@ public class FtHandlerService {
           * we have try again to reach CBS transaction and then
           * Saving BEFTN Data into the database again
           */
-         System.out.println(rtgsInfoOutward.toString());
+//         System.out.println(rtgsInfoOutward.toString());
+         System.out.println(rtgsInfoSave.toString());
 
          String remoteAddr = httpServletRequest.getHeader("X-FORWARDED-FOR");
          String host = httpServletRequest.getRemoteHost();
@@ -249,18 +251,30 @@ public class FtHandlerService {
              remoteAddr = httpServletRequest.getRemoteAddr();
          }
 
-         rtgsInfoOutward.setIp(remoteAddr);
-         rtgsInfoOutward.setHostname(host);
+
+			/*
+			 * rtgsInfoOutward.setIp(remoteAddr); rtgsInfoOutward.setHostname(host);
+			 */
+
+         rtgsInfoSave.setIp(remoteAddr);
+         rtgsInfoSave.setHostname(host);
 
          /**
           * Initially the status of BEFTN Transaction is pending and saved in the
           * database
           * It is because of Transaction response yet not confirmed
           */
-         rtgsInfoOutward.setStatus(EftStatus.PENDING.getValue());
-         rtgsInfoOutward.setOfsRequest(requestOFS);
 
-         rtgsInfoSave = rtgsInfoOutwardService.save(rtgsInfoOutward);
+			/*
+			 * rtgsInfoOutward.setStatus(EftStatus.PENDING.getValue());
+			 * rtgsInfoOutward.setOfsRequest(requestOFS);
+			 */
+
+         rtgsInfoSave.setStatus(EftStatus.PENDING.getValue());
+         rtgsInfoSave.setOfsRequest(requestOFS);
+
+         //rtgsInfoSave = 
+        		 rtgsInfoOutwardService.save(rtgsInfoSave);
 
          System.out.println("requestOFS: " + requestOFS);
          String responseData = "";
@@ -291,7 +305,7 @@ public class FtHandlerService {
                      ResponseStatus.FIVEZ3.getValue());
              rtgsInfoSave.setStatus(EftStatus.FAILED.getValue());
              rtgsInfoOutwardService.save(rtgsInfoSave);
-             rtgsInfoOutwardService.save(rtgsInfoOutward);
+             //rtgsInfoOutwardService.save(rtgsInfoOutward);
              return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
          } else {
 
@@ -317,15 +331,22 @@ public class FtHandlerService {
                      .message(wrapper.getMessage())
                      .responseCode(wrapper.getResponseCode())
                      .additionalInfo(wrapper.getAdditionalInfo());
-             rtgsInfoOutward.setStatus(wrapper.getFtStatus());
+//             rtgsInfoOutward.setStatus(wrapper.getFtStatus());
+             rtgsInfoSave.setStatus(wrapper.getFtStatus());
 
              ObjectMapper mapper = new ObjectMapper();
              String ftResponseStr = mapper.writeValueAsString(ftResponse.build());
-             rtgsInfoOutward.setFtResponseStr(ftResponseStr);
-             rtgsInfoOutward.setCbsFtno(ftResponse.build().getFtRef());
-             rtgsInfoOutward.setOfsResponse(responseData);
+				/*
+				 * rtgsInfoOutward.setFtResponseStr(ftResponseStr);
+				 * rtgsInfoOutward.setCbsFtno(ftResponse.build().getFtRef());
+				 * rtgsInfoOutward.setOfsResponse(responseData);
+				 */
 
-             rtgsInfoSave = rtgsInfoOutward;
+             rtgsInfoSave.setFtResponseStr(ftResponseStr);
+             rtgsInfoSave.setCbsFtno(ftResponse.build().getFtRef());
+             rtgsInfoSave.setOfsResponse(responseData);
+             
+//             rtgsInfoSave = rtgsInfoOutward;
              // FIXME:
              rtgsInfoOutwardService.save(rtgsInfoSave);
              // eftInfoOutwardService.save(eftInfoOutward);

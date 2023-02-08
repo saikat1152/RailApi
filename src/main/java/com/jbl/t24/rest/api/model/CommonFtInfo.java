@@ -54,7 +54,7 @@ public abstract class CommonFtInfo {
     
     @NotNull(message = "Debit Amount is Missing")
 	@Column(name = "debit_amount", length = 23)
-    @Range(min =100000)
+    //@Range(min =100000, message ="debit amount will be more than or equal bdt 100000")
     private double debitAmount;
 
     @CreationTimestamp
@@ -70,7 +70,10 @@ public abstract class CommonFtInfo {
 
     @Column(name = "credit_details", unique = true, nullable = false, length = 256)
     private String creditDetails;
+
+    @Column(name = "commission_Type", unique = false, nullable = true, length = 20)
     private String commissionType;
+
     private String instrumentNo;
 
     @Column(name = "status", length = 2)
@@ -93,4 +96,5 @@ public abstract class CommonFtInfo {
 
     @Column(name = "ft_response_str", length = 512)
     private String ftResponseStr;
+
 }
