@@ -10,8 +10,6 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.Range;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,8 +40,6 @@ public abstract class CommonFtInfo {
     @Column(name = "transaction_category", length = 10)
     private String txCategory = "RTGS";
 
-
-
    // @Pattern(regexp = ACCOUNT_NUMBER_PATTERN, message = "Debit Account Pattern Not Valid")
 	@Column(name = "debit_account", length = 63)
     private String debitAccNo;
@@ -54,7 +50,6 @@ public abstract class CommonFtInfo {
     
     @NotNull(message = "Debit Amount is Missing")
 	@Column(name = "debit_amount", length = 23)
-    //@Range(min =100000, message ="debit amount will be more than or equal bdt 100000")
     private double debitAmount;
 
     @CreationTimestamp
@@ -71,6 +66,9 @@ public abstract class CommonFtInfo {
     @Column(name = "credit_details", unique = true, nullable = false, length = 256)
     private String creditDetails;
 
+    @Column(name = "commission_code", unique = false, nullable = true, length = 20)
+    private String commissionCode;
+
     @Column(name = "commission_Type", unique = false, nullable = true, length = 20)
     private String commissionType;
 
@@ -78,6 +76,9 @@ public abstract class CommonFtInfo {
 
     @Column(name = "status", length = 2)
     private int status;
+
+    @Column(name = "category", nullable = false, length = 2)
+    private int category;
 
     @Column(name = "ofs_request", length = 1048)
     private String ofsRequest;

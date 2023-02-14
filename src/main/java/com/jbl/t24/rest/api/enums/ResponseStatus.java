@@ -35,6 +35,7 @@ public enum ResponseStatus {
 	FOURZ23(423, "Amount Cannot be Negative!"),
 	FOURZ24(424, "Ammount Cannot be Zero!"),
 	FOURZ25(425,"Image Not Found!"),
+	FOURZ26(426,"Amount cannot be less than 100000 for RTGS"),
 
 	FIVEZ0(500, "Internal Server Error!"),
 	FIVEZ3(503, "Service Unavailable!"),
