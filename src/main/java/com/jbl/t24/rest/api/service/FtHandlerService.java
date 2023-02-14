@@ -22,6 +22,7 @@ import com.jbl.t24.rest.api.common.model.FtTxResponse.FtTxResponseBuilder;
 import com.jbl.t24.rest.api.custom.exception.BlankOfsResponseException;
 import com.jbl.t24.rest.api.enums.CBSResponseStr;
 import com.jbl.t24.rest.api.enums.EftStatus;
+import com.jbl.t24.rest.api.enums.RTGSCategory;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.model.EftInfoOutward;
 import com.jbl.t24.rest.api.model.RtgsInfoInward;
@@ -36,6 +37,8 @@ public class FtHandlerService {
 
     @Autowired
 	RtgsInfoOutwardService rtgsInfoOutwardService;
+
+    public static final int RTGS_OUWARD_PACS8_MIN_VALUE=100000;
 
     // @Async
     public String handleFtTransaction(String requestOFS, String channelName) {
@@ -251,6 +254,20 @@ public class FtHandlerService {
              remoteAddr = httpServletRequest.getRemoteAddr();
          }
 
+			/*
+			 * checking the categorty RTGS Ouward=1
+			 * Customs E payment=3,
+			 * RTGS Inward=2
+			 */
+
+			int category = rtgsInfoOutward == null ? 0 : rtgsInfoOutward.getCategory();
+			if (category == RTGSCategory.RTGSOUTWARDPACS8.getValue() && rtgsInfoOutward.getDebitAmount() < RTGS_OUWARD_PACS8_MIN_VALUE) {
+				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ26.getText(),
+						ResponseStatus.FOURZ26.getValue());
+				return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
+			} else {
+				rtgsInfoSave.setCategory(rtgsInfoOutward.getCategory());
+			}
 
 			/*
 			 * rtgsInfoOutward.setIp(remoteAddr); rtgsInfoOutward.setHostname(host);
