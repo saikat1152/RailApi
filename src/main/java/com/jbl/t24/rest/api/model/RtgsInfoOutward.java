@@ -35,7 +35,7 @@ public class RtgsInfoOutward extends CommonFtInfo {
 	private int OutwardRtgsInfoId;
 
 	@NotBlank(message = "Unique ID is Blank")
-	@Pattern(regexp = "^(RTGS)[0-9]{16}$", message = "RTGS Unique ID Length Not Valid")
+	//@Pattern(regexp = "^(RTGS)[0-9]{16}$", message = "RTGS Unique ID Length Not Valid")
 	@Column(name = "out_unique_id", unique = true, nullable = false, length = 23)
 	private String uniqueOutwardRtgsId;
 

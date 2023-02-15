@@ -20,6 +20,14 @@ public class ResponseMessageProcessor {
 
     public ResponseMsgProcessorWrapper handleResponseOfs(String responseData) {
 
+		if (responseData.contains(CBSResponseStr.invalidCompany.getText())) {
+			wrapper.setMessage(ResponseStatus.FOURZ27.getText());
+			wrapper.setResponseCode(ResponseStatus.FOURZ27.getValue());
+			wrapper.setFtStatus(EftStatus.FAILED.getValue());
+
+	        return wrapper;
+		}
+
         String[] spiltData = responseData.split(",");
         String[] firstPart = spiltData[0].split("/");
         String statusFlag = firstPart[2];
