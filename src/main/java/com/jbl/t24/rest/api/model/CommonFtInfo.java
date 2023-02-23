@@ -77,8 +77,10 @@ public abstract class CommonFtInfo {
     @Column(name = "status", length = 2)
     private int status;
 
-    @Column(name = "category", nullable = false, length = 2)
-    private int category;
+	/*
+	 * @Column(name = "category", nullable = false, length = 2) private int
+	 * category;
+	 */
 
     @Column(name = "ofs_request", length = 1048)
     private String ofsRequest;

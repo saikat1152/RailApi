@@ -47,7 +47,8 @@ public class RtgsOutwardTransaction {
 		 * ACOD --> BEFTN Outward
 		 * ACOR ---> RTGS Outward
 		 * ACIR ---> RTGS Inward
-		 * 
+		 * ACOP ---> RTGS Outward PACS 09 FC
+		 * ACIN ---> RTGS Inward PACS 09 FC
 		 */
 
 		/**
@@ -132,6 +133,5 @@ public class RtgsOutwardTransaction {
 		return response;
 
 	}
-
 
 }

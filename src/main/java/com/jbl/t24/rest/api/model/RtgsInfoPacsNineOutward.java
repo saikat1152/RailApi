@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
 import org.hibernate.envers.Audited;
 
@@ -21,13 +20,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "rtgs_out_info")
+@Table(name = "rtgs_out_pacs_nine_info")
 @Setter
 @Getter
 @ToString
 @Builder
 @Audited
-public class RtgsInfoOutward extends CommonFtInfo {
+public class RtgsInfoPacsNineOutward extends CommonFtInfo{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +38,25 @@ public class RtgsInfoOutward extends CommonFtInfo {
 	@Column(name = "out_unique_id", unique = true, nullable = false, length = 23)
 	private String uniqueOutwardRtgsId;
 
+	@Column(name = "transaction_type", length = 10)
+	private String txType = "ACOP";
+
 	@Column(name = "category", nullable = false, length = 2)
 	private int category;
 
-	@Column(name = "transaction_type", length = 10)
-	private String txType = "ACOR";
+	@Column(name = "bill_description", nullable = true, length = 23)
+	private String billDescription;
+
+	@Column(name = "lc_number", nullable = true, length = 23)
+	private String lcNumber;
+
+	@Column(name = "party_name", nullable = true, length = 23)
+	private String partyName;
+
+	@Column(name = "instruction_info", nullable = true, length = 23)
+	private String instructionInfo;
+
+	@Column(name = "trade_finance_info", nullable = true, length = 23)
+	private String tradeFinanceInfo;
+
 }
