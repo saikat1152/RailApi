@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.Audited;
 
@@ -41,21 +42,27 @@ public class RtgsInfoPacsNineOutward extends CommonFtInfo{
 	@Column(name = "transaction_type", length = 10)
 	private String txType = "ACOP";
 
+	@NotNull(message = "Category is Blank")
 	@Column(name = "category", nullable = false, length = 2)
 	private int category;
 
+	@NotNull(message = "Bill Description is Missing")
 	@Column(name = "bill_description", nullable = true, length = 23)
 	private String billDescription;
 
+	@NotNull(message = "LC NUmber is Missing")
 	@Column(name = "lc_number", nullable = true, length = 23)
 	private String lcNumber;
 
+	@NotNull(message = "Party Name is Missing")
 	@Column(name = "party_name", nullable = true, length = 23)
 	private String partyName;
 
+	@NotNull(message = "Instruction Info is Missing")
 	@Column(name = "instruction_info", nullable = true, length = 23)
 	private String instructionInfo;
 
+	@NotNull(message = "Trade Finance Info is Missing")
 	@Column(name = "trade_finance_info", nullable = true, length = 23)
 	private String tradeFinanceInfo;
 

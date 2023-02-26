@@ -38,6 +38,9 @@ public class RtgsInfoInward extends CommonFtInfo {
 	@Column(name = "in_unique_id", unique = true, nullable = false, length = 23)
 	private String uniqueInwardRtgsId;
 
+	@Column(name = "category", nullable = false, length = 2)
+	private int category;
+
 	@Column(name = "transaction_type", length = 10)
 	private String txType = "ACIR";
 

@@ -41,6 +41,9 @@ public class FtHandlerService {
 	RtgsInfoOutwardService rtgsInfoOutwardService;
 
     @Autowired
+	RtgsInfoInwardService rtgsInfoInwardService;
+
+    @Autowired
     RtgsInfoPacsNineOutwardService rtgsInfoPacsNineOutwardService;
 
     @Autowired
@@ -210,7 +213,7 @@ public class FtHandlerService {
     }
 
 
-    /* ---------------------------- RTGS Outward Transaction Pacs 09 start -------------------------------------------- */
+    /* ---------------------------- RTGS Outward Transaction Pacs 08 start -------------------------------------------- */
 
     public ResponseEntity<?> handleRtgsOutwardTransaction(String requestOFS, RtgsInfoOutward rtgsInfoOutward,
             HttpServletRequest httpServletRequest) throws Exception {
@@ -577,9 +580,9 @@ public class FtHandlerService {
          TccUtility tccUtility = new TccUtility();
 
          RtgsInfoInward rtgsInfoExist = new RtgsInfoInward();
-         RtgsInfoInward rtgsInfoSave = new RtgsInfoInward();
-         ///In ward saikat
-         //rtgsInfoExist = rtgsInfoOutwardService.findByUniqueOutwardRtgsId(rtgsInfoOutward.getUniqueOutwardRtgsId());
+//         RtgsInfoOutward rtgsInfoSave = new RtgsInfoOutward();
+         RtgsInfoInward rtgsInfoSave = rtgsInfoInward;
+         rtgsInfoExist = rtgsInfoInwardService.findByUniqueInwardRtgsId(rtgsInfoInward.getUniqueInwardRtgsId());
          int statusExist = rtgsInfoExist == null ? 0 : rtgsInfoExist.getStatus();
          /**
           * If eft present in db and its status is success
@@ -612,7 +615,8 @@ public class FtHandlerService {
           * we have try again to reach CBS transaction and then
           * Saving BEFTN Data into the database again
           */
-         System.out.println(rtgsInfoInward.toString());
+//         System.out.println(rtgsInfoOutward.toString());
+         System.out.println(rtgsInfoSave.toString());
 
          String remoteAddr = httpServletRequest.getHeader("X-FORWARDED-FOR");
          String host = httpServletRequest.getRemoteHost();
@@ -621,19 +625,45 @@ public class FtHandlerService {
              remoteAddr = httpServletRequest.getRemoteAddr();
          }
 
-         rtgsInfoInward.setIp(remoteAddr);
-         rtgsInfoInward.setHostname(host);
+			/*
+			 * checking the categorty RTGS Ouward=1
+			 * Customs E payment=3,
+			 * RTGS Inward=2
+			 */
+
+			/*
+			 * int category = rtgsInfoInward == null ? 0 : rtgsInfoInward.getCategory(); if
+			 * (category == RTGSCategory.RTGSOUTWARDPACS8.getValue() &&
+			 * rtgsInfoOutward.getDebitAmount() < RTGS_OUWARD_PACS8_MIN_VALUE) {
+			 * JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
+			 * ResponseStatus.FOURZ26.getText(), ResponseStatus.FOURZ26.getValue()); return
+			 * ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse); } else {
+			 * rtgsInfoSave.setCategory(rtgsInfoOutward.getCategory()); }
+			 */
+
+			/*
+			 * rtgsInfoOutward.setIp(remoteAddr); rtgsInfoOutward.setHostname(host);
+			 */
+
+         rtgsInfoSave.setIp(remoteAddr);
+         rtgsInfoSave.setHostname(host);
 
          /**
           * Initially the status of BEFTN Transaction is pending and saved in the
           * database
           * It is because of Transaction response yet not confirmed
           */
-         rtgsInfoInward.setStatus(EftStatus.PENDING.getValue());
-         rtgsInfoInward.setOfsRequest(requestOFS);
 
-         ///In ward saikat
-        // rtgsInfoSave = rtgsInfoOutwardService.save(rtgsInfoOutward);
+			/*
+			 * rtgsInfoOutward.setStatus(EftStatus.PENDING.getValue());
+			 * rtgsInfoOutward.setOfsRequest(requestOFS);
+			 */
+
+         rtgsInfoSave.setStatus(EftStatus.PENDING.getValue());
+         rtgsInfoSave.setOfsRequest(requestOFS);
+
+         //rtgsInfoSave = 
+         rtgsInfoInwardService.save(rtgsInfoSave);
 
          System.out.println("requestOFS: " + requestOFS);
          String responseData = "";
@@ -663,10 +693,8 @@ public class FtHandlerService {
              JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ3.getText(),
                      ResponseStatus.FIVEZ3.getValue());
              rtgsInfoSave.setStatus(EftStatus.FAILED.getValue());
-
-             ///In ward saikat
-             //  rtgsInfoOutwardService.save(rtgsInfoSave);
-             // rtgsInfoOutwardService.save(rtgsInfoOutward);
+             rtgsInfoInwardService.save(rtgsInfoSave);
+             //rtgsInfoOutwardService.save(rtgsInfoOutward);
              return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
          } else {
 
@@ -692,18 +720,24 @@ public class FtHandlerService {
                      .message(wrapper.getMessage())
                      .responseCode(wrapper.getResponseCode())
                      .additionalInfo(wrapper.getAdditionalInfo());
-             rtgsInfoInward.setStatus(wrapper.getFtStatus());
+//             rtgsInfoOutward.setStatus(wrapper.getFtStatus());
+             rtgsInfoSave.setStatus(wrapper.getFtStatus());
 
              ObjectMapper mapper = new ObjectMapper();
              String ftResponseStr = mapper.writeValueAsString(ftResponse.build());
-             rtgsInfoInward.setFtResponseStr(ftResponseStr);
-             rtgsInfoInward.setCbsFtno(ftResponse.build().getFtRef());
-             rtgsInfoInward.setOfsResponse(responseData);
+				/*
+				 * rtgsInfoOutward.setFtResponseStr(ftResponseStr);
+				 * rtgsInfoOutward.setCbsFtno(ftResponse.build().getFtRef());
+				 * rtgsInfoOutward.setOfsResponse(responseData);
+				 */
 
-             ///In ward saikat
-            // rtgsInfoSave = rtgsInfoOutward;
+             rtgsInfoSave.setFtResponseStr(ftResponseStr);
+             rtgsInfoSave.setCbsFtno(ftResponse.build().getFtRef());
+             rtgsInfoSave.setOfsResponse(responseData);
+             
+//             rtgsInfoSave = rtgsInfoOutward;
              // FIXME:
-             //rtgsInfoOutwardService.save(rtgsInfoSave);
+             rtgsInfoInwardService.save(rtgsInfoSave);
              // eftInfoOutwardService.save(eftInfoOutward);
 
              return ResponseEntity.status(HttpStatus.OK).body(ftResponse.build());
@@ -711,6 +745,7 @@ public class FtHandlerService {
          }
 
     }
+
 
 	/*------------------------- Inward Transaction PACS 08-------------------------------------------------*/
 

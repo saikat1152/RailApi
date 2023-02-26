@@ -59,7 +59,7 @@ public class RtgsInwardTransaction {
 		 * Currency
 		 * USD, GBP, EUR,
 		 */
-		String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,BD0010888,,TRANSACTION.TYPE=ACOR,DEBIT.ACCT.NO=0100146594209,DEBIT.CURRENCY=BDT,DEBIT.AMOUNT=10,DEBIT.VALUE.DATE=20220506,CREDIT.ACCT.NO=BDT171120001,ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,FT.DR.DETAILS=BACH,FT.DR.DETAILS=,COMMISSION.TYPE=,CHEQUE.NUMBER=,LOCAL.REF:3:1=,LOCAL.REF:94:1=0021699806164052";
+		String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,BD0010888,,TRANSACTION.TYPE=ACOR,DEBIT.ACCT.NO=0100146594209,DEBIT.CURRENCY=BDT,DEBIT.AMOUNT=10,DEBIT.VALUE.DATE=20220506,CREDIT.ACCT.NO=BDT171120001,ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,FT.DR.DETAILS=BACH,FT.DR.DETAILS=,COMMISSION.CODE=,COMMISSION.TYPE=,CHEQUE.NUMBER=,LOCAL.REF:3:1=,LOCAL.REF:94:1=0021699806164052";
 
 		// BeftnOutwardInfo beftnInfoSave = null;
 		// BeftnOutwardInfo beftnInfoExist = null;
@@ -92,6 +92,8 @@ public class RtgsInwardTransaction {
 		String creditAccNo = rtgsInfoInward.getCreditAccNo();
 		String debitDetails = rtgsInfoInward.getDebitDetails();
 		String creditDetails = rtgsInfoInward.getCreditDetails();
+		String commissionCode = rtgsInfoInward.getCommissionCode();
+		String commissionType = rtgsInfoInward.getCommissionType();
 		String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
 		Timestamp t = new Timestamp(new Date().getTime());
 		rtgsInfoInward.setIssueDate(t);
@@ -117,7 +119,8 @@ public class RtgsInwardTransaction {
 				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,"
 				+ "FT.DR.DETAILS=" + debitDetails + ","
 				+ "FT.CR.DETAILS=" + creditDetails + ","
-				+ "COMMISSION.TYPE=,"
+				+ "COMMISSION.CODE=" + commissionCode+ ","
+				+ "COMMISSION.TYPE="+ commissionType +","
 				+ "CHEQUE.NUMBER=,"
 				+ "LOCAL.REF:3:1=,"
 				+ "LOCAL.REF:94:1=" + uniqueFtId;
