@@ -401,7 +401,6 @@ public class FtHandlerService {
          TccUtility tccUtility = new TccUtility();
 
          RtgsInfoPacsNineOutward rtgsInfoExist = new RtgsInfoPacsNineOutward();
-//         RtgsInfoOutward rtgsInfoSave = new RtgsInfoOutward();
          RtgsInfoPacsNineOutward rtgsInfoSave = rtgsInfoPacsNineOut;
          rtgsInfoExist = rtgsInfoPacsNineOutwardService.findByUniqueOutwardRtgsId(rtgsInfoPacsNineOut.getUniqueOutwardRtgsId());
          int statusExist = rtgsInfoExist == null ? 0 : rtgsInfoExist.getStatus();
@@ -431,10 +430,10 @@ public class FtHandlerService {
 
          // NOTE:
          /**
-          * When BEFTN Not exists in database OR it exist
+          * When RTGS Not exists in database OR it exist
           * but it's status is pending or failure then
           * we have try again to reach CBS transaction and then
-          * Saving BEFTN Data into the database again
+          * Saving RTGS PACS09 Data into the database again
           */
 //         System.out.println(rtgsInfoPacsNineOut.toString());
          System.out.println(rtgsInfoSave.toString());
@@ -469,7 +468,7 @@ public class FtHandlerService {
          rtgsInfoSave.setHostname(host);
 
          /**
-          * Initially the status of BEFTN Transaction is pending and saved in the
+          * Initially the status of RTGS Transaction is pending and saved in the
           * database
           * It is because of Transaction response yet not confirmed
           */
@@ -610,7 +609,7 @@ public class FtHandlerService {
 
          // NOTE:
          /**
-          * When BEFTN Not exists in database OR it exist
+          * When RTGS Not exists in database OR it exist
           * but it's status is pending or failure then
           * we have try again to reach CBS transaction and then
           * Saving BEFTN Data into the database again

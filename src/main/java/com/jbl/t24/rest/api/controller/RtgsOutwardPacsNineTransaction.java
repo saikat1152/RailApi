@@ -62,7 +62,7 @@ public class RtgsOutwardPacsNineTransaction {
 		 * Currency
 		 * USD, GBP, EUR,
 		 */
-		String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,,TRANSACTION.TYPE=ACOP,DEBIT.ACCT.NO=USD1720600010888,DEBIT.CURRENCY=USD,DEBIT.AMOUNT=10,DEBIT.VALUE.DATE=20220506,CREDIT.ACCT.NO=USD1745100059999,ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,FT.DR.DETAILS=RTGS-PACS9,FT.CR.DETAILS=,COMMISSION.TYPE=,CHEQUE.NUMBER=,LOCAL.REF:3:1=,LOCAL.REF:94:1=RTGSPACS90001,LOCAL.REF:126:1=TEST BILL,LOCAL.REF:127:1=TEST LC,LOCAL.REF:128:1=TEST NAME,LOCAL.REF:129:1=TEST INSTR,LOCAL.REF:130:1=TF00110000";
+		String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,,TRANSACTION.TYPE=ACOP,DEBIT.ACCT.NO=USD1720600010888,DEBIT.CURRENCY=USD,DEBIT.AMOUNT=10,DEBIT.VALUE.DATE=20220506,CREDIT.ACCT.NO=USD1745100059999,ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,FT.DR.DETAILS=RTGS-PACS9,FT.CR.DETAILS=,COMMISSION.TYPE=,CHEQUE.NUMBER=,LOCAL.REF:3:1=,LOCAL.REF:94:1=RTGSPACS90001,LOCAL.REF:125:1=OTHER INFO,LOCAL.REF:126:1=TEST BILL,LOCAL.REF:127:1=TEST LC,LOCAL.REF:128:1=TEST NAME,LOCAL.REF:129:1=TEST INSTR,LOCAL.REF:130:1=TF00110000";
 
 		// BeftnOutwardInfo beftnInfoSave = null;
 		// BeftnOutwardInfo beftnInfoExist = null;
@@ -96,6 +96,7 @@ public class RtgsOutwardPacsNineTransaction {
 		String creditDetails = rtgsInfoPacsNineOut.getCreditDetails();
 		String commissionCode = rtgsInfoPacsNineOut.getCommissionCode();
 		String commissionType = rtgsInfoPacsNineOut.getCommissionType();
+		String otherInfo = rtgsInfoPacsNineOut.getOtherInfo();
 		String billDescription = rtgsInfoPacsNineOut.getBillDescription();
 		String lcNumber = rtgsInfoPacsNineOut.getLcNumber();
 		String partyName = rtgsInfoPacsNineOut.getPartyName();
@@ -111,6 +112,7 @@ public class RtgsOutwardPacsNineTransaction {
 		Objects.requireNonNull(debitAmount);
 		Objects.requireNonNull(creditAccNo);
 		Objects.requireNonNull(currency);
+
 
 		// String requestOFS = "";
 
@@ -131,6 +133,7 @@ public class RtgsOutwardPacsNineTransaction {
 				+ "CHEQUE.NUMBER=,"
 				+ "LOCAL.REF:3:1=,"
 				+ "LOCAL.REF:94:1=" + uniqueFtId +","
+				+ "LOCAL.REF:125:1=" + otherInfo +","
 				+ "LOCAL.REF:126:1=" + billDescription +","
 				+ "LOCAL.REF:127:1=" + lcNumber +","
 				+ "LOCAL.REF:128:1=" + partyName +","

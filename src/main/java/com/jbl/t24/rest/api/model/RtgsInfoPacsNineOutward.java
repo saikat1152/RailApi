@@ -66,4 +66,8 @@ public class RtgsInfoPacsNineOutward extends CommonFtInfo{
 	@Column(name = "trade_finance_info", nullable = true, length = 23)
 	private String tradeFinanceInfo;
 
+	@NotNull(message = "Other Info is Missing")
+	@Column(name = "other_info", nullable = true, length = 23)
+	private String otherInfo;
+
 }
