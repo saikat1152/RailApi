@@ -19,11 +19,15 @@ public enum CBSResponseStr {
 	postingRestriction("Posting Restriction"),
 	valueAmountZero("VAL.AMOUNT.SHOULD.NOT.BE.ZERO"),
 	invalidMinus("INVALID MINUS"),
+	historyRecordMissing("HISTORY RECORD MISSING"),
+	noImageToDisplay("No Images to display"),
+
 
 	/**
 	 * Below response are for RTGS Purposes
 	*/
 	invalidCompany("INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS");
+
 
 	private final String text;
 
