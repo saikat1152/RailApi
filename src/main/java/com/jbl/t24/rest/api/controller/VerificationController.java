@@ -272,15 +272,17 @@ public class VerificationController {
 						accountInfo.setCusMobNum(secondPart[6]);
 						String[] allIdNumbersNames = secondPart[8].split("\n");
 						String[] allIds = secondPart[7].split("\n");
-						for(int i=0; i<allIdNumbersNames.length; i++){
-							if(allIdNumbersNames[i].contains("NATIONAL.ID")){
-								accountInfo.setCusNidNum(allIds[i]);
-								break;
-							}
-								
-						}
-						
-						
+
+//						for(int i=0; i<allIdNumbersNames.length; i++){
+//							if(allIdNumbersNames[i].contains("NATIONAL.ID")){
+//								accountInfo.setCusNidNum(allIds[i]);
+//								break;
+//							}
+//
+//						}
+
+						accountInfo.setCusNidNum(secondPart[16]);
+
 						accountInfo.setCoCode(secondPart[9].replace("BD001", ""));
 						accountInfo.setCoName(secondPart[10].replace("\"", ""));
 						accountInfo.setAccBalance(secondPart[11]);
