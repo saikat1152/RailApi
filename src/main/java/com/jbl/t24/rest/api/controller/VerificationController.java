@@ -70,6 +70,7 @@ public class VerificationController {
 	SignQueryInfoService signQueryInfoService;
 
 	@Value("${test.image.path}")
+	// @Value("${live.image.path}")
 	private String ROOT_PATH;
 
 	@RequestMapping(value = "/sign-check", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -117,7 +118,21 @@ public class VerificationController {
 
 		String imageRelativePath = allData[2].replace("\"", "");
 
-		if (!allData[0].toLowerCase().contains("no images to display")) {
+		// TODO::FIXIT LATER
+		// if (allData[0].toLowerCase().contains("no images to display")) {
+		if (!imageRelativePath.toLowerCase().contains("no images to display")) {
+
+			/*
+			 * finding the correct imageRelativePath with the .jpg 
+			 */
+
+			 for(int i=2; i<=allData.length; i++) {
+				if(allData[i].toLowerCase().contains(".jpg")) {
+					imageRelativePath = allData[i].replace("\"", "");
+					break;
+				}
+			 }
+
 			imageRelativePath = imageRelativePath.substring(1, imageRelativePath.length());
 			String imagePath = ROOT_PATH + imageRelativePath;
 
@@ -166,9 +181,14 @@ public class VerificationController {
 				return ResponseEntity.status(HttpStatus.OK).headers(headers).body(jsonMap);
 
 			} catch (IOException e) {
-				// log.error(e.toString());
+
 				logger.info("Image Fetching Error: " + e.getStackTrace());
-				throw new RuntimeException(e);
+				// throw new RuntimeException(e);
+
+				AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(ResponseStatus.FOURZ25.getText(),
+						ResponseStatus.FOURZ25.getValue(), false);
+				logger.info("Image Not Found Error " + accountInfoNotFound.getMessage());
+				return ResponseEntity.status(HttpStatus.OK).body(accountInfoNotFound);
 			}
 		} else {
 			AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(ResponseStatus.FOURZ25.getText(),
@@ -272,17 +292,13 @@ public class VerificationController {
 						accountInfo.setCusMobNum(secondPart[6]);
 						String[] allIdNumbersNames = secondPart[8].split("\n");
 						String[] allIds = secondPart[7].split("\n");
-
-//						for(int i=0; i<allIdNumbersNames.length; i++){
-//							if(allIdNumbersNames[i].contains("NATIONAL.ID")){
-//								accountInfo.setCusNidNum(allIds[i]);
-//								break;
-//							}
-//
-//						}
-
+						// for(int i=0; i<allIdNumbersNames.length; i++){
+						// if(allIdNumbersNames[i].contains("NATIONAL.ID")){
+						// accountInfo.setCusNidNum(allIds[i]);
+						// break;
+						// }
+						// }
 						accountInfo.setCusNidNum(secondPart[16]);
-
 						accountInfo.setCoCode(secondPart[9].replace("BD001", ""));
 						accountInfo.setCoName(secondPart[10].replace("\"", ""));
 						accountInfo.setAccBalance(secondPart[11]);
@@ -310,18 +326,27 @@ public class VerificationController {
 						accountQueryInfo.setAccountDetails(accountInfoStr);
 						accountQueryInfoService.save(accountQueryInfo);
 						System.out.println(accountQueryInfo);
-						
+
 						logger.info("Account Query Done", Mapper.mapToJsonString(accountQueryInfo));
 						return ResponseEntity.status(HttpStatus.OK).body(accountInfo);
 					} else {
+						accountQueryInfoService.save(accountQueryInfo);
+						// AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(
+						// ResponseStatus.FOURZ13.getText(), ResponseStatus.FOURZ13.getValue(), false);
+						// return ResponseEntity.status(HttpStatus.OK).body(accountInfoNotFound);
 						AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(
-								ResponseStatus.FOURZ13.getText(), ResponseStatus.FOURZ13.getValue(), false);
+								message, ResponseStatus.FOURZ13.getValue(), false);
 						return ResponseEntity.status(HttpStatus.OK).body(accountInfoNotFound);
 					}
 
 				} else {
-					AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(ResponseStatus.FOURZ7.getText(),
-							ResponseStatus.FOURZ7.getValue(), false);
+					accountQueryInfoService.save(accountQueryInfo);
+					// AccountInfoNotFound accountInfoNotFound = new
+					// AccountInfoNotFound(ResponseStatus.FOURZ7.getText(),
+					// ResponseStatus.FOURZ7.getValue(), false);
+					// return ResponseEntity.status(HttpStatus.OK).body(accountInfoNotFound);
+					AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(
+							message, ResponseStatus.FOURZ13.getValue(), false);
 					return ResponseEntity.status(HttpStatus.OK).body(accountInfoNotFound);
 				}
 
