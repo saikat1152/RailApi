@@ -7,6 +7,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Pattern.Flag;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.envers.Audited;
@@ -26,12 +27,14 @@ import lombok.ToString;
 @Audited
 public abstract class CommonFtInfo {
 
-	//@Transient
-    //private final String ACCOUNT_NUMBER_PATTERN = "(^BDT[0-9]{13}$)|((^[0-9]{12}$)|(^[0-9]{13}$)|(^[0-9]{16}$))";
+	/*
+	 * @Transient protected final String ACCOUNT_NUMBER_PATTERN =
+	 * "(^BDT[0-9]{13}$)|((^[0-9]{12}$)|(^[0-9]{13}$)|(^[0-9]{16}$))";
+	 */
 
-    @Transient
+//    @Transient
     @NotNull(message = "Branch Code Missing")
-    @Pattern(regexp = "^[0-9]{4}$", message = "Branch Code Pattern Not Valid")
+    @Pattern(regexp = "^[0-9]{4}$", message = "Branch Code Pattern Not Valid", flags = Flag.CASE_INSENSITIVE)
     private String coCode;
 
     @Column(name = "company_code", length = 10)
