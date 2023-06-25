@@ -20,9 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.model.RtgsInfoOutward;
 import com.jbl.t24.rest.api.service.BeftnInfoService;
 import com.jbl.t24.rest.api.service.FtHandlerService;
+import com.jbl.t24.rest.api.service.FtHandlerServiceN;
 import com.jbl.t24.rest.api.service.RtgsHandlerService;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
@@ -34,6 +37,9 @@ public class RtgsOutwardTransaction {
 
 	@Autowired
 	private FtHandlerService ftHandlerService;
+	
+	@Autowired
+	private FtHandlerServiceN ftHandlerServicen;
 
 	@RequestMapping(value = "/out", method = RequestMethod.GET)
 
@@ -125,8 +131,13 @@ public class RtgsOutwardTransaction {
 				+ "CHEQUE.NUMBER=,"
 				+ "LOCAL.REF:3:1=,"
 				+ "LOCAL.REF:94:1=" + uniqueFtId;
+		
+		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
+		rtgsInfoOut.setHostname(hostIpData.get("host"));
+		rtgsInfoOut.setIp(hostIpData.get("remoteAddr"));
 
-		ResponseEntity<?> response = ftHandlerService.handleRtgsOutwardTransaction(requestOFS, rtgsInfoOut, httpServletRequest);
+//		ResponseEntity<?> response = ftHandlerService.handleRtgsOutwardTransaction(requestOFS, rtgsInfoOut, httpServletRequest);
+		ResponseEntity<?> response = ftHandlerServicen.handleFtTransaction(requestOFS, rtgsInfoOut, uniqueFtId);
 		
 		System.out.println(response.getBody());
 		// return ResponseEntity.status(HttpStatus.OK).body(response);

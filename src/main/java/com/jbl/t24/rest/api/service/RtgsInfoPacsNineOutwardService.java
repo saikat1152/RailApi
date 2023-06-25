@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jbl.t24.rest.api.model.RtgsInfoOutward;
 import com.jbl.t24.rest.api.model.RtgsInfoPacsNineOutward;
 import com.jbl.t24.rest.api.repository.RtgsInfoPacsNineOutwardRepository;
 
@@ -22,5 +23,9 @@ public class RtgsInfoPacsNineOutwardService {
 	  public RtgsInfoPacsNineOutward findByUniqueOutwardRtgsId(String uniqueOutwardRtgsId){
 	    return rtgsInfoPacsNineOutwardRepository.findByUniqueOutwardRtgsId(uniqueOutwardRtgsId);
 	  }
+	  
+	  public RtgsInfoPacsNineOutward findByCbsFtno(String cbsFtno){
+		    return rtgsInfoPacsNineOutwardRepository.findByCbsFtno(cbsFtno);
+		  }
 
 }

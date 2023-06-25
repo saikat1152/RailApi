@@ -4,9 +4,11 @@ public enum ResponseStatus {
 
 	TWOZ0(200, "Successfully Processed!"),
 	TWOZ1(201, "Transaction Failed!"),
-	TWOZ2(202, "This Transaction Already Successful! Duplicate BEFTN Narrative!"),
+	TWOZ2(202, "This Transaction Already Successful! Duplicate RTGS/FT Unique id!"),
 	TWOZ3(203, "Transaction Failed! Duplicate BEFTN Narrative!"),
 	TWOZ4(204, "Transaction Failed! Duplicate Credit Narrative!"),
+	TWOZ5(205, "Successfully Reversed"),
+	TWOZ6(206, "Already Reversed! Duplicate Unique Identifier!"),
 	
 	FOURZ0(400, "Invalid Input Parameter Request!"), 
 	FOURZ1(401, "Username or Password doesn't match!"),
@@ -36,7 +38,7 @@ public enum ResponseStatus {
 	FOURZ24(424, "Ammount Cannot be Zero!"),
 	FOURZ25(425,"Image Not Found!"),
 	FOURZ26(426,"Amount cannot be less than 100000 for RTGS"),
-	FOURZ27(427,"Invalid Company Code Specified"),
+	FOURZ27(427,"INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS"),
 
 	FIVEZ0(500, "Internal Server Error!"),
 	FIVEZ3(503, "Service Unavailable!"),

@@ -21,7 +21,7 @@ import com.jbl.t24.rest.api.common.model.ResponseMsgProcessorWrapper;
 import com.jbl.t24.rest.api.common.model.FtTxResponse.FtTxResponseBuilder;
 import com.jbl.t24.rest.api.custom.exception.BlankOfsResponseException;
 import com.jbl.t24.rest.api.enums.CBSResponseStr;
-import com.jbl.t24.rest.api.enums.EftStatus;
+import com.jbl.t24.rest.api.enums.FtStatus;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.model.EftInfoOutward;
 import com.jbl.t24.rest.api.model.RtgsInfoOutward;
@@ -85,7 +85,7 @@ public class RtgsHandlerService {
 				/**
 				 * Fetching Previous Ft Response
 				 */
-				if (statusExist == EftStatus.SUCCESS.getValue()) {
+				if (statusExist == FtStatus.SUCCESS.getValue()) {
 
 					String ftResponseStr = rtgsInfoExist.getFtResponseStr();
 					ObjectMapper mapper = new ObjectMapper();
@@ -125,7 +125,7 @@ public class RtgsHandlerService {
           * database
           * It is because of Transaction response yet not confirmed
           */
-         rtgsInfoOutward.setStatus(EftStatus.PENDING.getValue());
+         rtgsInfoOutward.setStatus(FtStatus.PENDING.getValue());
          rtgsInfoOutward.setOfsRequest(requestOFS);
 
          rtgsInfoSave = rtgsInfoOutwardService.save(rtgsInfoOutward);
@@ -157,7 +157,7 @@ public class RtgsHandlerService {
                  || responseData.equals("403")) {
              JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ3.getText(),
                      ResponseStatus.FIVEZ3.getValue());
-             rtgsInfoSave.setStatus(EftStatus.FAILED.getValue());
+             rtgsInfoSave.setStatus(FtStatus.FAILED.getValue());
              rtgsInfoOutwardService.save(rtgsInfoSave);
              rtgsInfoOutwardService.save(rtgsInfoOutward);
              return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
@@ -179,7 +179,7 @@ public class RtgsHandlerService {
               */
 
              ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
-             wrapper = processor.handleResponseOfs(responseData);
+             wrapper = processor.handleResponseOfs(responseData,0);
 
              ftResponse.ftRef(wrapper.getFtRef())
                      .message(wrapper.getMessage())

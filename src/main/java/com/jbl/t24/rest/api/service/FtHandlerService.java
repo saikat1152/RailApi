@@ -21,10 +21,11 @@ import com.jbl.t24.rest.api.common.model.FtResponse;
 import com.jbl.t24.rest.api.common.model.FtTxResponse;
 import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
 import com.jbl.t24.rest.api.common.model.ResponseMsgProcessorWrapper;
+import com.jbl.t24.rest.api.config.Mapper;
 import com.jbl.t24.rest.api.common.model.FtTxResponse.FtTxResponseBuilder;
 import com.jbl.t24.rest.api.custom.exception.BlankOfsResponseException;
 import com.jbl.t24.rest.api.enums.CBSResponseStr;
-import com.jbl.t24.rest.api.enums.EftStatus;
+import com.jbl.t24.rest.api.enums.FtStatus;
 import com.jbl.t24.rest.api.enums.RTGSCategory;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.model.EftInfoOutward;
@@ -59,25 +60,10 @@ public class FtHandlerService {
 	// @Async
 	public String handleFtTransaction(String requestOFS, String channelName) {
 
-		// System.out.println(requestOFS);
-
 		try {
 			TccUtility tccUtility = new TccUtility(channelName);
-
-			/**
-			 * 
-			 * 
-			 */
-
 			String ofsResponse = tccUtility.sendRequest(requestOFS);
 			String[] spiltDataOfs = ofsResponse.split(",");
-
-			System.out.println("--------------OFS RESPONSE" + " " + channelName + " " + "--------------");
-			System.out.println(ofsResponse);
-			// return
-			// CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.OK).body(ofsResponse));
-			// return null;
-			// return ResponseEntity.status(HttpStatus.OK).body(ofsResponse);
 			return ofsResponse;
 		} catch (Exception e) {
 			// return ResponseEntity.status(HttpStatus.OK).body("eror");
@@ -86,127 +72,10 @@ public class FtHandlerService {
 
 	}
 
-	
-	  public ResponseEntity<?> handleFtTransaction(String requestOFS,
-	  EftInfoOutward eftInfoOutward, HttpServletRequest httpServletRequest) throws
-	  Exception {
+	public ResponseEntity<?> handleFtTransaction(String requestOFS, EftInfoOutward eftInfoOutward,
+			HttpServletRequest httpServletRequest) throws Exception {
 		return null;
-	  /*
-	 * System.out.println(requestOFS);
-	 * 
-	 * TccUtility tccUtility = new TccUtility();
-	 * 
-	 * EftInfoOutward eftnInfoExist = null; EftInfoOutward eftnInfoSave = null; //
-	 * eftnInfoExist = beftnInfoService.findByCreditNarrative(creditNarrative);
-	 * 
-	 * if (eftnInfoExist != null) {
-	 * 
-	 * int statusExist = eftnInfoExist.getStatus();
-	 * 
-	 * // NOTE: Testing the builder pattern if (statusExist ==
-	 * EftStatus.SUCCESS.getValue()) {
-	 * 
-	 * // NOTE:
-	 *//**
-		 * Fetching Previous Ft Response
-		 */
-	/*
-	 * String ftResponseStr = eftnInfoExist.getFtResponseStr(); ObjectMapper mapper
-	 * = new ObjectMapper(); FtTxResponse savedFtResponse =
-	 * mapper.readValue(ftResponseStr, FtTxResponse.class); FtTxResponse ftResponse
-	 * = savedFtResponse;
-	 * 
-	 * eftnInfoSave = eftnInfoExist;
-	 * 
-	 * return ResponseEntity.status(HttpStatus.OK).body(ftResponse); }
-	 * 
-	 * else {
-	 * 
-	 * } }
-	 * 
-	 * // NOTE:
-	 *//**
-		 * When BEFTN Not exists in database Saving BEFTN Data into the database
-		 */
-	/*
-	 * 
-	 * String remoteAddr = httpServletRequest.getHeader("X-FORWARDED-FOR"); String
-	 * host = httpServletRequest.getRemoteHost();
-	 * 
-	 * if (remoteAddr == null) { remoteAddr = httpServletRequest.getRemoteAddr(); }
-	 * 
-	 * eftInfoOutward.setIp(remoteAddr); eftInfoOutward.setHostname(host);
-	 * 
-	 *//**
-		 * Initially the status of BEFTN Transaction is pending and saved in the
-		 * database It is because of Transaction response yet not confirmed
-		 */
-	/*
-	 * eftInfoOutward.setStatus(EftStatus.PENDING.getValue());
-	 * eftInfoOutward.setOfsRequest(requestOFS);
-	 * 
-	 * // FIXME: Update it for saving into db // eftnInfoSave =
-	 * eftInfoService.save(beftnInfo);
-	 * 
-	 * System.out.println("requestOFS: " + requestOFS); // TccUtility tccUtility =
-	 * new TccUtility(); String responseData = "";
-	 * 
-	 *//**
-		 * Checking if response from cbs is blank due to timeout or cbs issue
-		 */
-	/*
-	 * 
-	 * try { responseData = tccUtility.sendRequest(requestOFS); } catch
-	 * (BlankOfsResponseException e) { JwtErrorResponse jwtErrorResponse = new
-	 * JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ4.getText(),
-	 * ResponseStatus.FIVEZ4.getValue()); return
-	 * ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse); }
-	 * 
-	 *//**
-		 * Finally the BEFTN Txn response is fetched
-		 */
-
-	/*
-	 * 
-	 * // eftnInfoSave.setOfsResponse(responseData); //
-	 * remitterInfoSave.setResponseAt(new Timestamp(System.currentTimeMillis()));
-	 * System.out.println("responseData " + responseData);
-	 * 
-	 * if (responseData.equals("400") || responseData.equals("401") ||
-	 * responseData.equals("402") || responseData.equals("403")) { JwtErrorResponse
-	 * jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
-	 * ResponseStatus.FIVEZ3.getText(), ResponseStatus.FIVEZ3.getValue());
-	 * eftnInfoSave.setStatus(EftStatus.FAILED.getValue()); // FIXME: //
-	 * eftInfoService.save(eftnInfoSave); return
-	 * ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse); } else {
-	 * 
-	 * // FtTxResponse ftResponse = new FtTxResponse(); FtTxResponseBuilder
-	 * ftResponse = FtTxResponse.builder(); // NOTE: Not with Builder //
-	 * ftResponse.setStatus(HttpStatus.OK); //
-	 * ftResponse.setNarrative(creditNarrative);
-	 * 
-	 * // NOTE: With Builder ftResponse.status(HttpStatus.OK)
-	 * .uniqueEft(eftInfoOutward.getUniqueOutwardEftId());
-	 * 
-	 *//**
-		 * NOTE: Wrapping the response by Response Handler
-		 *//*
-			 * 
-			 * ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
-			 * wrapper = processor.handleResponseOfs(responseData);
-			 * 
-			 * ftResponse.ftRef(wrapper.getFtRef()) .message(wrapper.getMessage())
-			 * .responseCode(wrapper.getResponseCode())
-			 * .additionalInfo(wrapper.getAdditionalInfo());
-			 * eftInfoOutward.setStatus(wrapper.getFtStatus()); eftnInfoSave =
-			 * eftInfoOutward; // FIXME: // beftnInfoService.save(eftnInfoSave);
-			 * 
-			 * return ResponseEntity.status(HttpStatus.OK).body(ftResponse.build());
-			 * 
-			 * }
-			 */ 
-			  }
-			 
+	}
 
 	/*
 	 * ---------------------------- RTGS Outward Transaction Pacs 08 start
@@ -234,7 +103,7 @@ public class FtHandlerService {
 			/**
 			 * Fetching Previous Ft Response from database record
 			 */
-			if (statusExist == EftStatus.SUCCESS.getValue() || statusExist == EftStatus.REVERSED.getValue()) {
+			if (statusExist == FtStatus.SUCCESS.getValue() || statusExist == FtStatus.REVERSED.getValue()) {
 
 				String ftResponseStr = rtgsInfoExist.getFtResponseStr();
 				ObjectMapper mapper = new ObjectMapper();
@@ -259,7 +128,7 @@ public class FtHandlerService {
 		 * failure then we have try again to reach CBS transaction and then Saving RTGS
 		 * Data into the database again
 		 */
-//         System.out.println(rtgsInfoOutward.toString());
+
 		System.out.println(rtgsInfoSave.toString());
 
 		String remoteAddr = httpServletRequest.getHeader("X-FORWARDED-FOR");
@@ -284,9 +153,6 @@ public class FtHandlerService {
 			rtgsInfoSave.setCategory(rtgsInfoOutward.getCategory());
 		}
 
-		/*
-		 * rtgsInfoOutward.setIp(remoteAddr); rtgsInfoOutward.setHostname(host);
-		 */
 
 		rtgsInfoSave.setIp(remoteAddr);
 		rtgsInfoSave.setHostname(host);
@@ -296,12 +162,7 @@ public class FtHandlerService {
 		 * It is because of Transaction response yet not confirmed
 		 */
 
-		/*
-		 * rtgsInfoOutward.setStatus(EftStatus.PENDING.getValue());
-		 * rtgsInfoOutward.setOfsRequest(requestOFS);
-		 */
-
-		rtgsInfoSave.setStatus(EftStatus.PENDING.getValue());
+		rtgsInfoSave.setStatus(FtStatus.PENDING.getValue());
 		rtgsInfoSave.setOfsRequest(requestOFS);
 
 		// rtgsInfoSave =
@@ -321,6 +182,14 @@ public class FtHandlerService {
 		} catch (BlankOfsResponseException e) {
 			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ4.getText(),
 					ResponseStatus.FIVEZ4.getValue());
+			
+			ObjectMapper mapper = new ObjectMapper();
+			String errorResponse = mapper.writeValueAsString(JwtErrorResponse.class);
+			
+			rtgsInfoSave.setStatus(FtStatus.FAILED.getValue());
+			rtgsInfoSave.setFtResponseStr(errorResponse);
+			rtgsInfoOutwardService.save(rtgsInfoSave);
+			
 			logger.error(e.getMessage());
 			logger.error(jwtErrorResponse);
 			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
@@ -330,17 +199,30 @@ public class FtHandlerService {
 		 * Finally the RTGS Txn response is fetched
 		 */
 
-		// eftnInfoSave.setOfsResponse(responseData);
-		// remitterInfoSave.setResponseAt(new Timestamp(System.currentTimeMillis()));
 		System.out.println("responseData " + responseData);
 		rtgsInfoSave.setIssueDate(new Timestamp(System.currentTimeMillis()));
 
 		if (responseData.equals("400") || responseData.equals("401") || responseData.equals("402")
-				|| responseData.equals("403")) {
-			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ3.getText(),
-					ResponseStatus.FIVEZ3.getValue());
-			rtgsInfoSave.setStatus(EftStatus.FAILED.getValue());
+                || responseData.equals("403") || responseData.equals("405")) {
+        	int responseCode;
+        	String responseMsg;
+        	if(responseData.equals("405")) {
+        		responseCode = ResponseStatus.FOURZ27.getValue();
+        		responseMsg = ResponseStatus.FOURZ27.getText();
+        	}
+        	else {
+        		responseCode = ResponseStatus.FIVEZ3.getValue();
+        		responseMsg = ResponseStatus.FIVEZ3.getText();
+        	}
+        	
+            JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, responseMsg,responseCode);
+            
+			String errorResponse = Mapper.mapToJsonString(jwtErrorResponse);
+			rtgsInfoSave.setStatus(FtStatus.FAILED.getValue());
+			rtgsInfoSave.setFtResponseStr(errorResponse);
+			
 			rtgsInfoOutwardService.save(rtgsInfoSave);
+			
 
 			logger.error("Server Error:: " + jwtErrorResponse);
 			// rtgsInfoOutwardService.save(rtgsInfoOutward);
@@ -361,7 +243,7 @@ public class FtHandlerService {
 			 */
 
 			ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
-			wrapper = processor.handleResponseOfs(responseData);
+			wrapper = processor.handleResponseOfs(responseData,0);
 
 			ftResponse.ftRef(wrapper.getFtRef()).message(wrapper.getMessage()).responseCode(wrapper.getResponseCode())
 					.additionalInfo(wrapper.getAdditionalInfo()).timestamp(rtgsInfoSave.getIssueDate());
@@ -371,11 +253,7 @@ public class FtHandlerService {
 
 			ObjectMapper mapper = new ObjectMapper();
 			String ftResponseStr = mapper.writeValueAsString(ftResponse.build());
-			/*
-			 * rtgsInfoOutward.setFtResponseStr(ftResponseStr);
-			 * rtgsInfoOutward.setCbsFtno(ftResponse.build().getFtRef());
-			 * rtgsInfoOutward.setOfsResponse(responseData);
-			 */
+
 
 			rtgsInfoSave.setFtResponseStr(ftResponseStr);
 			rtgsInfoSave.setCbsFtno(ftResponse.build().getFtRef());
@@ -385,7 +263,6 @@ public class FtHandlerService {
 			// FIXME:
 			try {
 				rtgsInfoOutwardService.save(rtgsInfoSave);
-				// eftInfoOutwardService.save(eftInfoOutward);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				logger.info("-----::ERROR CHECKING----::" + rtgsInfoSave);
@@ -400,12 +277,12 @@ public class FtHandlerService {
 	}
 
 	/*
-	 * ---------------------------- RTGS Outward Transaction Pacs 08 end
+	 * ---------------------------- RTGS Outward Transaction Pacs 08 end ------------------------------------
 	 * --------------------------------------------
 	 */
 
 	/*
-	 * ---------------------------- RTGS Outward Transaction Pacs 09 start
+	 * ---------------------------- RTGS Outward Transaction Pacs 09 start ----------------------------------
 	 * --------------------------------------------
 	 */
 
@@ -431,7 +308,7 @@ public class FtHandlerService {
 			/**
 			 * Fetching Previous Ft Response from database record
 			 */
-			if (statusExist == EftStatus.SUCCESS.getValue() || statusExist == EftStatus.REVERSED.getValue()) {
+			if (statusExist == FtStatus.SUCCESS.getValue() || statusExist == FtStatus.REVERSED.getValue()) {
 
 				String ftResponseStr = rtgsInfoExist.getFtResponseStr();
 				ObjectMapper mapper = new ObjectMapper();
@@ -493,7 +370,7 @@ public class FtHandlerService {
 		 * rtgsInfoPacsNineOut.setOfsRequest(requestOFS);
 		 */
 
-		rtgsInfoSave.setStatus(EftStatus.PENDING.getValue());
+		rtgsInfoSave.setStatus(FtStatus.PENDING.getValue());
 		rtgsInfoSave.setOfsRequest(requestOFS);
 
 		// rtgsInfoSave =
@@ -527,7 +404,7 @@ public class FtHandlerService {
 				|| responseData.equals("403")) {
 			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ3.getText(),
 					ResponseStatus.FIVEZ3.getValue());
-			rtgsInfoSave.setStatus(EftStatus.FAILED.getValue());
+			rtgsInfoSave.setStatus(FtStatus.FAILED.getValue());
 			rtgsInfoPacsNineOutwardService.save(rtgsInfoSave);
 			// rtgsInfoOutwardService.save(rtgsInfoPacsNineOut);
 			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
@@ -547,7 +424,7 @@ public class FtHandlerService {
 			 */
 
 			ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
-			wrapper = processor.handleResponseOfs(responseData);
+			wrapper = processor.handleResponseOfs(responseData,0);
 
 			ftResponse.ftRef(wrapper.getFtRef()).message(wrapper.getMessage()).responseCode(wrapper.getResponseCode())
 					.additionalInfo(wrapper.getAdditionalInfo()).timestamp(rtgsInfoSave.getIssueDate());
@@ -587,10 +464,12 @@ public class FtHandlerService {
 
 	/*
 	 * ---------------------------- RTGS Outward Transaction Pacs 09 end
-	 * --------------------------------------------
 	 */
 
 	/*------------------------------------ Inward Transaction ----------------------------------------------- */
+	
+	/*
+	 * ---------------------------- RTGS Inward Transaction Pacs 08 --------------------------------------*/
 
 	public ResponseEntity<?> handleRtgsInwardTransaction(String requestOFS, RtgsInfoInward rtgsInfoInward,
 			HttpServletRequest httpServletRequest) throws Exception {
@@ -612,7 +491,7 @@ public class FtHandlerService {
 			/**
 			 * Fetching Previous Ft Response from database record
 			 */
-			if (statusExist == EftStatus.SUCCESS.getValue()) {
+			if (statusExist == FtStatus.SUCCESS.getValue()) {
 
 				String ftResponseStr = rtgsInfoExist.getFtResponseStr();
 				ObjectMapper mapper = new ObjectMapper();
@@ -675,7 +554,7 @@ public class FtHandlerService {
 		 * rtgsInfoOutward.setOfsRequest(requestOFS);
 		 */
 
-		rtgsInfoSave.setStatus(EftStatus.PENDING.getValue());
+		rtgsInfoSave.setStatus(FtStatus.PENDING.getValue());
 		rtgsInfoSave.setOfsRequest(requestOFS);
 
 		// rtgsInfoSave =
@@ -709,7 +588,7 @@ public class FtHandlerService {
 				|| responseData.equals("403")) {
 			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ3.getText(),
 					ResponseStatus.FIVEZ3.getValue());
-			rtgsInfoSave.setStatus(EftStatus.FAILED.getValue());
+			rtgsInfoSave.setStatus(FtStatus.FAILED.getValue());
 			rtgsInfoInwardService.save(rtgsInfoSave);
 			// rtgsInfoOutwardService.save(rtgsInfoOutward);
 			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
@@ -729,7 +608,7 @@ public class FtHandlerService {
 			 */
 
 			ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
-			wrapper = processor.handleResponseOfs(responseData);
+			wrapper = processor.handleResponseOfs(responseData,0);
 
 			ftResponse.ftRef(wrapper.getFtRef()).message(wrapper.getMessage()).responseCode(wrapper.getResponseCode())
 					.additionalInfo(wrapper.getAdditionalInfo()).timestamp(rtgsInfoSave.getIssueDate());
@@ -766,7 +645,7 @@ public class FtHandlerService {
 
 	}
 
-	/*------------------------- Inward Transaction PACS 08-------------------------------------------------*/
+	/*------------------------- Inward Transaction PACS 08 end -------------------------------------------------*/
 
 	/*
 	 * ---------------------------- RTGS Inward Transaction PACS 09 start
@@ -797,7 +676,7 @@ public class FtHandlerService {
 			/**
 			 * Fetching Previous Ft Response from database record
 			 */
-			if (statusExist == EftStatus.SUCCESS.getValue()) {
+			if (statusExist == FtStatus.SUCCESS.getValue()) {
 
 				String ftResponseStr = rtgsInfoExist.getFtResponseStr();
 				ObjectMapper mapper = new ObjectMapper();
@@ -859,7 +738,7 @@ public class FtHandlerService {
 		 * rtgsInfoPacsNineOut.setOfsRequest(requestOFS);
 		 */
 
-		rtgsInfoSave.setStatus(EftStatus.PENDING.getValue());
+		rtgsInfoSave.setStatus(FtStatus.PENDING.getValue());
 		rtgsInfoSave.setOfsRequest(requestOFS);
 
 		// rtgsInfoSave =
@@ -893,7 +772,7 @@ public class FtHandlerService {
 				|| responseData.equals("403")) {
 			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ3.getText(),
 					ResponseStatus.FIVEZ3.getValue());
-			rtgsInfoSave.setStatus(EftStatus.FAILED.getValue());
+			rtgsInfoSave.setStatus(FtStatus.FAILED.getValue());
 			rtgsInfoPacsNineInwardService.save(rtgsInfoSave);
 			// rtgsInfoOutwardService.save(rtgsInfoPacsNineOut);
 			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
@@ -913,7 +792,7 @@ public class FtHandlerService {
 			 */
 
 			ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
-			wrapper = processor.handleResponseOfs(responseData);
+			wrapper = processor.handleResponseOfs(responseData,0);
 
 			ftResponse.ftRef(wrapper.getFtRef()).message(wrapper.getMessage()).responseCode(wrapper.getResponseCode())
 					.additionalInfo(wrapper.getAdditionalInfo()).timestamp(rtgsInfoSave.getIssueDate());

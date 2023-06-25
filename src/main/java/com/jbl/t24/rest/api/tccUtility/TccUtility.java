@@ -36,6 +36,7 @@ public class TccUtility {
 	 * 401 = CANNOT PING THE TC SERVER
 	 * 402 = REQUEST NOT VALID
 	 * 403 = INTERNAL ERROR
+	 * 405 = INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS
 	 */
 
 	public String sendRequest(String sRequest) throws BlankOfsResponseException {
@@ -99,6 +100,8 @@ public class TccUtility {
 					if (sResponse.length() == 1) {
 						throw new BlankOfsResponseException("Response None Due to Unresponsive CBS.");
 					}
+					if(sResponse.toLowerCase().contains("INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS".toLowerCase()))
+						sResponse="405";
 					// System.out.println("len "+sResponse.trim());
 				}
 			}

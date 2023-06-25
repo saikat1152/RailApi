@@ -1,5 +1,6 @@
 package com.jbl.t24.rest.api.model;
 
+
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -102,5 +103,15 @@ public abstract class CommonFtInfo {
 
     @Column(name = "ft_response_str", length = 512)
     private String ftResponseStr;
+
+    // @CreationTimestamp
+ 	@Column(name = "reverse_date", columnDefinition = "TIMESTAMP", updatable = true, nullable = true)
+ 	protected Timestamp reverseDate;
+
+     @Column(name = "transaction_type")
+     protected String txType;
+
+    @Column(name = "reverse_enabled")
+ 	protected boolean reverseEnabled = true;
 
 }

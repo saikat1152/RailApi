@@ -10,4 +10,7 @@ public interface RtgsInfoPacsNineOutwardRepository extends JpaRepository<RtgsInf
 
 	RtgsInfoPacsNineOutward findByUniqueOutwardRtgsId(String uniqueOutwardRtgsId);
 
+	RtgsInfoPacsNineOutward findByCbsFtno(String findByCbsFtno);
+
+	
 }

@@ -20,10 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.model.RtgsInfoOutward;
 import com.jbl.t24.rest.api.model.RtgsInfoPacsNineOutward;
 import com.jbl.t24.rest.api.service.BeftnInfoService;
 import com.jbl.t24.rest.api.service.FtHandlerService;
+import com.jbl.t24.rest.api.service.FtHandlerServiceN;
 import com.jbl.t24.rest.api.service.RtgsHandlerService;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
@@ -35,6 +38,9 @@ public class RtgsOutwardPacsNineTransaction {
 
 	@Autowired
 	private FtHandlerService ftHandlerService;
+
+	@Autowired
+	private FtHandlerServiceN ftHandlerServiceN;
 
 	@RequestMapping(value = "/pacs09/out", method = RequestMethod.GET)
 
@@ -139,9 +145,15 @@ public class RtgsOutwardPacsNineTransaction {
 				+ "LOCAL.REF:128:1=" + partyName +","
 				+ "LOCAL.REF:129:1=" + instructionInfo +","
 				+ "LOCAL.REF:130:1=" + tradeFinanceInfo;
+		
+		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
+		rtgsInfoPacsNineOut.setHostname(hostIpData.get("host"));
+		rtgsInfoPacsNineOut.setIp(hostIpData.get("remoteAddr"));
 
-		ResponseEntity<?> response = ftHandlerService.handleRtgsOutwardPacsNineTransaction(requestOFS, rtgsInfoPacsNineOut, httpServletRequest);
+//		ResponseEntity<?> response = ftHandlerService.handleRtgsOutwardPacsNineTransaction(requestOFS, rtgsInfoPacsNineOut, httpServletRequest);
+		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, rtgsInfoPacsNineOut, uniqueFtId);
 
+		
 		System.out.println(response.getBody());
 		// return ResponseEntity.status(HttpStatus.OK).body(response);
 		return response;

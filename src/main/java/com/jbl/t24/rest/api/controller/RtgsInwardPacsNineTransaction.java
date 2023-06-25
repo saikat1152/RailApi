@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.model.RtgsInfoPacsNineInward;
 import com.jbl.t24.rest.api.model.RtgsInfoPacsNineOutward;
 import com.jbl.t24.rest.api.service.FtHandlerService;
+import com.jbl.t24.rest.api.service.FtHandlerServiceN;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
 @RestController
@@ -34,6 +36,9 @@ public class RtgsInwardPacsNineTransaction {
 
 	@Autowired
 	private FtHandlerService ftHandlerService;
+
+	@Autowired
+	private FtHandlerServiceN ftHandlerServiceN;
 
 	public ResponseEntity<?> rtgsTrasferInward(@Valid @RequestParam Map<String, String> requestParams,
 			HttpServletRequest httpServletRequest) throws Exception {
@@ -138,7 +143,14 @@ public class RtgsInwardPacsNineTransaction {
 				+ "LOCAL.REF:129:1=" + instructionInfo +","
 				+ "LOCAL.REF:130:1=" + tradeFinanceInfo;
 
-		ResponseEntity<?> response = ftHandlerService.handleRtgsInwardPacsNineTransaction(requestOFS, rtgsInfoPacsNineIn, httpServletRequest);
+
+		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
+		rtgsInfoPacsNineIn.setHostname(hostIpData.get("host"));
+		rtgsInfoPacsNineIn.setIp(hostIpData.get("remoteAddr"));
+
+		//ResponseEntity<?> response = ftHandlerService.handleRtgsInwardPacsNineTransaction(requestOFS, rtgsInfoPacsNineIn, httpServletRequest);
+		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, rtgsInfoPacsNineIn, uniqueFtId);
+
 		
 		System.out.println(response.getBody());
 		// return ResponseEntity.status(HttpStatus.OK).body(response);

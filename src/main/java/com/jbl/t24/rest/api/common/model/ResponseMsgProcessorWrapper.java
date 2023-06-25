@@ -14,9 +14,10 @@ import lombok.ToString;
 @ToString
 
 public class ResponseMsgProcessorWrapper {
-    private String message;
+	private String message;
     private int responseCode;
     private int ftStatus;
     private String additionalInfo;
     private String ftRef;
+    private String uniqueOperationTransactionId;
 }
