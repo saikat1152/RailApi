@@ -39,6 +39,7 @@ public enum ResponseStatus {
 	FOURZ25(425,"Image Not Found!"),
 	FOURZ26(426,"Amount cannot be less than 100000 for RTGS"),
 	FOURZ27(427,"INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS"),
+	FOURZ28(428, "Transaction Category Incorrect"),
 
 	FIVEZ0(500, "Internal Server Error!"),
 	FIVEZ3(503, "Service Unavailable!"),

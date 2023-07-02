@@ -36,13 +36,13 @@ public abstract class CommonFtInfo {
 //    @Transient
     @NotNull(message = "Branch Code Missing")
     @Pattern(regexp = "^[0-9]{4}$", message = "Branch Code Pattern Not Valid", flags = Flag.CASE_INSENSITIVE)
-    private String coCode;
+    protected String coCode;
 
     @Column(name = "company_code", length = 10)
-    private String companyCode = "BD001";
+    protected String companyCode = "BD001";
 
     @Column(name = "transaction_category", length = 10)
-    private String txCategory = "RTGS";
+	protected String txCategory = "RTGS";
 
    // @Pattern(regexp = ACCOUNT_NUMBER_PATTERN, message = "Debit Account Pattern Not Valid")
 	@Column(name = "debit_account", length = 63)
@@ -50,36 +50,36 @@ public abstract class CommonFtInfo {
 
     @Column(name = "currency", length = 5)
     @NotNull(message = "Currency is Missing")
-    private String currency;
+    protected String currency;
     
     @NotNull(message = "Debit Amount is Missing")
 	@Column(name = "debit_amount", length = 23)
-    private double debitAmount;
+    protected double debitAmount;
 
     @CreationTimestamp
     @Column(name = "issue_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, nullable = false)
-    private Timestamp issueDate;
+    protected Timestamp issueDate;
 
     //@Pattern(regexp = ACCOUNT_NUMBER_PATTERN, message = "Credit Account Pattern Not Valid")
 	@Column(name = "credit_account", length = 63)
-    private String creditAccNo;
+	protected String creditAccNo;
 
     @Column(name = "debit_details", unique = true, nullable = false, length = 256)
-    private String debitDetails;
+    protected String debitDetails;
 
     @Column(name = "credit_details", unique = true, nullable = false, length = 256)
-    private String creditDetails;
+    protected String creditDetails;
 
     @Column(name = "commission_code", unique = false, nullable = true, length = 20)
-    private String commissionCode;
+    protected String commissionCode;
 
     @Column(name = "commission_Type", unique = false, nullable = true, length = 20)
-    private String commissionType;
+    protected String commissionType;
 
-    private String instrumentNo;
+    protected String instrumentNo;
 
     @Column(name = "status", length = 2)
-    private int status;
+    protected int status;
 
 	/*
 	 * @Column(name = "category", nullable = false, length = 2) private int
@@ -87,22 +87,22 @@ public abstract class CommonFtInfo {
 	 */
 
     @Column(name = "ofs_request", length = 1048)
-    private String ofsRequest;
+    protected String ofsRequest;
 
     @Column(name = "ofs_response", length = 2048)
-    private String ofsResponse;
+    protected String ofsResponse;
 
     @Column(name = "ip", length = 63)
-    private String ip;
+    protected String ip;
 
     @Column(name = "hostname", length = 127)
-    private String hostname;
+    protected String hostname;
 
     @Column(name = "cbs_ft_number", length = 127)
-    private String cbsFtno;//[idx 0]
+    protected String cbsFtno;//[idx 0]
 
     @Column(name = "ft_response_str", length = 512)
-    private String ftResponseStr;
+    protected String ftResponseStr;
 
     // @CreationTimestamp
  	@Column(name = "reverse_date", columnDefinition = "TIMESTAMP", updatable = true, nullable = true)
@@ -112,6 +112,6 @@ public abstract class CommonFtInfo {
      protected String txType;
 
     @Column(name = "reverse_enabled")
- 	protected boolean reverseEnabled = true;
+    protected boolean reverseEnabled = true;
 
 }

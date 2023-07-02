@@ -35,6 +35,8 @@ import com.jbl.t24.rest.api.model.RtgsInfoInward;
 import com.jbl.t24.rest.api.model.RtgsInfoOutward;
 import com.jbl.t24.rest.api.model.RtgsInfoPacsNineInward;
 import com.jbl.t24.rest.api.model.RtgsInfoPacsNineOutward;
+import com.jbl.t24.rest.api.model.SettlementInInfo;
+import com.jbl.t24.rest.api.model.SettlementOutInfo;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 import java.sql.Timestamp;
 
@@ -65,10 +67,15 @@ public class FtHandlerServiceN {
         } else if(ftInfo instanceof RtgsInfoPacsNineInward){
             ftSave = new RtgsInfoPacsNineInward();
             ftExist = new RtgsInfoPacsNineInward();
-        }else {
+        }else if(ftInfo instanceof RtgsInfoPacsNineOutward){
         	ftSave = new RtgsInfoPacsNineOutward();
             ftExist = new RtgsInfoPacsNineOutward();
-        	
+        } else if (ftInfo instanceof SettlementInInfo) {
+            ftSave = new SettlementInInfo();
+            ftExist = new SettlementInInfo();
+        } else if (ftInfo instanceof SettlementOutInfo) {
+            ftSave = new SettlementOutInfo();
+            ftExist = new SettlementOutInfo();
         }
 
         TccUtility tccUtility = new TccUtility();
@@ -128,7 +135,7 @@ public class FtHandlerServiceN {
         		responseCode = ResponseStatus.FIVEZ3.getValue();
         		responseMsg = ResponseStatus.FIVEZ3.getText();
         	}
-        	
+
             JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, responseMsg,responseCode);
             service.save(ftSave);
 
