@@ -28,6 +28,7 @@ import com.jbl.t24.rest.api.common.model.FtTxResponse.FtTxResponseBuilder;
 import com.jbl.t24.rest.api.config.Mapper;
 
 import com.jbl.t24.rest.api.enums.FtStatus;
+import com.jbl.t24.rest.api.enums.RTGSCategory;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.model.CommonFtInfo;
 import com.jbl.t24.rest.api.model.EftInfoOutward;
@@ -50,6 +51,8 @@ public class FtHandlerServiceN {
     @Autowired
     ResponseMessageProcessor processor = new ResponseMessageProcessor();
 
+    public static final int RTGS_OUWARD_PACS8_MIN_VALUE = 100000;
+
     public ResponseEntity<?> handleFtTransaction(String requestOFS, CommonFtInfo ftInfo,
             String uniqueId)
             throws Exception {
@@ -64,6 +67,25 @@ public class FtHandlerServiceN {
         } else if (ftInfo instanceof RtgsInfoOutward) {
             ftSave = new RtgsInfoOutward();
             ftExist = new RtgsInfoOutward();
+            RtgsInfoOutward temp = (RtgsInfoOutward)ftInfo;
+            ftSave = (RtgsInfoOutward)ftSave;
+            /*
+    		 * checking the categorty RTGS Ouward=1 Customs E payment=3, RTGS Inward=2
+    		 */
+
+    		int category = temp == null ? 0 : temp.getCategory();
+
+    		if (category == RTGSCategory.RTGSOUTWARDPACS8.getValue()
+    				&& ftInfo.getDebitAmount() < RTGS_OUWARD_PACS8_MIN_VALUE) {
+    			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ26.getText(),
+    					ResponseStatus.FOURZ26.getValue());
+    			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
+    		}
+    		
+    		
+			/*
+			 * else { temp.setCategory(1); }
+			 */
         } else if(ftInfo instanceof RtgsInfoPacsNineInward){
             ftSave = new RtgsInfoPacsNineInward();
             ftExist = new RtgsInfoPacsNineInward();

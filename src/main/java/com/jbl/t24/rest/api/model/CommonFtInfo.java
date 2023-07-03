@@ -41,7 +41,7 @@ public abstract class CommonFtInfo {
     @Column(name = "company_code", length = 10)
     protected String companyCode = "BD001";
 
-    @Column(name = "transaction_category", length = 10)
+    @Column(name = "transaction_category", length = 20)
 	protected String txCategory = "RTGS";
 
    // @Pattern(regexp = ACCOUNT_NUMBER_PATTERN, message = "Debit Account Pattern Not Valid")

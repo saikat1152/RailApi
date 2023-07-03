@@ -62,8 +62,8 @@ public class ReverseTxController {
         
 //        RtgsInfoOutward rtgsInfoOutward = rtgsInfoOutwardService.findByCbsFtno(cbsFtNo);
         if (rtgsOutward == null) {
-            JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ26.getText(),
-                    ResponseStatus.FOURZ26.getValue());
+            JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ29.getText(),
+                    ResponseStatus.FOURZ29.getValue());
             return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
         }
         if (rtgsOutward.getStatus() == FtStatus.REVERSED.getValue()) {

@@ -68,7 +68,7 @@ public class RtgsInfoService {
 		} else if (entity instanceof RtgsInfoPacsNineInward) {
 			infoPacsNineInwardRepository.save((RtgsInfoPacsNineInward) entity);
 
-		} else if (entity instanceof RtgsInfoPacsNineOutwardRepository) {
+		} else if (entity instanceof RtgsInfoPacsNineOutward) {
 			infoPacsNineOutwardRepository.save((RtgsInfoPacsNineOutward) entity);
 		} else if (entity instanceof SettlementInInfo) {
 			settlementInInfoRepositoryEFT.save((SettlementInInfo) entity);

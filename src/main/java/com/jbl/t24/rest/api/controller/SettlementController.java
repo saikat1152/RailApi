@@ -42,7 +42,7 @@ public class SettlementController {
             HttpServletRequest httpServletRequest) throws Exception {
     	
 
-    	if(!settlementInfo.getTxCategory().equals("PACS08-Inward") || !settlementInfo.getTxCategory().equals("PACS09-Inward")) {
+    	if(!settlementInfo.getTxCategory().equals("PACS08-Inward") && !settlementInfo.getTxCategory().equals("PACS09-Inward")) {
         	JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ28.getText(),
                     ResponseStatus.FOURZ28.getValue());
         	return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
@@ -52,7 +52,7 @@ public class SettlementController {
         ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, settlementInfo, settlementInfo.getUniqueSettlementtId());
 
         System.out.println(response.getBody());
-        logger.info("BEFTN Outward Process Finished");
+        logger.info("RTGS Inward Settlement Process Finished");
         // return ResponseEntity.status(HttpStatus.OK).body(response);
         System.out.println("---- "+settlementInfo);
         return response;
@@ -64,7 +64,7 @@ public class SettlementController {
     public ResponseEntity<?> settlementOutward(@Valid @RequestBody SettlementOutInfo settlementOutInfo,
             HttpServletRequest httpServletRequest) throws Exception {
     	
-    	if(!settlementOutInfo.getTxCategory().equals("PACS08-Outward") || !settlementOutInfo.getTxCategory().equals("PACS09-Outward")) {
+    	if(!settlementOutInfo.getTxCategory().equals("PACS08-Outward") && !settlementOutInfo.getTxCategory().equals("PACS09-Outward")) {
         	JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ28.getText(),
                     ResponseStatus.FOURZ28.getValue());
         	return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
@@ -75,7 +75,7 @@ public class SettlementController {
         ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, settlementOutInfo, settlementOutInfo.getUniqueSettlementtId());
 
         System.out.println(response.getBody());
-        logger.info("BEFTN Outward Process Finished");
+        logger.info("RTGS Outward Settlement Process Finished");
         // return ResponseEntity.status(HttpStatus.OK).body(response);
         System.out.println("---- "+settlementOutInfo);
         return response;
