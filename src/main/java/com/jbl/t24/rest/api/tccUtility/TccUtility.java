@@ -23,7 +23,7 @@ public class TccUtility {
 		// System.out.println("tcf object " + tcf);
 
 		// sendPingRequest("10.180.10.60");
-		channel = "ISOLIST2";
+		channel = "ISOLIST";
 	}
 
 	public TccUtility(String ch) throws IOException {
@@ -114,6 +114,7 @@ public class TccUtility {
 			tcEx.printStackTrace();
 			sResponse = "403";
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			sResponse = "403";
 		}
 		return sResponse;

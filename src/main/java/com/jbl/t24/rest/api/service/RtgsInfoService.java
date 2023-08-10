@@ -35,6 +35,8 @@ public class RtgsInfoService {
 	@Autowired
 	private SettlementOutInfoRepositoryEFT settlementOutInfoRepositoryEFT;
 
+	public static final String RTGS_PACS08_REVERSE_TRANSACTION="1";
+
 	public CommonFtInfo findByUniqueId(CommonFtInfo ftInfo, String uniqueId) {
 		if (ftInfo instanceof RtgsInfoInward) {
 			return infoInwardRepository.findByUniqueInwardRtgsId(uniqueId);
@@ -45,7 +47,7 @@ public class RtgsInfoService {
 		} else if (ftInfo instanceof RtgsInfoPacsNineInward) {
 			return infoPacsNineInwardRepository.findByUniqueInwardRtgsId(uniqueId);
 
-		} else if (ftInfo instanceof RtgsInfoPacsNineOutwardRepository) {
+		} else if (ftInfo instanceof RtgsInfoPacsNineOutward) {
 			return infoPacsNineOutwardRepository.findByUniqueOutwardRtgsId(uniqueId);
 		} else if (ftInfo instanceof SettlementInInfo) {
 			return settlementInInfoRepositoryEFT.findByUniqueSettlementtId(uniqueId);
@@ -78,7 +80,7 @@ public class RtgsInfoService {
 	}
 
 	public CommonFtInfo findByCbsFtNo(String flag, String cbsFtNo) {
-		if (flag.equals("1")) {
+		if (flag.equals(RTGS_PACS08_REVERSE_TRANSACTION)) {
 			return infoOutwardRepository.findByCbsFtno(cbsFtNo);
 		} else {
 			return infoPacsNineOutwardRepository.findByCbsFtno(cbsFtNo);
