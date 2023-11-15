@@ -81,11 +81,7 @@ public class FtHandlerServiceN {
     					ResponseStatus.FOURZ26.getValue());
     			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
     		}
-    		
-    		
-			/*
-			 * else { temp.setCategory(1); }
-			 */
+
         } else if(ftInfo instanceof RtgsInfoPacsNineInward){
             ftSave = new RtgsInfoPacsNineInward();
             ftExist = new RtgsInfoPacsNineInward();
@@ -113,9 +109,7 @@ public class FtHandlerServiceN {
             if (statusExist == FtStatus.SUCCESS.getValue() || statusExist == FtStatus.REVERSED.getValue()) {
 
                 String ftResponseStr = ftExist.getFtResponseStr();
-                // ObjectMapper mapper = new ObjectMapper();
-                // FtTxResponse savedFtResponse = mapper.readValue(ftResponseStr,
-                // FtTxResponse.class);
+
                 FtTxResponse ftResponse = Mapper.readValue(ftResponseStr);
 
                 String message = ftExist.getStatus() == 2 ? ResponseStatus.TWOZ2.getText()
@@ -126,13 +120,19 @@ public class FtHandlerServiceN {
                 return ResponseEntity.status(HttpStatus.OK).body(ftResponse);
             }
 
-            else {
-                logger.info("FT Alreeady Exists but Failed or Pending");
-                ftSave = ftExist;
-                ftSave.setCoCode(ftInfo.getCoCode());
+			else {
+				logger.info("FT Alreeady Exists but Failed or Pending");
 
-            }
-        }
+				if (statusExist == FtStatus.PENDING.getValue()) {
+					JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
+							ResponseStatus.FOURZ27.getText(), ResponseStatus.FOURZ27.getValue());
+					return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
+				}
+				ftSave = ftExist;
+				ftSave.setCoCode(ftInfo.getCoCode());
+
+			}
+		}
 
         System.out.println(ftSave.toString());
 
@@ -142,29 +142,20 @@ public class FtHandlerServiceN {
         logger.info("FT saved as PENDING");
 
         String responseData = tccUtility.sendRequest(requestOFS);
+        System.out.println(responseData);
 
         ftSave.setIssueDate(new Timestamp(System.currentTimeMillis()));
 
-        if (responseData.equals("400") || responseData.equals("401") || responseData.equals("402")
-                || responseData.equals("403") || responseData.equals("405")) {
-        	int responseCode;
-        	String responseMsg;
-        	if(responseData.equals("405")) {
-        		responseCode = ResponseStatus.FOURZ27.getValue();
-        		responseMsg = ResponseStatus.FOURZ27.getText();
-        	}
-        	else {
-        		responseCode = ResponseStatus.FIVEZ3.getValue();
-        		responseMsg = ResponseStatus.FIVEZ3.getText();
-        	}
+        if (responseData.startsWith("40")) {
 
-            JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, responseMsg,responseCode);
+            JwtErrorResponse jwtErrorResponse = getCbsJwtError(responseData);
+            ftSave.setStatus(FtStatus.FAILED.getValue());
+            ftSave.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
             service.save(ftSave);
 
             logger.error("Server Error:: " + jwtErrorResponse);
 
             return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
-
         } else {
             FtTxResponseBuilder ftResponse = FtTxResponse.builder();
 
@@ -202,6 +193,38 @@ public class FtHandlerServiceN {
             return ResponseEntity.status(HttpStatus.OK).body(ftResponse.build());
 
         }
+
+    }
+
+    private JwtErrorResponse getCbsJwtError(String responseData) {
+		JwtErrorResponse jwtErrorResponse;
+		switch (responseData) {
+		case "400":
+		case "401":
+			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ3.getText(),
+					ResponseStatus.FIVEZ3.getValue());
+			break;
+		case "402":
+            jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ2.getText(),
+                    ResponseStatus.FIVEZ2.getValue());
+            break;
+		case "403":
+            jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ0.getText(),
+                    ResponseStatus.FIVEZ0.getValue());
+            break;
+		case "404":
+            jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ4.getText(),
+                    ResponseStatus.FIVEZ4.getValue());
+            break;
+        case "405":
+            jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ5.getText(),
+                    ResponseStatus.FIVEZ5.getValue());
+            break;
+		default:
+			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ99.getText(),
+					ResponseStatus.FIVEZ99.getValue());
+		}
+		return jwtErrorResponse;
 
     }
 

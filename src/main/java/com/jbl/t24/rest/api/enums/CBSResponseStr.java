@@ -26,7 +26,7 @@ public enum CBSResponseStr {
 	/**
 	 * Below response are for RTGS Purposes
 	*/
-	invalidCompany("INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS");
+	invalidCompanyCodeAssigned("INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS");
 
 
 	private final String text;

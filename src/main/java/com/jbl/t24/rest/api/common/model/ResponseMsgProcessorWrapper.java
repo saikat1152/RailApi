@@ -20,4 +20,11 @@ public class ResponseMsgProcessorWrapper {
     private String additionalInfo;
     private String ftRef;
     private String uniqueOperationTransactionId;
+
+    public void setWrapperValues(String ftRef, String message, int responseCode, int ftStatus) {
+        this.message = message;
+        this.ftRef = ftRef;
+        this.responseCode = responseCode;
+        this.ftStatus = ftStatus;
+    }
 }
