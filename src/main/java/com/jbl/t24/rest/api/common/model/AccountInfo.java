@@ -26,5 +26,6 @@ public class AccountInfo {
 	private String postingResTrictionType;
 	private String postingRestrictionDescription;
 	private String currency;
+	private String accountType;
 
 }

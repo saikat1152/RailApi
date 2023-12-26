@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jbl.t24.rest.api.config.HostIpHandle;
+import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.model.RtgsInfoPacsNineInward;
 import com.jbl.t24.rest.api.model.RtgsInfoPacsNineOutward;
 import com.jbl.t24.rest.api.service.FtHandlerService;
@@ -120,7 +121,7 @@ public class RtgsInwardPacsNineTransaction {
 		// String requestOFS = "";
 
 		issueDate = "20220506";
-		final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
+		/*final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
 				+ companyCode
 				+ ",,TRANSACTION.TYPE=" + txType + ","
 				+ "DEBIT.ACCT.NO=" + debitAccNo + ","
@@ -142,16 +143,21 @@ public class RtgsInwardPacsNineTransaction {
 				+ "LOCAL.REF:128:1=" + partyName +","
 				+ "LOCAL.REF:129:1=" + instructionInfo +","
 				+ "LOCAL.REF:130:1=" + tradeFinanceInfo;
-
+*/
 
 		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
 		rtgsInfoPacsNineIn.setHostname(hostIpData.get("host"));
 		rtgsInfoPacsNineIn.setIp(hostIpData.get("remoteAddr"));
 
+		final String requestOFS = String.format(OfsSources.REQUEST_OFS_STRING_P9,
+				companyCode, txType, debitAccNo, debitDetails, issueDate, creditAccNo, debitDetails, creditDetails,
+				uniqueFtId, commissionCode, commissionType, otherInfo, billDescription, lcNumber, partyName,
+				instructionInfo, tradeFinanceInfo);
+
 		//ResponseEntity<?> response = ftHandlerService.handleRtgsInwardPacsNineTransaction(requestOFS, rtgsInfoPacsNineIn, httpServletRequest);
 		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, rtgsInfoPacsNineIn, uniqueFtId);
 
-		
+
 		System.out.println(response.getBody());
 		// return ResponseEntity.status(HttpStatus.OK).body(response);
 		return response;

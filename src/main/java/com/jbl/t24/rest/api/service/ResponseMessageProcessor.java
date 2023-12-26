@@ -181,10 +181,10 @@ public class ResponseMessageProcessor {
                     wrapper.setWrapperValues(ftRef, ResponseStatus.TWOZ6.getText(), ResponseStatus.TWOZ6.getValue(),
                             FtStatus.FAILED.getValue());
                 } else {
-                    wrapper.setMessage(ResponseStatus.TWOZ1.getText());
-                    wrapper.setResponseCode(ResponseStatus.TWOZ1.getValue());
-                    wrapper.setFtStatus(FtStatus.FAILED.getValue());
-                    // NOTE: Not With Builder
+//                    wrapper.setMessage(ResponseStatus.TWOZ1.getText());
+//                    wrapper.setResponseCode(ResponseStatus.TWOZ1.getValue());
+//                    wrapper.setFtStatus(FtStatus.FAILED.getValue());
+//                    // NOTE: Not With Builder
                     // ftResponse.setMessage(ResponseStatus.TWOZ1.getText());
                     // ftResponse.setResponseCode(ResponseStatus.TWOZ1.getValue());
                     wrapper.setWrapperValues(null, ResponseStatus.TWOZ1.getText(), ResponseStatus.TWOZ1.getValue(),
@@ -194,7 +194,6 @@ public class ResponseMessageProcessor {
         }
 
         wrapper.setAdditionalInfo(additionalInfo);
-
         return wrapper;
 
     }

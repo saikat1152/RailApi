@@ -1,37 +1,21 @@
 package com.jbl.t24.rest.api.service;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jbl.t24.rest.api.common.model.FtResponse;
 import com.jbl.t24.rest.api.common.model.FtTxResponse;
 import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
 import com.jbl.t24.rest.api.common.model.ResponseMsgProcessorWrapper;
 import com.jbl.t24.rest.api.common.model.FtTxResponse.FtTxResponseBuilder;
 import com.jbl.t24.rest.api.config.Mapper;
-
+import com.jbl.t24.rest.api.constant.JwtErrorsCBS;
 import com.jbl.t24.rest.api.enums.FtStatus;
 import com.jbl.t24.rest.api.enums.RTGSCategory;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.model.CommonFtInfo;
-import com.jbl.t24.rest.api.model.EftInfoOutward;
 import com.jbl.t24.rest.api.model.RtgsInfoInward;
 import com.jbl.t24.rest.api.model.RtgsInfoOutward;
 import com.jbl.t24.rest.api.model.RtgsInfoPacsNineInward;
@@ -85,7 +69,7 @@ public class FtHandlerServiceN {
         } else if(ftInfo instanceof RtgsInfoPacsNineInward){
             ftSave = new RtgsInfoPacsNineInward();
             ftExist = new RtgsInfoPacsNineInward();
-        }else if(ftInfo instanceof RtgsInfoPacsNineOutward){
+        } else if(ftInfo instanceof RtgsInfoPacsNineOutward){
         	ftSave = new RtgsInfoPacsNineOutward();
             ftExist = new RtgsInfoPacsNineOutward();
         } else if (ftInfo instanceof SettlementInInfo) {
@@ -121,15 +105,17 @@ public class FtHandlerServiceN {
             }
 
 			else {
-				logger.info("FT Alreeady Exists but Failed or Pending");
+				 logger.info("FT Alreeady Exists but Failed or Pending");
 
 				if (statusExist == FtStatus.PENDING.getValue()) {
+					logger.info("FT Alreeady Exists but Pending");
 					JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
 							ResponseStatus.FOURZ27.getText(), ResponseStatus.FOURZ27.getValue());
 					return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 				}
 				ftSave = ftExist;
 				ftSave.setCoCode(ftInfo.getCoCode());
+				logger.info("FT Alreeady Exists but Failed");
 
 			}
 		}
@@ -148,9 +134,10 @@ public class FtHandlerServiceN {
 
         if (responseData.startsWith("40")) {
 
-            JwtErrorResponse jwtErrorResponse = getCbsJwtError(responseData);
+            JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(responseData);
             ftSave.setStatus(FtStatus.FAILED.getValue());
             ftSave.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
+            ftSave.setOfsResponse(responseData);
             service.save(ftSave);
 
             logger.error("Server Error:: " + jwtErrorResponse);
@@ -163,13 +150,26 @@ public class FtHandlerServiceN {
                     .uniqueEft(uniqueId);
 
             ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
-            wrapper = processor.handleResponseOfs(responseData,0);
 
-            ftResponse.ftRef(wrapper.getFtRef())
-                    .message(wrapper.getMessage())
-                    .responseCode(wrapper.getResponseCode())
-                    .additionalInfo(wrapper.getAdditionalInfo())
-                    .timestamp(ftSave.getIssueDate());
+            try {
+            	wrapper = processor.handleResponseOfs(responseData,0);
+				ftResponse.ftRef(wrapper.getFtRef())
+				        .message(wrapper.getMessage())
+				        .responseCode(wrapper.getResponseCode())
+				        .additionalInfo(wrapper.getAdditionalInfo())
+				        .timestamp(ftSave.getIssueDate());
+			} catch (Exception e1) {
+
+				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ0.getText(),
+						ResponseStatus.FIVEZ0.getValue());
+				ftSave.setStatus(FtStatus.FAILED.getValue());
+				ftSave.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
+				ftSave.setOfsResponse(responseData);
+
+				logger.error("Server error----: " + jwtErrorResponse);
+				service.save(ftSave);
+				return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
+			}
 
             String ftResponseStr = Mapper.mapToJsonString(ftResponse.build());
 
@@ -193,38 +193,6 @@ public class FtHandlerServiceN {
             return ResponseEntity.status(HttpStatus.OK).body(ftResponse.build());
 
         }
-
-    }
-
-    private JwtErrorResponse getCbsJwtError(String responseData) {
-		JwtErrorResponse jwtErrorResponse;
-		switch (responseData) {
-		case "400":
-		case "401":
-			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ3.getText(),
-					ResponseStatus.FIVEZ3.getValue());
-			break;
-		case "402":
-            jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ2.getText(),
-                    ResponseStatus.FIVEZ2.getValue());
-            break;
-		case "403":
-            jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ0.getText(),
-                    ResponseStatus.FIVEZ0.getValue());
-            break;
-		case "404":
-            jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ4.getText(),
-                    ResponseStatus.FIVEZ4.getValue());
-            break;
-        case "405":
-            jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ5.getText(),
-                    ResponseStatus.FIVEZ5.getValue());
-            break;
-		default:
-			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ99.getText(),
-					ResponseStatus.FIVEZ99.getValue());
-		}
-		return jwtErrorResponse;
 
     }
 

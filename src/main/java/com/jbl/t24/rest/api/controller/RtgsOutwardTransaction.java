@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jbl.t24.rest.api.config.HostIpHandle;
+import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.model.RtgsInfoOutward;
-import com.jbl.t24.rest.api.service.BeftnInfoService;
 import com.jbl.t24.rest.api.service.FtHandlerService;
 import com.jbl.t24.rest.api.service.FtHandlerServiceN;
 import com.jbl.t24.rest.api.service.RtgsHandlerService;
@@ -49,24 +49,7 @@ public class RtgsOutwardTransaction {
 		/**
 		 * Setting the versionwise OFS Message @requestOFS
 		 */
-		/**
-		 * ACOD --> BEFTN Outward
-		 * ACOR ---> RTGS Outward
-		 * ACIR ---> RTGS Inward
-		 * ACOP ---> RTGS Outward PACS 09 FC
-		 * ACIN ---> RTGS Inward PACS 09 FC
-		 */
 
-		/**
-		 * BEFT , RTGS, BACH
-		 * Current Timestamp YYYYMMDD HH:MM:SS
-		 * Unique ID
-		 */
-
-		/**
-		 * Currency
-		 * USD, GBP, EUR,
-		 */
 		String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,BD0010888,,TRANSACTION.TYPE=ACOR,DEBIT.ACCT.NO=0100146594209,DEBIT.CURRENCY=BDT,DEBIT.AMOUNT=10,DEBIT.VALUE.DATE=20220506,CREDIT.ACCT.NO=BDT171120001,ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,FT.DR.DETAILS=BACH,FT.DR.DETAILS=,COMMISSION.CODE=,COMMISSION.TYPE=,CHEQUE.NUMBER=,LOCAL.REF:3:1=,LOCAL.REF:94:1=0021699806164052";
 
 		// BeftnOutwardInfo beftnInfoSave = null;
@@ -82,6 +65,24 @@ public class RtgsOutwardTransaction {
 		return ResponseEntity.status(HttpStatus.OK).body(ofsResponse);
 
 	}
+
+	/**
+	 * BEFT , RTGS, BACH
+	 * Current Timestamp YYYYMMDD HH:MM:SS
+	 * Unique ID
+	 */
+
+	/**
+	 * Currency
+	 * USD, GBP, EUR,
+	 */
+	/**
+	 * ACOD --> BEFTN Outward
+	 * ACOR ---> RTGS Outward
+	 * ACIR ---> RTGS Inward
+	 * ACOP ---> RTGS Outward PACS 09 FC
+	 * ACIN ---> RTGS Inward PACS 09 FC
+	 */
 
 	@RequestMapping(value = "/outward", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 
@@ -115,6 +116,7 @@ public class RtgsOutwardTransaction {
 		// String requestOFS = "";
 
 		issueDate = "20220506";
+		/*
 		final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
 				+ companyCode
 				+ ",,TRANSACTION.TYPE=" + txType + ","
@@ -131,7 +133,12 @@ public class RtgsOutwardTransaction {
 				+ "CHEQUE.NUMBER=,"
 				+ "LOCAL.REF:3:1=,"
 				+ "LOCAL.REF:94:1=" + uniqueFtId;
+				*/
 		
+		final String requestOFS = String.format(OfsSources.REQUEST_OFS_STRING, companyCode, txType, debitAccNo,
+				currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, uniqueFtId, commissionCode,
+				commissionType);
+
 		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
 		rtgsInfoOut.setHostname(hostIpData.get("host"));
 		rtgsInfoOut.setIp(hostIpData.get("remoteAddr"));

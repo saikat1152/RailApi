@@ -22,12 +22,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jbl.t24.rest.api.config.HostIpHandle;
-import com.jbl.t24.rest.api.model.RtgsInfoOutward;
+import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.model.RtgsInfoPacsNineOutward;
-import com.jbl.t24.rest.api.service.BeftnInfoService;
 import com.jbl.t24.rest.api.service.FtHandlerService;
 import com.jbl.t24.rest.api.service.FtHandlerServiceN;
-import com.jbl.t24.rest.api.service.RtgsHandlerService;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
 @RestController
@@ -123,32 +121,37 @@ public class RtgsOutwardPacsNineTransaction {
 		// String requestOFS = "";
 
 		issueDate = "20220506";
-		final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
-				+ companyCode
-				+ ",,TRANSACTION.TYPE=" + txType + ","
-				+ "DEBIT.ACCT.NO=" + debitAccNo + ","
-				+ "DEBIT.CURRENCY=" + currency + ","
-				+ "DEBIT.AMOUNT=" + debitAmount + ","
-				+ "DEBIT.VALUE.DATE=" + issueDate + ","
-				+ "CREDIT.ACCT.NO=" + creditAccNo + ","
-				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,"
-				+ "FT.DR.DETAILS=" + debitDetails + ","
-				+ "FT.CR.DETAILS=" + creditDetails + ","
-				+ "COMMISSION.CODE=" + commissionCode+ ","
-				+ "COMMISSION.TYPE="+ commissionType +","
-				+ "CHEQUE.NUMBER=,"
-				+ "LOCAL.REF:3:1=,"
-				+ "LOCAL.REF:94:1=" + uniqueFtId +","
-				+ "LOCAL.REF:125:1=" + otherInfo +","
-				+ "LOCAL.REF:126:1=" + billDescription +","
-				+ "LOCAL.REF:127:1=" + lcNumber +","
-				+ "LOCAL.REF:128:1=" + partyName +","
-				+ "LOCAL.REF:129:1=" + instructionInfo +","
-				+ "LOCAL.REF:130:1=" + tradeFinanceInfo;
-		
+//		final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
+//				+ companyCode
+//				+ ",,TRANSACTION.TYPE=" + txType + ","
+//				+ "DEBIT.ACCT.NO=" + debitAccNo + ","
+//				+ "DEBIT.CURRENCY=" + currency + ","
+//				+ "DEBIT.AMOUNT=" + debitAmount + ","
+//				+ "DEBIT.VALUE.DATE=" + issueDate + ","
+//				+ "CREDIT.ACCT.NO=" + creditAccNo + ","
+//				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,"
+//				+ "FT.DR.DETAILS=" + debitDetails + ","
+//				+ "FT.CR.DETAILS=" + creditDetails + ","
+//				+ "COMMISSION.CODE=" + commissionCode+ ","
+//				+ "COMMISSION.TYPE="+ commissionType +","
+//				+ "CHEQUE.NUMBER=,"
+//				+ "LOCAL.REF:3:1=,"
+//				+ "LOCAL.REF:94:1=" + uniqueFtId +","
+//				+ "LOCAL.REF:125:1=" + otherInfo +","
+//				+ "LOCAL.REF:126:1=" + billDescription +","
+//				+ "LOCAL.REF:127:1=" + lcNumber +","
+//				+ "LOCAL.REF:128:1=" + partyName +","
+//				+ "LOCAL.REF:129:1=" + instructionInfo +","
+//				+ "LOCAL.REF:130:1=" + tradeFinanceInfo;
+//		
 		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
 		rtgsInfoPacsNineOut.setHostname(hostIpData.get("host"));
 		rtgsInfoPacsNineOut.setIp(hostIpData.get("remoteAddr"));
+
+		final String requestOFS = String.format(OfsSources.REQUEST_OFS_STRING_P9,
+				companyCode, txType, debitAccNo, debitDetails, issueDate, creditAccNo, debitDetails, creditDetails,
+				uniqueFtId, commissionCode, commissionType, otherInfo, billDescription, lcNumber, partyName,
+				instructionInfo, tradeFinanceInfo);
 
 //		ResponseEntity<?> response = ftHandlerService.handleRtgsOutwardPacsNineTransaction(requestOFS, rtgsInfoPacsNineOut, httpServletRequest);
 		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, rtgsInfoPacsNineOut, uniqueFtId);

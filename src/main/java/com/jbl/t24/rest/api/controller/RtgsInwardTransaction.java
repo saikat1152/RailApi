@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jbl.t24.rest.api.config.HostIpHandle;
+import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.model.RtgsInfoInward;
 import com.jbl.t24.rest.api.service.FtHandlerService;
 import com.jbl.t24.rest.api.service.FtHandlerServiceN;
@@ -35,7 +36,7 @@ public class RtgsInwardTransaction {
 
 	@Autowired
 	private FtHandlerService ftHandlerService;
-	
+
 	@Autowired
 	private FtHandlerServiceN ftHandlerServiceN;
 
@@ -113,27 +114,31 @@ public class RtgsInwardTransaction {
 		// String requestOFS = "";
 
 		issueDate = "20220506";
-		final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
-				+ companyCode
-				+ ",,TRANSACTION.TYPE=" + txType + ","
-				+ "DEBIT.ACCT.NO=" + debitAccNo + ","
-				+ "DEBIT.CURRENCY=" + currency + ","
-				+ "DEBIT.AMOUNT=" + debitAmount + ","
-				+ "DEBIT.VALUE.DATE=" + issueDate + ","
-				+ "CREDIT.ACCT.NO=" + creditAccNo + ","
-				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,"
-				+ "FT.DR.DETAILS=" + debitDetails + ","
-				+ "FT.CR.DETAILS=" + creditDetails + ","
-				+ "COMMISSION.CODE=" + commissionCode+ ","
-				+ "COMMISSION.TYPE="+ commissionType +","
-				+ "CHEQUE.NUMBER=,"
-				+ "LOCAL.REF:3:1=,"
-				+ "LOCAL.REF:94:1=" + uniqueFtId;
+//		final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
+//				+ companyCode
+//				+ ",,TRANSACTION.TYPE=" + txType + ","
+//				+ "DEBIT.ACCT.NO=" + debitAccNo + ","
+//				+ "DEBIT.CURRENCY=" + currency + ","
+//				+ "DEBIT.AMOUNT=" + debitAmount + ","
+//				+ "DEBIT.VALUE.DATE=" + issueDate + ","
+//				+ "CREDIT.ACCT.NO=" + creditAccNo + ","
+//				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,"
+//				+ "FT.DR.DETAILS=" + debitDetails + ","
+//				+ "FT.CR.DETAILS=" + creditDetails + ","
+//				+ "COMMISSION.CODE=" + commissionCode+ ","
+//				+ "COMMISSION.TYPE="+ commissionType +","
+//				+ "CHEQUE.NUMBER=,"
+//				+ "LOCAL.REF:3:1=,"
+//				+ "LOCAL.REF:94:1=" + uniqueFtId;
 		
 
 		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
 		rtgsInfoInward.setHostname(hostIpData.get("host"));
 		rtgsInfoInward.setIp(hostIpData.get("remoteAddr"));
+
+		final String requestOFS = String.format(OfsSources.REQUEST_OFS_STRING, companyCode, txType, debitAccNo,
+				currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, uniqueFtId, commissionCode,
+				commissionType);
 
 //		ResponseEntity<?> response = ftHandlerService.handleRtgsInwardTransaction(requestOFS, rtgsInfoInward, httpServletRequest);
 		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, rtgsInfoInward, uniqueFtId);
@@ -143,6 +148,5 @@ public class RtgsInwardTransaction {
 		return response;
 
 	}
-	
 
 }
