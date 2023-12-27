@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
-import com.jbl.t24.rest.api.model.EftInfoOutward;
 import com.jbl.t24.rest.api.model.SettlementInInfo;
 import com.jbl.t24.rest.api.model.SettlementOutInfo;
 import com.jbl.t24.rest.api.service.FtHandlerService;

@@ -121,37 +121,37 @@ public class RtgsInwardPacsNineTransaction {
 		// String requestOFS = "";
 
 		issueDate = "20220506";
-		/*final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
-				+ companyCode
-				+ ",,TRANSACTION.TYPE=" + txType + ","
-				+ "DEBIT.ACCT.NO=" + debitAccNo + ","
-				+ "DEBIT.CURRENCY=" + currency + ","
-				+ "DEBIT.AMOUNT=" + debitAmount + ","
-				+ "DEBIT.VALUE.DATE=" + issueDate + ","
-				+ "CREDIT.ACCT.NO=" + creditAccNo + ","
-				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,"
-				+ "FT.DR.DETAILS=" + debitDetails + ","
-				+ "FT.CR.DETAILS=" + creditDetails + ","
-				+ "COMMISSION.CODE=" + commissionCode+ ","
-				+ "COMMISSION.TYPE="+ commissionType +","
-				+ "CHEQUE.NUMBER=,"
-				+ "LOCAL.REF:3:1=,"
-				+ "LOCAL.REF:94:1=" + uniqueFtId +","
-				+ "LOCAL.REF:125:1=" + otherInfo +","
-				+ "LOCAL.REF:126:1=" + billDescription +","
-				+ "LOCAL.REF:127:1=" + lcNumber +","
-				+ "LOCAL.REF:128:1=" + partyName +","
-				+ "LOCAL.REF:129:1=" + instructionInfo +","
-				+ "LOCAL.REF:130:1=" + tradeFinanceInfo;
-*/
+//		final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
+//				+ companyCode
+//				+ ",,TRANSACTION.TYPE=" + txType + ","
+//				+ "DEBIT.ACCT.NO=" + debitAccNo + ","
+//				+ "DEBIT.CURRENCY=" + currency + ","
+//				+ "DEBIT.AMOUNT=" + debitAmount + ","
+//				+ "DEBIT.VALUE.DATE=" + issueDate + ","
+//				+ "CREDIT.ACCT.NO=" + creditAccNo + ","
+//				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,"
+//				+ "FT.DR.DETAILS=" + debitDetails + ","
+//				+ "FT.CR.DETAILS=" + creditDetails + ","
+//				+ "COMMISSION.CODE=" + commissionCode+ ","
+//				+ "COMMISSION.TYPE="+ commissionType +","
+//				+ "CHEQUE.NUMBER=,"
+//				+ "LOCAL.REF:3:1=,"
+//				+ "LOCAL.REF:94:1=" + uniqueFtId +","
+//				+ "LOCAL.REF:125:1=" + otherInfo +","
+//				+ "LOCAL.REF:126:1=" + billDescription +","
+//				+ "LOCAL.REF:127:1=" + lcNumber +","
+//				+ "LOCAL.REF:128:1=" + partyName +","
+//				+ "LOCAL.REF:129:1=" + instructionInfo +","
+//				+ "LOCAL.REF:130:1=" + tradeFinanceInfo;
+
 
 		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
 		rtgsInfoPacsNineIn.setHostname(hostIpData.get("host"));
 		rtgsInfoPacsNineIn.setIp(hostIpData.get("remoteAddr"));
 
 		final String requestOFS = String.format(OfsSources.REQUEST_OFS_STRING_P9,
-				companyCode, txType, debitAccNo, debitDetails, issueDate, creditAccNo, debitDetails, creditDetails,
-				uniqueFtId, commissionCode, commissionType, otherInfo, billDescription, lcNumber, partyName,
+				companyCode, txType, debitAccNo,currency,debitAmount, issueDate, creditAccNo, debitDetails, creditDetails,
+				commissionCode, commissionType, uniqueFtId,otherInfo, billDescription, lcNumber, partyName,
 				instructionInfo, tradeFinanceInfo);
 
 		//ResponseEntity<?> response = ftHandlerService.handleRtgsInwardPacsNineTransaction(requestOFS, rtgsInfoPacsNineIn, httpServletRequest);
