@@ -18,9 +18,16 @@ public enum CBSResponseStr {
 	unauthorizedOverdraft("Unauthorised Overdraft"),
 	postingRestriction("Posting Restriction"),
 	valueAmountZero("VAL.AMOUNT.SHOULD.NOT.BE.ZERO"),
-	invalidMinus("INVALID MINUS");
+	invalidMinus("INVALID MINUS"),
+	historyRecordMissing("HISTORY RECORD MISSING"),
+	noImageToDisplay("No Images to display"),
 
-	
+
+	/**
+	 * Below response are for RTGS Purposes
+	*/
+	invalidCompanyCodeAssigned("INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS");
+
 
 	private final String text;
 

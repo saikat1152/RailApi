@@ -4,9 +4,11 @@ public enum ResponseStatus {
 
 	TWOZ0(200, "Successfully Processed!"),
 	TWOZ1(201, "Transaction Failed!"),
-	TWOZ2(202, "This Transaction Already Successful! Duplicate BEFTN Narrative!"),
+	TWOZ2(202, "This Transaction Already Successful! Duplicate RTGS/FT Unique id!"),
 	TWOZ3(203, "Transaction Failed! Duplicate BEFTN Narrative!"),
 	TWOZ4(204, "Transaction Failed! Duplicate Credit Narrative!"),
+	TWOZ5(205, "Successfully Reversed"),
+	TWOZ6(206, "Already Reversed! Duplicate Unique Identifier!"),
 	
 	FOURZ0(400, "Invalid Input Parameter Request!"), 
 	FOURZ1(401, "Username or Password doesn't match!"),
@@ -35,10 +37,20 @@ public enum ResponseStatus {
 	FOURZ23(423, "Amount Cannot be Negative!"),
 	FOURZ24(424, "Ammount Cannot be Zero!"),
 	FOURZ25(425,"Image Not Found!"),
+	FOURZ26(426,"Amount cannot be less than 100000 for RTGS"),
+	FOURZ27(427, "Cannot Do New CBS Transaction Beacause An Transaction Is On Already Processing!"),
+	FOURZ28(428, "Transaction Category Incorrect"),
+	FOURZ29(429,"Incorrect Cbs Ft number for Reversal!"),
 
 	FIVEZ0(500, "Internal Server Error!"),
+	FIVEZ2(502, "REQUEST NOT VALID"),
 	FIVEZ3(503, "Service Unavailable!"),
-	FIVEZ4(504, "Response NONE Due to Unresponsive CBS!");
+	FIVEZ4(504, "Response NONE Due to Unresponsive CBS!"),
+	FIVEZ5(505, "INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS!"),
+
+
+	FIVEZ99(599, "CBS Transaction Error");;
+	
 
 		
 	private final int value;

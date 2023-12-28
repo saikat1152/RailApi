@@ -23,33 +23,48 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.constant.OfsSources;
-import com.jbl.t24.rest.api.model.RtgsInfoOutward;
+import com.jbl.t24.rest.api.model.RtgsInfoInward;
 import com.jbl.t24.rest.api.service.FtHandlerService;
 import com.jbl.t24.rest.api.service.FtHandlerServiceN;
-import com.jbl.t24.rest.api.service.RtgsHandlerService;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/rtgs_out")
+@RequestMapping("/rtgs_in")
 @Validated
-public class RtgsOutwardTransaction {
+public class RtgsInwardTransaction {
 
 	@Autowired
 	private FtHandlerService ftHandlerService;
-	
+
 	@Autowired
-	private FtHandlerServiceN ftHandlerServicen;
+	private FtHandlerServiceN ftHandlerServiceN;
 
-	@RequestMapping(value = "/out", method = RequestMethod.GET)
-
-	public ResponseEntity<?> beftnTrasferOutward(@Valid @RequestParam Map<String, String> requestParams,
+	public ResponseEntity<?> rtgsTrasferInward(@Valid @RequestParam Map<String, String> requestParams,
 			HttpServletRequest httpServletRequest) throws Exception {
 
 		/**
 		 * Setting the versionwise OFS Message @requestOFS
 		 */
+		/**
+		 * ACOD --> BEFTN Outward
+		 * ACOR ---> RTGS Outward
+		 * ACIR ---> RTGS Inward
+		 * ACOP ---> RTGS Outward PACS 09 FC
+		 * ACIN ---> RTGS Inward PACS 09 FC
+		 * 
+		 */
 
+		/**
+		 * BEFT , RTGS, BACH
+		 * Current Timestamp YYYYMMDD HH:MM:SS
+		 * Unique ID
+		 */
+
+		/**
+		 * Currency
+		 * USD, GBP, EUR,
+		 */
 		String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,BD0010888,,TRANSACTION.TYPE=ACOR,DEBIT.ACCT.NO=0100146594209,DEBIT.CURRENCY=BDT,DEBIT.AMOUNT=10,DEBIT.VALUE.DATE=20220506,CREDIT.ACCT.NO=BDT171120001,ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,FT.DR.DETAILS=BACH,FT.DR.DETAILS=,COMMISSION.CODE=,COMMISSION.TYPE=,CHEQUE.NUMBER=,LOCAL.REF:3:1=,LOCAL.REF:94:1=0021699806164052";
 
 		// BeftnOutwardInfo beftnInfoSave = null;
@@ -66,45 +81,28 @@ public class RtgsOutwardTransaction {
 
 	}
 
-	/**
-	 * BEFT , RTGS, BACH
-	 * Current Timestamp YYYYMMDD HH:MM:SS
-	 * Unique ID
-	 */
+	
+	@RequestMapping(value = "/inward", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 
-	/**
-	 * Currency
-	 * USD, GBP, EUR,
-	 */
-	/**
-	 * ACOD --> BEFTN Outward
-	 * ACOR ---> RTGS Outward
-	 * ACIR ---> RTGS Inward
-	 * ACOP ---> RTGS Outward PACS 09 FC
-	 * ACIN ---> RTGS Inward PACS 09 FC
-	 */
-
-	@RequestMapping(value = "/outward", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-
-	public ResponseEntity<?> rtgsTrasferOutward(@Valid @RequestBody RtgsInfoOutward rtgsInfoOut,
+	public ResponseEntity<?> rtgsTrasferInward(@Valid @RequestBody RtgsInfoInward rtgsInfoInward,
 			HttpServletRequest httpServletRequest) throws Exception {
 
-		String uniqueFtId = rtgsInfoOut.getUniqueOutwardRtgsId();
-		String coCode = rtgsInfoOut.getCoCode();
-		String companyCode = rtgsInfoOut.getCompanyCode() + coCode;
-		rtgsInfoOut.setCompanyCode(companyCode);
-		String txType = rtgsInfoOut.getTxType();
-		String debitAccNo = rtgsInfoOut.getDebitAccNo();
-		String currency = rtgsInfoOut.getCurrency();
-		String debitAmount = String.format("%.2f", rtgsInfoOut.getDebitAmount());
-		String creditAccNo = rtgsInfoOut.getCreditAccNo();
-		String debitDetails = rtgsInfoOut.getDebitDetails();
-		String creditDetails = rtgsInfoOut.getCreditDetails();
-		String commissionCode = rtgsInfoOut.getCommissionCode();
-		String commissionType = rtgsInfoOut.getCommissionType();
+		String uniqueFtId = rtgsInfoInward.getUniqueInwardRtgsId();
+		String coCode = rtgsInfoInward.getCoCode();
+		String companyCode = rtgsInfoInward.getCompanyCode() + coCode;
+		rtgsInfoInward.setCompanyCode(companyCode);
+		String txType = rtgsInfoInward.getTxType();
+		String debitAccNo = rtgsInfoInward.getDebitAccNo();
+		String currency = rtgsInfoInward.getCurrency();
+		String debitAmount = String.format("%.2f", rtgsInfoInward.getDebitAmount());
+		String creditAccNo = rtgsInfoInward.getCreditAccNo();
+		String debitDetails = rtgsInfoInward.getDebitDetails();
+		String creditDetails = rtgsInfoInward.getCreditDetails();
+		String commissionCode = rtgsInfoInward.getCommissionCode();
+		String commissionType = rtgsInfoInward.getCommissionType();
 		String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
 		Timestamp t = new Timestamp(new Date().getTime());
-		rtgsInfoOut.setIssueDate(t);
+		rtgsInfoInward.setIssueDate(t);
 
 		Objects.requireNonNull(uniqueFtId);
 		Objects.requireNonNull(coCode);
@@ -116,35 +114,34 @@ public class RtgsOutwardTransaction {
 		// String requestOFS = "";
 
 		issueDate = "20220506";
-		/*
-		final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
-				+ companyCode
-				+ ",,TRANSACTION.TYPE=" + txType + ","
-				+ "DEBIT.ACCT.NO=" + debitAccNo + ","
-				+ "DEBIT.CURRENCY=" + currency + ","
-				+ "DEBIT.AMOUNT=" + debitAmount + ","
-				+ "DEBIT.VALUE.DATE=" + issueDate + ","
-				+ "CREDIT.ACCT.NO=" + creditAccNo + ","
-				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,"
-				+ "FT.DR.DETAILS=" + debitDetails + ","
-				+ "FT.CR.DETAILS=" + creditDetails + ","
-				+ "COMMISSION.CODE=" + commissionCode+ ","
-				+ "COMMISSION.TYPE="+ commissionType +","
-				+ "CHEQUE.NUMBER=,"
-				+ "LOCAL.REF:3:1=,"
-				+ "LOCAL.REF:94:1=" + uniqueFtId;
-				*/
+//		final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
+//				+ companyCode
+//				+ ",,TRANSACTION.TYPE=" + txType + ","
+//				+ "DEBIT.ACCT.NO=" + debitAccNo + ","
+//				+ "DEBIT.CURRENCY=" + currency + ","
+//				+ "DEBIT.AMOUNT=" + debitAmount + ","
+//				+ "DEBIT.VALUE.DATE=" + issueDate + ","
+//				+ "CREDIT.ACCT.NO=" + creditAccNo + ","
+//				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,"
+//				+ "FT.DR.DETAILS=" + debitDetails + ","
+//				+ "FT.CR.DETAILS=" + creditDetails + ","
+//				+ "COMMISSION.CODE=" + commissionCode+ ","
+//				+ "COMMISSION.TYPE="+ commissionType +","
+//				+ "CHEQUE.NUMBER=,"
+//				+ "LOCAL.REF:3:1=,"
+//				+ "LOCAL.REF:94:1=" + uniqueFtId;
 		
+
+		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
+		rtgsInfoInward.setHostname(hostIpData.get("host"));
+		rtgsInfoInward.setIp(hostIpData.get("remoteAddr"));
+
 		final String requestOFS = String.format(OfsSources.REQUEST_OFS_STRING, companyCode, txType, debitAccNo,
 				currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, uniqueFtId, commissionCode,
 				commissionType);
 
-		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
-		rtgsInfoOut.setHostname(hostIpData.get("host"));
-		rtgsInfoOut.setIp(hostIpData.get("remoteAddr"));
-
-//		ResponseEntity<?> response = ftHandlerService.handleRtgsOutwardTransaction(requestOFS, rtgsInfoOut, httpServletRequest);
-		ResponseEntity<?> response = ftHandlerServicen.handleFtTransaction(requestOFS, rtgsInfoOut, uniqueFtId);
+//		ResponseEntity<?> response = ftHandlerService.handleRtgsInwardTransaction(requestOFS, rtgsInfoInward, httpServletRequest);
+		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, rtgsInfoInward, uniqueFtId);
 		
 		System.out.println(response.getBody());
 		// return ResponseEntity.status(HttpStatus.OK).body(response);

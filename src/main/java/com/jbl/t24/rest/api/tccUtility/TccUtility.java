@@ -3,14 +3,16 @@ package com.jbl.t24.rest.api.tccUtility;
 import java.io.IOException;
 import java.net.InetAddress;
 
-import com.jbl.t24.rest.api.custom.exception.BlankOfsResponseException;
+import com.jbl.t24.rest.api.enums.CBSResponseStr;
+// import com.temenos.tocf.*;
 import com.temenos.tocf.tcc.*;
 
 public class TccUtility {
 
 	private static boolean bValidate = false;
 
-	private static String channel = ""; // Channel Name from channel.xml
+	// public static String channel = ""; // Channel Name from channel.xml
+	public String channel = "";
 
 	private static String sCharSet = null;
 
@@ -19,11 +21,7 @@ public class TccUtility {
 	public TccUtility() throws IOException {
 
 		tcf = TCCFactory.getInstance();
-
-		// System.out.println("tcf object " + tcf);
-
-		// sendPingRequest("10.180.10.60");
-		channel = "ISOLIST2";
+		channel = "ISOLIST";
 	}
 
 	public TccUtility(String ch) throws IOException {
@@ -36,24 +34,24 @@ public class TccUtility {
 	 * 401 = CANNOT PING THE TC SERVER
 	 * 402 = REQUEST NOT VALID
 	 * 403 = INTERNAL ERROR
+	 * 404 = BLANK OFS ERROR
+	 * 405 = INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS
 	 */
 
-	public String sendRequest(String sRequest) throws BlankOfsResponseException {
-		String sResponse = "400";
+	public void setChannel(String channel){
+		this.channel = channel;
+	}
 
-		// System.out.println("Request OFS: " + sRequest);
+	public String sendRequest(String sRequest){
+		String sResponse = "400";
 
 		try {
 
 			/**
 			 * Create a Connection based on the channel name.
 			 */
-			// long lTime = System.currentTimeMillis();
-			// System.out.println("The time is " + lTime);
-			// System.out.println("tcf " + tcf);
+			
 			TCConnection tcConnection = tcf.createTCConnection(channel);
-			// System.out.println("tcConnection: " + tcConnection);
-			// System.out.println("Connection created successfully.");
 			tcConnection.setMaximumRetryCount(1);
 			tcConnection.setRetryInterval(2);
 
@@ -83,23 +81,23 @@ public class TccUtility {
 					TCResponse tcResponse = null;
 
 					tcResponse = tcSendRequest.send(tcConnection);
-
-					// String strOFSResponse = null;
 					String strOFSError = null;
 
 					long nError = tcResponse.getErrorCode();
-					// System.out.println("nError: " + nError);
 					if (nError != 0) {
 						strOFSError = tcResponse.getErrorMessage();
-						// System.out.println(strOFSError);
 					}
 
 					sResponse = tcResponse.getOFSString();
 
 					if (sResponse.length() == 1) {
-						throw new BlankOfsResponseException("Response None Due to Unresponsive CBS.");
+						sResponse="404";
 					}
-					// System.out.println("len "+sResponse.trim());
+
+					if(sResponse.contains(CBSResponseStr.invalidCompanyCodeAssigned.getText())){
+						sResponse="405";
+					}
+			
 				}
 			}
 			/**

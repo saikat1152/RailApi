@@ -37,7 +37,7 @@ public class SignatureQueryInfo extends CommonQueryInfo {
 	
 	@Column(name = "account_number", length = 63)
     @NotEmpty
-    @Pattern(regexp = "^[0-9]{12}$|^[0-9]{13}$|^[0-9]{16}$", message = "Credit Account Length Not Valid")
+    // @Pattern(regexp = "^[0-9]{12}$|^[0-9]{13}$|^[0-9]{16}$", message = "Credit Account Length Not Valid")
     String accountNumber;
 
 }

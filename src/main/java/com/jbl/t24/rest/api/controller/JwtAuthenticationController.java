@@ -31,7 +31,6 @@ import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.model.ApiLog;
 import com.jbl.t24.rest.api.model.JwtUser;
 import com.jbl.t24.rest.api.service.ApiLogService;
-import com.jbl.t24.rest.api.service.BeftnInfoService;
 import com.jbl.t24.rest.api.service.CustomUserDetailsService;
 import com.jbl.t24.rest.api.service.JwtUserService;
 

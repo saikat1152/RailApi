@@ -10,7 +10,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.envers.Audited;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,27 +20,28 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "rtgs_out_info")
-@Setter
+@Table(name = "rtgs_in_info")
 @Getter
+@Setter
 @ToString
 @Builder
 @Audited
-public class RtgsInfoOutward extends CommonFtInfo {
-
+public class RtgsInfoInward extends CommonFtInfo {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "rtgs_out_id", unique = true, nullable = false)
-	private int OutwardRtgsInfoId;
+	@Column(name = "rtgs_in_id", unique = true, nullable = false)
+	private int InwardRtgsInfoId;
 
 	@NotBlank(message = "Unique ID is Blank")
-	//@Pattern(regexp = "^(RTGS)[0-9]{16}$", message = "RTGS Unique ID Length Not Valid")
-	@Column(name = "out_unique_id", unique = true, nullable = false, length = 23)
-	private String uniqueOutwardRtgsId;
+	@Pattern(regexp = "^(RTGS)[0-9]{16}$", message = "RTGS Unique ID Length Not Valid")
+	@Column(name = "in_unique_id", unique = true, nullable = false, length = 23)
+	private String uniqueInwardRtgsId;
 
 	@Column(name = "category", nullable = false, length = 2)
 	private int category;
 
 	@Column(name = "transaction_type", length = 10)
-	private String txType = "ACOR";
+	private String txType = "ACIR";
+
 }

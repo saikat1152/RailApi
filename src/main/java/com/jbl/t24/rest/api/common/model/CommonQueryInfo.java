@@ -20,7 +20,10 @@ import lombok.ToString;
 @ToString
 public abstract class CommonQueryInfo {
     @CreationTimestamp
-    Timestamp queryDate;
-    String ip;
-    String hostname;
+    protected Timestamp queryDate;
+    protected String ip;
+    protected String hostname;
+    protected String status;
+    protected String responseData;
+
 }

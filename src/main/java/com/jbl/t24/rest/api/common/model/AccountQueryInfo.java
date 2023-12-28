@@ -37,9 +37,12 @@ public class AccountQueryInfo extends CommonQueryInfo {
 	
 	@Column(name = "account_number", length = 63)
 	@NotEmpty
-	@Pattern(regexp = "^[0-9]{12}$|^[0-9]{13}$|^[0-9]{16}$", message = "Account Length Not Valid")
+	// @Pattern(regexp = "^[0-9]{12}$|^[0-9]{13}$|^[0-9]{16}$", message = "Account Length Not Valid")
 	String accountNumber;
 
 	@Column(name = "ofs_response", length = 2048)
 	String ofsResponse;
+
+	@Column(name = "account_details", length = 500)
+	String accountDetails;
 }
