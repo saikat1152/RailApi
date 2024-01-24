@@ -2,8 +2,8 @@ package com.jbl.t24.rest.api.custom.validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.jbl.t24.rest.api.model.JwtUser;
-import com.jbl.t24.rest.api.service.JwtUserService;
+import com.jbl.t24.rest.api.model.base.JwtUser;
+import com.jbl.t24.rest.api.service.base.JwtUserService;
 
 public class CustomValidation {
 

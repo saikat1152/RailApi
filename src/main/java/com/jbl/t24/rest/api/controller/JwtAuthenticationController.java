@@ -28,11 +28,11 @@ import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
 import com.jbl.t24.rest.api.common.model.JwtResponse;
 import com.jbl.t24.rest.api.config.JwtTokenUtil;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
-import com.jbl.t24.rest.api.model.ApiLog;
-import com.jbl.t24.rest.api.model.JwtUser;
-import com.jbl.t24.rest.api.service.ApiLogService;
-import com.jbl.t24.rest.api.service.CustomUserDetailsService;
-import com.jbl.t24.rest.api.service.JwtUserService;
+import com.jbl.t24.rest.api.model.ApiLogs.ApiLog;
+import com.jbl.t24.rest.api.model.base.JwtUser;
+import com.jbl.t24.rest.api.service.base.JwtUserService;
+import com.jbl.t24.rest.api.service.rtgs.ApiLogService;
+import com.jbl.t24.rest.api.service.rtgs.CustomUserDetailsService;
 
 import io.jsonwebtoken.impl.DefaultClaims;
 

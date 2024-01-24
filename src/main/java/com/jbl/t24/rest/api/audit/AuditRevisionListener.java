@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.jbl.t24.rest.api.model.MyUserAccountDetails;
+import com.jbl.t24.rest.api.model.rtgs.MyUserAccountDetails;
 
 public class AuditRevisionListener implements RevisionListener {
 

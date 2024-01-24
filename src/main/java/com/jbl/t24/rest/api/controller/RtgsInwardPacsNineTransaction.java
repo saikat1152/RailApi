@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.constant.OfsSources;
-import com.jbl.t24.rest.api.model.RtgsInfoPacsNineInward;
-import com.jbl.t24.rest.api.model.RtgsInfoPacsNineOutward;
-import com.jbl.t24.rest.api.service.FtHandlerService;
-import com.jbl.t24.rest.api.service.FtHandlerServiceN;
+import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineInward;
+import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineOutward;
+import com.jbl.t24.rest.api.service.rtgs.FtHandlerService;
+import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
 @RestController

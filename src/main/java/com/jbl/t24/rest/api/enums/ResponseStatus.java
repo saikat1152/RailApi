@@ -49,7 +49,7 @@ public enum ResponseStatus {
 	FIVEZ5(505, "INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS!"),
 
 
-	FIVEZ99(599, "CBS Transaction Error");;
+	FIVEZ99(599, "CBS Transaction Error");
 	
 
 		

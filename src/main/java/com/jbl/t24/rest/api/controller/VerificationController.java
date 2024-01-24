@@ -30,15 +30,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jbl.t24.rest.api.common.model.AccountInfo;
 import com.jbl.t24.rest.api.common.model.AccountInfoNotFound;
-import com.jbl.t24.rest.api.common.model.AccountQueryInfo;
 import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
-import com.jbl.t24.rest.api.common.model.SignatureQueryInfo;
 import com.jbl.t24.rest.api.config.Mapper;
 import com.jbl.t24.rest.api.constant.JwtErrorsCBS;
 import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
-import com.jbl.t24.rest.api.service.AccountQueryInfoService;
-import com.jbl.t24.rest.api.service.SignQueryInfoService;
+import com.jbl.t24.rest.api.model.rtgs.AccountQueryInfo;
+import com.jbl.t24.rest.api.model.rtgs.SignatureQueryInfo;
+import com.jbl.t24.rest.api.service.rtgs.AccountQueryInfoService;
+import com.jbl.t24.rest.api.service.rtgs.SignQueryInfoService;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
 

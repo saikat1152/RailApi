@@ -26,12 +26,12 @@ import com.jbl.t24.rest.api.common.model.ResponseMsgProcessorWrapper;
 import com.jbl.t24.rest.api.config.Mapper;
 import com.jbl.t24.rest.api.enums.FtStatus;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
-import com.jbl.t24.rest.api.model.CommonFtInfo;
-import com.jbl.t24.rest.api.model.RtgsInfoOutward;
-import com.jbl.t24.rest.api.service.ResponseMessageProcessor;
-import com.jbl.t24.rest.api.service.RtgsInfoOutwardService;
-import com.jbl.t24.rest.api.service.RtgsInfoPacsNineOutwardService;
-import com.jbl.t24.rest.api.service.RtgsInfoService;
+import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
+import com.jbl.t24.rest.api.model.rtgs.RtgsInfoOutward;
+import com.jbl.t24.rest.api.service.rtgs.ResponseMessageProcessor;
+import com.jbl.t24.rest.api.service.rtgs.RtgsInfoOutwardService;
+import com.jbl.t24.rest.api.service.rtgs.RtgsInfoPacsNineOutwardService;
+import com.jbl.t24.rest.api.service.rtgs.RtgsInfoService;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
 @RestController
