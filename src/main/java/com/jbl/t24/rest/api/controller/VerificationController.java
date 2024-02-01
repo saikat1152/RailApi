@@ -289,7 +289,6 @@ public class VerificationController {
 
 						JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
 								ResponseStatus.FOURZ13.getText(), ResponseStatus.FOURZ13.getValue());
-;
 						AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(
 								message, ResponseStatus.FOURZ13.getValue(), false);
 						logger.info("Account Query Error " + jwtErrorResponse.getMessage());

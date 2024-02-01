@@ -16,12 +16,12 @@ import com.jbl.t24.rest.api.enums.FtStatus;
 import com.jbl.t24.rest.api.enums.RTGSCategory;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementOutInfo;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoInward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoOutward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineInward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineOutward;
-import com.jbl.t24.rest.api.model.rtgs.SettlementInInfo;
-import com.jbl.t24.rest.api.model.rtgs.SettlementOutInfo;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 import java.sql.Timestamp;
 
@@ -72,12 +72,12 @@ public class FtHandlerServiceN {
         } else if(ftInfo instanceof RtgsInfoPacsNineOutward){
         	ftSave = new RtgsInfoPacsNineOutward();
             ftExist = new RtgsInfoPacsNineOutward();
-        } else if (ftInfo instanceof SettlementInInfo) {
-            ftSave = new SettlementInInfo();
-            ftExist = new SettlementInInfo();
-        } else if (ftInfo instanceof SettlementOutInfo) {
-            ftSave = new SettlementOutInfo();
-            ftExist = new SettlementOutInfo();
+        } else if (ftInfo instanceof RTGSSettlementInInfo) {
+            ftSave = new RTGSSettlementInInfo();
+            ftExist = new RTGSSettlementInInfo();
+        } else if (ftInfo instanceof RTGSSettlementOutInfo) {
+            ftSave = new RTGSSettlementOutInfo();
+            ftExist = new RTGSSettlementOutInfo();
         }
 
         TccUtility tccUtility = new TccUtility();

@@ -46,6 +46,7 @@ public abstract class CommonFtInfo {
 	protected String txCategory = "RTGS";
 
    // @Pattern(regexp = ACCOUNT_NUMBER_PATTERN, message = "Debit Account Pattern Not Valid")
+    @NotNull(message = "Debit Account is Missing")
 	@Column(name = "debit_account", length = 63)
     private String debitAccNo;
 
@@ -58,17 +59,17 @@ public abstract class CommonFtInfo {
     protected double debitAmount;
 
     @CreationTimestamp
-    @Column(name = "issue_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, nullable = false)
+    @Column(name = "issue_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = true, nullable = false)
     protected Timestamp issueDate;
 
     //@Pattern(regexp = ACCOUNT_NUMBER_PATTERN, message = "Credit Account Pattern Not Valid")
 	@Column(name = "credit_account", length = 63)
 	protected String creditAccNo;
 
-    @Column(name = "debit_details", unique = true, nullable = false, length = 256)
+    @Column(name = "debit_details", unique = false, nullable = true, length = 256)
     protected String debitDetails;
 
-    @Column(name = "credit_details", unique = true, nullable = false, length = 256)
+    @Column(name = "credit_details", unique = false, nullable = true, length = 256)
     protected String creditDetails;
 
     @Column(name = "commission_code", unique = false, nullable = true, length = 20)

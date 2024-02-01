@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
-import com.jbl.t24.rest.api.model.rtgs.SettlementInInfo;
-import com.jbl.t24.rest.api.model.rtgs.SettlementOutInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementOutInfo;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerService;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
 import com.jbl.t24.rest.api.service.rtgs.OfsMessageGenerator;
@@ -28,7 +28,7 @@ import com.jbl.t24.rest.api.service.rtgs.OfsMessageGenerator;
 @CrossOrigin
 @RequestMapping("/rtgs")
 @Validated
-public class SettlementController {
+public class RTGSSettlementController {
 
     @Autowired
     FtHandlerServiceN ftHandlerServiceN;
@@ -37,7 +37,7 @@ public class SettlementController {
 
     @RequestMapping(value = "/settlement-in", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 
-    public ResponseEntity<?> settlementInward(@Valid @RequestBody SettlementInInfo settlementInfo,
+    public ResponseEntity<?> settlementInward(@Valid @RequestBody RTGSSettlementInInfo settlementInfo,
             HttpServletRequest httpServletRequest) throws Exception {
     	
 
@@ -60,7 +60,7 @@ public class SettlementController {
 
     @RequestMapping(value = "/settlement-out", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 
-    public ResponseEntity<?> settlementOutward(@Valid @RequestBody SettlementOutInfo settlementOutInfo,
+    public ResponseEntity<?> settlementOutward(@Valid @RequestBody RTGSSettlementOutInfo settlementOutInfo,
             HttpServletRequest httpServletRequest) throws Exception {
     	
     	if(!settlementOutInfo.getTxCategory().equals("PACS08-Outward") && !settlementOutInfo.getTxCategory().equals("PACS09-Outward")) {

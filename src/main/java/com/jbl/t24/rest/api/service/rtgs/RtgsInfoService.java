@@ -4,18 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementOutInfo;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoInward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoOutward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineInward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineOutward;
-import com.jbl.t24.rest.api.model.rtgs.SettlementInInfo;
-import com.jbl.t24.rest.api.model.rtgs.SettlementOutInfo;
 import com.jbl.t24.rest.api.repository.rtgs.RtgsInfoInwardRepository;
 import com.jbl.t24.rest.api.repository.rtgs.RtgsInfoOutwardRepository;
 import com.jbl.t24.rest.api.repository.rtgs.RtgsInfoPacsNineInwardRepository;
 import com.jbl.t24.rest.api.repository.rtgs.RtgsInfoPacsNineOutwardRepository;
-import com.jbl.t24.rest.api.repository.rtgs.SettlementInInfoRepositoryEFT;
-import com.jbl.t24.rest.api.repository.rtgs.SettlementOutInfoRepositoryEFT;
+import com.jbl.t24.rest.api.repository.rtgs.RTGSSettlementInInfoRepository;
+import com.jbl.t24.rest.api.repository.rtgs.RTGSSettlementOutInfoRepository;
 
 @Service
 public class RtgsInfoService {
@@ -30,10 +30,10 @@ public class RtgsInfoService {
 	private RtgsInfoPacsNineOutwardRepository infoPacsNineOutwardRepository;
 
 	@Autowired
-	private SettlementInInfoRepositoryEFT settlementInInfoRepositoryEFT;
+	private RTGSSettlementInInfoRepository settlementInInfoRepository;
 
 	@Autowired
-	private SettlementOutInfoRepositoryEFT settlementOutInfoRepositoryEFT;
+	private RTGSSettlementOutInfoRepository settlementOutInfoRepository;
 
 	public static final String RTGS_PACS08_REVERSE_TRANSACTION="1";
 
@@ -49,12 +49,12 @@ public class RtgsInfoService {
 
 		} else if (ftInfo instanceof RtgsInfoPacsNineOutward) {
 			return infoPacsNineOutwardRepository.findByUniqueOutwardRtgsId(uniqueId);
-		} else if (ftInfo instanceof SettlementInInfo) {
-			return settlementInInfoRepositoryEFT.findByUniqueSettlementtId(uniqueId);
+		} else if (ftInfo instanceof RTGSSettlementInInfo) {
+			return settlementInInfoRepository.findByUniqueSettlementtId(uniqueId);
 		}
 		// (ftInfo instanceof SettlementOutInfo)
 		else {
-			return settlementOutInfoRepositoryEFT.findByUniqueSettlementtId(uniqueId);
+			return settlementOutInfoRepository.findByUniqueSettlementtId(uniqueId);
 		}
 
 	}
@@ -72,10 +72,10 @@ public class RtgsInfoService {
 
 		} else if (entity instanceof RtgsInfoPacsNineOutward) {
 			infoPacsNineOutwardRepository.save((RtgsInfoPacsNineOutward) entity);
-		} else if (entity instanceof SettlementInInfo) {
-			settlementInInfoRepositoryEFT.save((SettlementInInfo) entity);
+		} else if (entity instanceof RTGSSettlementInInfo) {
+			settlementInInfoRepository.save((RTGSSettlementInInfo) entity);
 		} else {
-			settlementOutInfoRepositoryEFT.save((SettlementOutInfo) entity);
+			settlementOutInfoRepository.save((RTGSSettlementOutInfo) entity);
 		}
 	}
 

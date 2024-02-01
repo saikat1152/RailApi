@@ -17,8 +17,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
 @Entity
-@Table(name = "settlement_out_info")
+@Table(name = "rtgs_settlement_in_info")
 
 @AllArgsConstructor
 // @NoArgsConstructor
@@ -27,9 +28,9 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @Builder
 @Audited
-public class SettlementOutInfo extends CommonFtInfo{
+public class RTGSSettlementInInfo extends CommonFtInfo{
 
-  	@Id
+ 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "settlement_id", unique = true, nullable = false)
 	private Long settlementId;
@@ -41,8 +42,8 @@ public class SettlementOutInfo extends CommonFtInfo{
 	@Column(name = "reverse_enabled")
 	protected boolean reverseEnabled = false;
 
-    public SettlementOutInfo(){
-		this.txType = "ACOS";
+	public RTGSSettlementInInfo(){
+		this.txType = "ACIS";
 	}
 
 }
