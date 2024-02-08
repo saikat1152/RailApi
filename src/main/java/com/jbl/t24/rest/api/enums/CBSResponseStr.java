@@ -26,8 +26,11 @@ public enum CBSResponseStr {
 	/**
 	 * Below response are for RTGS Purposes
 	*/
-	invalidCompanyCodeAssigned("INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS");
+	invalidCompanyCodeAssigned("INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS"),
+	invalidOrNoSignOnNameSupplied("INVALID/ NO SIGN ON NAME SUPPLIED DURING SIGN ON PROCESS"),
+	uniqueIdNotFound("Unique ID not found");
 
+	
 
 	private final String text;
 

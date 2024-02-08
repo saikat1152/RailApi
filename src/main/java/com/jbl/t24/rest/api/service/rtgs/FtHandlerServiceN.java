@@ -12,6 +12,7 @@ import com.jbl.t24.rest.api.common.model.ResponseMsgProcessorWrapper;
 import com.jbl.t24.rest.api.common.model.FtTxResponse.FtTxResponseBuilder;
 import com.jbl.t24.rest.api.config.Mapper;
 import com.jbl.t24.rest.api.constant.JwtErrorsCBS;
+import com.jbl.t24.rest.api.constant.RtgsUniqueIdTransactionCheck;
 import com.jbl.t24.rest.api.enums.FtStatus;
 import com.jbl.t24.rest.api.enums.RTGSCategory;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
@@ -24,6 +25,7 @@ import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineInward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineOutward;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 import java.sql.Timestamp;
+import java.util.Map;
 
 @Service
 public class FtHandlerServiceN {
@@ -108,14 +110,63 @@ public class FtHandlerServiceN {
 				 logger.info("FT Alreeady Exists but Failed or Pending");
 
 				if (statusExist == FtStatus.PENDING.getValue()) {
-					logger.info("FT Alreeady Exists but Pending");
+					logger.info("FT Alreeady Exists but Pending-Transaction Is On Already Processing");
 					JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
-							ResponseStatus.FOURZ27.getText(), ResponseStatus.FOURZ27.getValue());
+							ResponseStatus.FIVEZ27.getText(), ResponseStatus.FIVEZ27.getValue());
 					return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 				}
+
+				logger.info("FT Alreeady Exists but Failed");
+
+				String uniqueIdTransactioncheck = RtgsUniqueIdTransactionCheck.checkTransactionByUniqueId(uniqueId);
+
+				if ((uniqueIdTransactioncheck.startsWith("40") && !uniqueIdTransactioncheck.equals("407"))
+                        || uniqueIdTransactioncheck.equals("499")) {
+
+					ftSave = ftExist;
+					JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(uniqueIdTransactioncheck);
+
+					ftSave.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
+					ftSave.setOfsResponse(uniqueIdTransactioncheck);
+
+					service.save(ftSave);
+
+					logger.error("Server Error:: " + jwtErrorResponse);
+
+					return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
+
+				} else if (uniqueIdTransactioncheck.contains("cbsFtNumber")) {
+
+					Map<String, String> cbsSuccessTrData = Mapper.readValueForMap(uniqueIdTransactioncheck);
+					ftSave = ftExist;
+
+					FtTxResponseBuilder ftResponse = FtTxResponse.builder();
+
+					ftResponse.status(HttpStatus.OK).uniqueEft(uniqueId).ftRef(cbsSuccessTrData.get("cbsFtNumber"))
+							.message(cbsSuccessTrData.get("message"))
+							.responseCode(Integer.parseInt(cbsSuccessTrData.get("responseCode")))
+							.timestamp(ftInfo.getIssueDate());
+
+					String ftResponseStr = Mapper.mapToJsonString(ftResponse.build());
+
+					ftSave.setStatus(2);
+					ftSave.setFtResponseStr(ftResponseStr);
+					ftSave.setCbsFtno(cbsSuccessTrData.get("cbsFtNumber"));
+					ftSave.setOfsResponse(cbsSuccessTrData.get("ofsResponse"));
+					ftSave.setDebitAmount(Double.parseDouble(cbsSuccessTrData.get("ammount")));
+
+					service.save(ftSave);
+
+					logger.info("FT Transaction Data Saved");
+					logger.info("Ft Handle Service Finished");
+
+					return ResponseEntity.status(HttpStatus.OK).body(ftResponse.build());
+
+				}
+
 				ftSave = ftExist;
 				ftSave.setCoCode(ftInfo.getCoCode());
-				logger.info("FT Alreeady Exists but Failed");
+				ftSave.setIssueDate(ftInfo.getIssueDate());
 
 			}
 		}

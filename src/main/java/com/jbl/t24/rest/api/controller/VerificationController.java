@@ -34,6 +34,7 @@ import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
 import com.jbl.t24.rest.api.config.Mapper;
 import com.jbl.t24.rest.api.constant.JwtErrorsCBS;
 import com.jbl.t24.rest.api.constant.OfsSources;
+import com.jbl.t24.rest.api.constant.RtgsTruncateString;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.model.rtgs.AccountQueryInfo;
 import com.jbl.t24.rest.api.model.rtgs.SignatureQueryInfo;
@@ -223,7 +224,7 @@ public class VerificationController {
 		String requestOFS = String.format(OfsSources.OFS_ACC_ENQUIRY, accountNo);
 		String responseData = tccUtility.sendRequest(requestOFS);
 
-		accountQueryInfo.setOfsResponse(responseData);
+		accountQueryInfo.setOfsResponse(RtgsTruncateString.truncateString(responseData, 2000));
 
 		if (responseData.startsWith("40")) {
 			JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(responseData);
@@ -267,6 +268,12 @@ public class VerificationController {
 						accountInfo.setMessage(ResponseStatus.TWOZ0.getText());
 						accountInfo.setResponseCode(ResponseStatus.TWOZ0.getValue());
 						accountInfo.setAccountType(secondPart[17]);
+
+						if (flagValue.equals("1")) {
+							accountInfo.setInactive(false);
+						} else {
+							accountInfo.setInactive(true);
+						}
 
 						ObjectMapper mapper = new ObjectMapper();
 						String accountInfoStr = mapper.writeValueAsString(accountInfo);
