@@ -27,5 +27,6 @@ public class AccountInfo {
 	private String postingRestrictionDescription;
 	private String currency;
 	private String accountType;
+	private boolean isInactive;
 
 }

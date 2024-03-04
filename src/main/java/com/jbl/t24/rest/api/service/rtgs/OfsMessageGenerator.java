@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 
 import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
-import com.jbl.t24.rest.api.model.rtgs.SettlementInInfo;
-import com.jbl.t24.rest.api.model.rtgs.SettlementOutInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementOutInfo;
 
 @Service
 public class OfsMessageGenerator {
 
-    public String generatedOfsString(SettlementOutInfo settlementOutInfo) {
+    public String generatedOfsString(RTGSSettlementOutInfo settlementOutInfo) {
 
         String requestOFS = "";
 
@@ -66,10 +66,10 @@ public class OfsMessageGenerator {
 
         String uniqueFtId = "";
 
-        if (ftInfo instanceof SettlementInInfo) {
-            uniqueFtId = ((SettlementInInfo) ftInfo).getUniqueSettlementtId();
-        } else if (ftInfo instanceof SettlementOutInfo) {
-            uniqueFtId = ((SettlementOutInfo) ftInfo).getUniqueSettlementtId();
+        if (ftInfo instanceof RTGSSettlementInInfo) {
+            uniqueFtId = ((RTGSSettlementInInfo) ftInfo).getUniqueSettlementtId();
+        } else if (ftInfo instanceof RTGSSettlementOutInfo) {
+            uniqueFtId = ((RTGSSettlementOutInfo) ftInfo).getUniqueSettlementtId();
         }
         String requestOFS = "";
         String coCode = ftInfo.getCoCode();
@@ -86,6 +86,9 @@ public class OfsMessageGenerator {
         Timestamp t = new Timestamp(new Date().getTime());
         ftInfo.setIssueDate(t);
 
+     // * Comment it for later Live deployment*/
+        issueDate = "20220506";
+        // * Comment it for later Live deployment*/
         Objects.requireNonNull(uniqueFtId);
         Objects.requireNonNull(coCode);
         Objects.requireNonNull(debitAccNo);

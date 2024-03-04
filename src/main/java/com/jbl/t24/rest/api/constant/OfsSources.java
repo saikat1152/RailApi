@@ -46,4 +46,6 @@ public class OfsSources {
 	public static final String OFS_ACC_ENQUIRY = "ENQUIRY.SELECT,,,E.JBL.API.BBR,ACCOUNT.NUMBER:EQ=" + "%s";
 
 	public static final String OFS_SIGN_CHECK_ENQUIRY = "ENQUIRY.SELECT,,,IMAGE.VIEW.SIGN,IMAGE.REFERENCE:EQ=" + "%s";
+
+	public static final String UNIQUE_ID_ENQ_STRING = "ENQUIRY.SELECT,,,E.JBL.BBR.UNIQUE.ID,JBL.BBR.ID:EQ=" + "%s";
 }

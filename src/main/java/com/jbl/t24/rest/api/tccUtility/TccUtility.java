@@ -94,10 +94,16 @@ public class TccUtility {
 						sResponse="404";
 					}
 
-					if(sResponse.contains(CBSResponseStr.invalidCompanyCodeAssigned.getText())){
-						sResponse="405";
+					if (sResponse.contains(CBSResponseStr.invalidCompanyCodeAssigned.getText())) {
+						sResponse = "405";
 					}
-			
+					if (sResponse.contains(CBSResponseStr.invalidOrNoSignOnNameSupplied.getText())) {
+						sResponse = "406";
+					}
+					if (sResponse.contains(CBSResponseStr.uniqueIdNotFound.getText())) {
+						sResponse = "407";
+					}
+
 				}
 			}
 			/**
