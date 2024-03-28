@@ -59,9 +59,9 @@ public class FtHandlerServiceN {
     		 * checking the categorty RTGS Ouward=1 Customs E payment=3, RTGS Inward=2
     		 */
 
-    		int category = temp == null ? 0 : temp.getCategory();
+    		String category = ftSave. getTxCategory();
 
-    		if (category == RTGSCategory.RTGSOUTWARDPACS8.getValue()
+    		if (category.equals(RTGSCategory.RTGSPACS8OUTBDT.getValue())
     				&& ftInfo.getDebitAmount() < RTGS_OUWARD_PACS8_MIN_VALUE) {
     			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ26.getText(),
     					ResponseStatus.FOURZ26.getValue());
@@ -142,7 +142,7 @@ public class FtHandlerServiceN {
 
 					FtTxResponseBuilder ftResponse = FtTxResponse.builder();
 
-					ftResponse.status(HttpStatus.OK).uniqueEft(uniqueId).ftRef(cbsSuccessTrData.get("cbsFtNumber"))
+					ftResponse.status(HttpStatus.OK).uniqueRTGS(uniqueId).ftRef(cbsSuccessTrData.get("cbsFtNumber"))
 							.message(cbsSuccessTrData.get("message"))
 							.responseCode(Integer.parseInt(cbsSuccessTrData.get("responseCode")))
 							.timestamp(ftInfo.getIssueDate());
@@ -172,7 +172,6 @@ public class FtHandlerServiceN {
 		}
 
         System.out.println(ftSave.toString());
-
         ftSave.setStatus(FtStatus.PENDING.getValue());
         ftSave.setOfsRequest(requestOFS);
         service.save(ftSave);
@@ -198,7 +197,7 @@ public class FtHandlerServiceN {
             FtTxResponseBuilder ftResponse = FtTxResponse.builder();
 
             ftResponse.status(HttpStatus.OK)
-                    .uniqueEft(uniqueId);
+                    .uniqueRTGS(uniqueId);
 
             ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
 

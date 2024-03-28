@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.annotations.Formula;
 import org.hibernate.envers.Audited;
 
 import lombok.AllArgsConstructor;
@@ -42,6 +43,12 @@ public class RtgsInfoOutward extends CommonFtInfo {
 	@Column(name = "category", nullable = false, length = 2)
 	private int category;
 
-	@Column(name = "transaction_type", length = 10)
-	private String txType = "ACOR";
+
+//	private String txType = "ACOR";
+
+//	@Column(name = "transaction_type", length = 10)
+//    private String txType;
+
+	@Column(name = "is_fc", nullable = true)
+	private Boolean isFc;
 }

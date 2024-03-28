@@ -153,7 +153,7 @@ public class RtgsHandlerService {
 
              // NOTE: With Builder
              ftResponse.status(HttpStatus.OK)
-                     .uniqueEft(rtgsInfoOutward.getUniqueOutwardRtgsId());
+                     .uniqueRTGS(rtgsInfoOutward.getUniqueOutwardRtgsId());
 
              /**
               * NOTE:

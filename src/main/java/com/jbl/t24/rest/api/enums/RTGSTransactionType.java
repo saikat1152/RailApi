@@ -1,14 +1,13 @@
 package com.jbl.t24.rest.api.enums;
 
-public enum RTGSCategory {
-	
-	RTGSPACS8OUTBDT(8001,"BDT_08_OUT"),
-	EPAY8OUTBDT(8002,"EPAY_08_OUT"),
-	FC8OUTUSD(8003,"FC_08_OUT_USD"),
-	FC8OUTEUR(8004,"FC_08_OUT_EUR"),
-	FC8OUTGBP(8005,"FC_08_OUT_GBP"),
-	FC8OUTJPY(8006,"FC_08_OUT_JPY"),
-	FC8OUTCNY(8007,"FC_08_OUT_CNY"),
+public enum RTGSTransactionType {
+	RTGSPACS8OUTBDT(8001,"ACOR"),
+	EPAY8OUTBDT(8002,"ACRC"),
+	FC8OUTUSD(8003,"ACRO"),
+	FC8OUTEUR(8004,"ACRO"),
+	FC8OUTGBP(8005,"ACRO"),
+	FC8OUTJPY(8006,"ACRO"),
+	FC8OUTCNY(8007,"ACRO"),
 
 	RTGSPACS8INBDT(8501,"BDT_08_IN"),
 	FC8INUSD(8503,"FC_09_IN_USD"),
@@ -51,7 +50,7 @@ public enum RTGSCategory {
 	private final int value;
 	private final String text;
 
-	private RTGSCategory(int value, String text) {
+	private RTGSTransactionType(int value, String text) {
 		this.value = value;
 		this.text = text;
 	}
@@ -63,5 +62,4 @@ public enum RTGSCategory {
 	public String getText() {
 		return text;
 	}
-
 }

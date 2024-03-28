@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.constant.OfsSources;
+import com.jbl.t24.rest.api.enums.RTGSTransactionType;
+import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoOutward;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerService;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
@@ -35,36 +37,9 @@ import com.jbl.t24.rest.api.tccUtility.TccUtility;
 @Validated
 public class RtgsOutwardTransaction {
 
-	@Autowired
-	private FtHandlerService ftHandlerService;
 	
 	@Autowired
 	private FtHandlerServiceN ftHandlerServicen;
-
-	@RequestMapping(value = "/out", method = RequestMethod.GET)
-
-	public ResponseEntity<?> beftnTrasferOutward(@Valid @RequestParam Map<String, String> requestParams,
-			HttpServletRequest httpServletRequest) throws Exception {
-
-		/**
-		 * Setting the versionwise OFS Message @requestOFS
-		 */
-
-		String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,BD0010888,,TRANSACTION.TYPE=ACOR,DEBIT.ACCT.NO=0100146594209,DEBIT.CURRENCY=BDT,DEBIT.AMOUNT=10,DEBIT.VALUE.DATE=20220506,CREDIT.ACCT.NO=BDT171120001,ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,FT.DR.DETAILS=BACH,FT.DR.DETAILS=,COMMISSION.CODE=,COMMISSION.TYPE=,CHEQUE.NUMBER=,LOCAL.REF:3:1=,LOCAL.REF:94:1=0021699806164052";
-
-		// BeftnOutwardInfo beftnInfoSave = null;
-		// BeftnOutwardInfo beftnInfoExist = null;
-
-		TccUtility tccUtility = new TccUtility();
-
-		String ofsResponse = tccUtility.sendRequest(requestOFS);
-		String[] spiltDataOfs = ofsResponse.split(",");
-		// String[] firstPart = spiltDataOfs[0].split("/");
-		// String statusFlag = firstPart[2];
-
-		return ResponseEntity.status(HttpStatus.OK).body(ofsResponse);
-
-	}
 
 	/**
 	 * BEFT , RTGS, BACH
@@ -93,7 +68,10 @@ public class RtgsOutwardTransaction {
 		String coCode = rtgsInfoOut.getCoCode();
 		String companyCode = rtgsInfoOut.getCompanyCode() + coCode;
 		rtgsInfoOut.setCompanyCode(companyCode);
-		String txType = rtgsInfoOut.getTxType();
+//		String txType = rtgsInfoOut.getCategory()==1?"ACOR":"ACRC";
+		String txCategory = rtgsInfoOut.getTxCategory();
+		String txType = RtgsTransactionConstants.rtgsConstants.get(txCategory).getTransactionType();
+		rtgsInfoOut.setTxCategory(txType);
 		String debitAccNo = rtgsInfoOut.getDebitAccNo();
 		String currency = rtgsInfoOut.getCurrency();
 		String debitAmount = String.format("%.2f", rtgsInfoOut.getDebitAmount());
@@ -102,6 +80,8 @@ public class RtgsOutwardTransaction {
 		String creditDetails = rtgsInfoOut.getCreditDetails();
 		String commissionCode = rtgsInfoOut.getCommissionCode();
 		String commissionType = rtgsInfoOut.getCommissionType();
+		boolean isFc = rtgsInfoOut.getCurrency().contains("BDT")?false:true;
+		rtgsInfoOut.setIsFc(isFc);
 		String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
 		Timestamp t = new Timestamp(new Date().getTime());
 		rtgsInfoOut.setIssueDate(t);

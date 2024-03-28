@@ -27,7 +27,7 @@ public class FtTxResponse {
     private HttpStatus status;
 	private String message;
 	private int responseCode;
-	private String uniqueEft;
+	private String uniqueRTGS;
 	private String ftRef;
 	private String additionalInfo;
     

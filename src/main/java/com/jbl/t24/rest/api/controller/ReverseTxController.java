@@ -99,9 +99,9 @@ public class ReverseTxController {
                 .message(wrapper.getMessage())
                 .responseCode(wrapper.getResponseCode())
                 .additionalInfo(wrapper.getAdditionalInfo())
-                .uniqueEft(wrapper.getUniqueOperationTransactionId())
+                .uniqueRTGS(wrapper.getUniqueOperationTransactionId())
                 .status(HttpStatus.OK)
-                .uniqueEft(ftTxResponse.getUniqueEft());
+                .uniqueRTGS(ftTxResponse.getUniqueRTGS());
 
         rtgsOutward.setStatus(wrapper.getFtStatus());
         rtgsOutward.setReverseDate(new Timestamp(System.currentTimeMillis()));
