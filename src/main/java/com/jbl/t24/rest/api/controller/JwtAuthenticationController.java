@@ -17,9 +17,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -58,7 +58,7 @@ public class JwtAuthenticationController {
 	@Autowired
 	private ApiLogService apiLogService;
 
-	@RequestMapping(value = "/api/token", method = RequestMethod.POST)
+	@PostMapping("/api/token")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody ApiToken apiToken,
 			HttpServletRequest httpServletRequest) throws Exception {
 
@@ -142,7 +142,7 @@ public class JwtAuthenticationController {
 		return ResponseEntity.status(HttpStatus.OK).body(jwtResponse);
 	}
 
-	@RequestMapping(value = "/refreshtoken", method = RequestMethod.GET)
+	@GetMapping("/refreshtoken")
 	public ResponseEntity<?> refreshtoken(HttpServletRequest request) throws Exception {
 		// From the HttpRequest get the claims
 		DefaultClaims claims = (io.jsonwebtoken.impl.DefaultClaims) request.getAttribute("claims");
