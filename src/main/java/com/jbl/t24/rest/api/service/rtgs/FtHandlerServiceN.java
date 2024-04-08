@@ -16,9 +16,11 @@ import com.jbl.t24.rest.api.constant.RtgsUniqueIdTransactionCheck;
 import com.jbl.t24.rest.api.enums.FtStatus;
 import com.jbl.t24.rest.api.enums.RTGSCategory;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
+import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementOutInfo;
+import com.jbl.t24.rest.api.model.rtgs.RtgsCommon;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoInward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoOutward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineInward;
@@ -29,85 +31,83 @@ import java.util.Map;
 
 @Service
 public class FtHandlerServiceN {
-    Logger logger = LogManager.getLogger(FtHandlerService.class);
+	Logger logger = LogManager.getLogger(FtHandlerService.class);
 
-    @Autowired
-    RtgsInfoService service;
+	@Autowired
+	RtgsInfoService service;
 
-    @Autowired
-    ResponseMessageProcessor processor = new ResponseMessageProcessor();
+	@Autowired
+	ResponseMessageProcessor processor = new ResponseMessageProcessor();
 
-    public static final int RTGS_OUWARD_PACS8_MIN_VALUE = 100000;
+	public static final int RTGS_OUWARD_PACS8_MIN_VALUE = 100000;
 
-    public ResponseEntity<?> handleFtTransaction(String requestOFS, CommonFtInfo ftInfo,
-            String uniqueId)
-            throws Exception {
+	public ResponseEntity<?> handleFtTransaction(String requestOFS, RtgsCommon ftInfo, String uniqueId)
+			throws Exception {
 
-        logger.info("Ft Handle Service Started");
-        CommonFtInfo ftSave;
-        CommonFtInfo ftExist;
+		logger.info("Ft Handle Service Started");
+		RtgsCommon ftSave;
+		RtgsCommon ftExist;
 
-        if (ftInfo instanceof RtgsInfoInward) {
-            ftSave = new RtgsInfoInward();
-            ftExist = new RtgsInfoInward();
-        } else if (ftInfo instanceof RtgsInfoOutward) {
-            ftSave = new RtgsInfoOutward();
-            ftExist = new RtgsInfoOutward();
-            RtgsInfoOutward temp = (RtgsInfoOutward)ftInfo;
-            ftSave = (RtgsInfoOutward)ftSave;
-            /*
-    		 * checking the categorty RTGS Ouward=1 Customs E payment=3, RTGS Inward=2
-    		 */
+		if (ftInfo instanceof RtgsInfoInward) {
+			ftSave = new RtgsInfoInward();
+			ftExist = new RtgsInfoInward();
+			
+		} else if (ftInfo instanceof RtgsInfoOutward) {
+			ftSave = new RtgsInfoOutward();
+			ftExist = new RtgsInfoOutward();
+			// RtgsInfoOutward temp = (RtgsInfoOutward) ftInfo;
+			ftSave = (RtgsInfoOutward) ftInfo;
+		
+			// String category = ftInfo.getTxCategory();
+			// int category = ftInfo.getCategoryCode();
 
-    		String category = ftSave. getTxCategory();
+//			if (category.equals(RTGSCategory.RTGSPACS8OUTBDT.getValue())
+			
+			if (ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTBDT.getText()) && ftInfo.getDebitAmount() < RTGS_OUWARD_PACS8_MIN_VALUE) {
+				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
+						ResponseStatus.FOURZ26.getText(), ResponseStatus.FOURZ26.getValue());
+				return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
+			}
 
-    		if (category.equals(RTGSCategory.RTGSPACS8OUTBDT.getValue())
-    				&& ftInfo.getDebitAmount() < RTGS_OUWARD_PACS8_MIN_VALUE) {
-    			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ26.getText(),
-    					ResponseStatus.FOURZ26.getValue());
-    			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
-    		}
+		} else if (ftInfo instanceof RtgsInfoPacsNineInward) {
+			ftSave = new RtgsInfoPacsNineInward();
+			ftExist = new RtgsInfoPacsNineInward();
+		} else if (ftInfo instanceof RtgsInfoPacsNineOutward) {
+			ftSave = new RtgsInfoPacsNineOutward();
+			ftExist = new RtgsInfoPacsNineOutward();
+		} else if (ftInfo instanceof RTGSSettlementInInfo) {
+			ftSave = new RTGSSettlementInInfo();
+			ftExist = new RTGSSettlementInInfo();
+		} else if (ftInfo instanceof RTGSSettlementOutInfo) {
+			ftSave = new RTGSSettlementOutInfo();
+			ftExist = new RTGSSettlementOutInfo();
+		}
 
-        } else if(ftInfo instanceof RtgsInfoPacsNineInward){
-            ftSave = new RtgsInfoPacsNineInward();
-            ftExist = new RtgsInfoPacsNineInward();
-        } else if(ftInfo instanceof RtgsInfoPacsNineOutward){
-        	ftSave = new RtgsInfoPacsNineOutward();
-            ftExist = new RtgsInfoPacsNineOutward();
-        } else if (ftInfo instanceof RTGSSettlementInInfo) {
-            ftSave = new RTGSSettlementInInfo();
-            ftExist = new RTGSSettlementInInfo();
-        } else if (ftInfo instanceof RTGSSettlementOutInfo) {
-            ftSave = new RTGSSettlementOutInfo();
-            ftExist = new RTGSSettlementOutInfo();
-        }
+		TccUtility tccUtility = new TccUtility();
 
-        TccUtility tccUtility = new TccUtility();
+		ftSave = ftInfo;
+		ftExist = service.findByUniqueId(ftInfo, uniqueId);
 
-        ftSave = ftInfo;
-        ftExist = service
-                .findByUniqueId(ftInfo, uniqueId);
+		int statusExist = ftExist == null ? 0 : ftExist.getStatus();
 
-        int statusExist = ftExist == null ? 0 : ftExist.getStatus();
+		if (ftExist != null) {
 
-        if (ftExist != null) {
+			if (statusExist == FtStatus.SUCCESS.getValue() || statusExist == FtStatus.REVERSED.getValue()) {
 
-            if (statusExist == FtStatus.SUCCESS.getValue() || statusExist == FtStatus.REVERSED.getValue()) {
+				String ftResponseStr = ftExist.getFtResponseStr();
 
-                String ftResponseStr = ftExist.getFtResponseStr();
+				FtTxResponse ftResponse = Mapper.readValue(ftResponseStr);
 
-                FtTxResponse ftResponse = Mapper.readValue(ftResponseStr);
+				String message = ftExist.getStatus() == 2 ? ResponseStatus.TWOZ2.getText()
+						: ResponseStatus.TWOZ6.getText();
 
-                String message = ftExist.getStatus() == 2 ? ResponseStatus.TWOZ2.getText()
-                        : ResponseStatus.TWOZ6.getText();
-
-                ftResponse.setResponseCode(ResponseStatus.TWOZ2.getValue());
-                ftResponse.setMessage(message);
-                return ResponseEntity.status(HttpStatus.OK).body(ftResponse);
-            }
+				ftResponse.setResponseCode(ResponseStatus.TWOZ2.getValue());
+				ftResponse.setMessage(message);
+				return ResponseEntity.status(HttpStatus.OK).body(ftResponse);
+			}
 
 			else {
-				 logger.info("FT Alreeady Exists but Failed or Pending");
+				logger.info("FT Alreeady Exists but Failed or Pending");
 
 				if (statusExist == FtStatus.PENDING.getValue()) {
 					logger.info("FT Alreeady Exists but Pending-Transaction Is On Already Processing");
@@ -121,7 +121,7 @@ public class FtHandlerServiceN {
 				String uniqueIdTransactioncheck = RtgsUniqueIdTransactionCheck.checkTransactionByUniqueId(uniqueId);
 
 				if ((uniqueIdTransactioncheck.startsWith("40") && !uniqueIdTransactioncheck.equals("407"))
-                        || uniqueIdTransactioncheck.equals("499")) {
+						|| uniqueIdTransactioncheck.equals("499")) {
 
 					ftSave = ftExist;
 					JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(uniqueIdTransactioncheck);
@@ -164,6 +164,13 @@ public class FtHandlerServiceN {
 
 				}
 
+				if(!ftInfo.isEqual(ftExist)){
+					logger.info("Rehitted block entered. data mismatched");
+					JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
+							ResponseStatus.FIVEZ28.getText(), ResponseStatus.FIVEZ28.getValue());
+					return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
+				}
+
 				ftSave = ftExist;
 				ftSave.setCoCode(ftInfo.getCoCode());
 				ftSave.setIssueDate(ftInfo.getIssueDate());
@@ -171,43 +178,40 @@ public class FtHandlerServiceN {
 			}
 		}
 
-        System.out.println(ftSave.toString());
-        ftSave.setStatus(FtStatus.PENDING.getValue());
-        ftSave.setOfsRequest(requestOFS);
-        service.save(ftSave);
-        logger.info("FT saved as PENDING");
+		System.out.println(ftSave.toString());
+		ftSave.setStatus(FtStatus.PENDING.getValue());
+		ftSave.setOfsRequest(requestOFS);
+		service.save(ftSave);
+		logger.info("FT saved as PENDING");
 
-        String responseData = tccUtility.sendRequest(requestOFS);
-        System.out.println(responseData);
+		String responseData = tccUtility.sendRequest(requestOFS);
+		System.out.println(responseData);
 
-        ftSave.setIssueDate(new Timestamp(System.currentTimeMillis()));
+		ftSave.setIssueDate(new Timestamp(System.currentTimeMillis()));
 
-        if (responseData.startsWith("40")) {
+		if (responseData.startsWith("40")) {
 
-            JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(responseData);
-            ftSave.setStatus(FtStatus.FAILED.getValue());
-            ftSave.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
-            ftSave.setOfsResponse(responseData);
-            service.save(ftSave);
+			JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(responseData);
+			ftSave.setStatus(FtStatus.FAILED.getValue());
+			ftSave.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
+			ftSave.setOfsResponse(responseData);
+			service.save(ftSave);
 
-            logger.error("Server Error:: " + jwtErrorResponse);
+			logger.error("Server Error:: " + jwtErrorResponse);
 
-            return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
-        } else {
-            FtTxResponseBuilder ftResponse = FtTxResponse.builder();
+			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
+		} else {
+			FtTxResponseBuilder ftResponse = FtTxResponse.builder();
 
-            ftResponse.status(HttpStatus.OK)
-                    .uniqueRTGS(uniqueId);
+			ftResponse.status(HttpStatus.OK).uniqueRTGS(uniqueId);
 
-            ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
+			ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
 
-            try {
-            	wrapper = processor.handleResponseOfs(responseData,0);
-				ftResponse.ftRef(wrapper.getFtRef())
-				        .message(wrapper.getMessage())
-				        .responseCode(wrapper.getResponseCode())
-				        .additionalInfo(wrapper.getAdditionalInfo())
-				        .timestamp(ftSave.getIssueDate());
+			try {
+				wrapper = processor.handleResponseOfs(responseData, 0);
+				ftResponse.ftRef(wrapper.getFtRef()).message(wrapper.getMessage())
+						.responseCode(wrapper.getResponseCode()).additionalInfo(wrapper.getAdditionalInfo())
+						.timestamp(ftSave.getIssueDate());
 			} catch (Exception e1) {
 
 				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ0.getText(),
@@ -221,29 +225,29 @@ public class FtHandlerServiceN {
 				return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 			}
 
-            String ftResponseStr = Mapper.mapToJsonString(ftResponse.build());
+			String ftResponseStr = Mapper.mapToJsonString(ftResponse.build());
 
-            ftSave.setStatus(wrapper.getFtStatus());
-            ftSave.setFtResponseStr(ftResponseStr);
-            ftSave.setCbsFtno(ftResponse.build().getFtRef());
-            ftSave.setOfsResponse(responseData);
+			ftSave.setStatus(wrapper.getFtStatus());
+			ftSave.setFtResponseStr(ftResponseStr);
+			ftSave.setCbsFtno(ftResponse.build().getFtRef());
+			ftSave.setOfsResponse(responseData);
 
-            try {
+			try {
 
-                service.save(ftSave);
-            } catch (Exception e) {
-                logger.info("-----::ERROR CHECKING----::" + ftSave);
-                logger.error(e.getMessage(), e);
-                logger.info("JPA Error Occured During Save: " + e.getMessage());
-            }
+				service.save(ftSave);
+			} catch (Exception e) {
+				logger.info("-----::ERROR CHECKING----::" + ftSave);
+				logger.error(e.getMessage(), e);
+				logger.info("JPA Error Occured During Save: " + e.getMessage());
+			}
 
-            logger.info("FT Data Saved");
-            logger.info("Ft Handle Service Finished");
+			logger.info("FT Data Saved");
+			logger.info("Ft Handle Service Finished");
 
-            return ResponseEntity.status(HttpStatus.OK).body(ftResponse.build());
+			return ResponseEntity.status(HttpStatus.OK).body(ftResponse.build());
 
-        }
+		}
 
-    }
+	}
 
 }

@@ -7,9 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
-import org.hibernate.annotations.Formula;
 import org.hibernate.envers.Audited;
 
 import lombok.AllArgsConstructor;
@@ -28,7 +26,8 @@ import lombok.ToString;
 @ToString
 @Builder
 @Audited
-public class RtgsInfoOutward extends CommonFtInfo {
+public class RtgsInfoOutward extends RtgsCommon {
+	// public class RtgsInfoOutward extends CommonFtInfo {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,19 +35,19 @@ public class RtgsInfoOutward extends CommonFtInfo {
 	private int OutwardRtgsInfoId;
 
 	@NotBlank(message = "Unique ID is Blank")
-	//@Pattern(regexp = "^(RTGS)[0-9]{16}$", message = "RTGS Unique ID Length Not Valid")
+	// @Pattern(regexp = "^(RTGS)[0-9]{16}$", message = "RTGS Unique ID Length Not
+	// Valid")
 	@Column(name = "out_unique_id", unique = true, nullable = false, length = 23)
 	private String uniqueOutwardRtgsId;
 
-	@Column(name = "category", nullable = false, length = 2)
-	private int category;
-
+	// @Column(name = "category_code", nullable = false, length = 5)
+	// private int category;
 
 //	private String txType = "ACOR";
 
 //	@Column(name = "transaction_type", length = 10)
 //    private String txType;
 
-	@Column(name = "is_fc", nullable = true)
-	private Boolean isFc;
+	// @Column(name = "is_fc", nullable = true)
+	// private Boolean isFc;
 }

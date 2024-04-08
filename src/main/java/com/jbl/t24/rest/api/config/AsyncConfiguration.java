@@ -11,37 +11,34 @@ import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-
-
 @Configuration
 @EnableAsync
 public class AsyncConfiguration extends AsyncConfigurerSupport {
-	
+
 	// @Bean
-    public Executor getAsyncExecutor() {
-        // ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        // return executor;
-        return new SimpleAsyncTaskExecutor();
-    }
+	public Executor getAsyncExecutor() {
+		// ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		// return executor;
+		return new SimpleAsyncTaskExecutor();
+	}
 
-    @Override
-    @Nullable
-    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-        
-        return (throwable, method, obj) -> {
+	@Override
+	@Nullable
+	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
 
-            System.out.println("Exception Caught in Thread - "+ Thread.currentThread().getName());
-            System.out.println("Exception message - "+throwable.getMessage());
-            System.out.println("Method name - "+method.getName());
+		return (throwable, method, obj) -> {
 
-            for(Object param: obj){
-                System.out.println("Parameter value- "+param);
-            }
+			System.out.println("Exception Caught in Thread - " + Thread.currentThread().getName());
+			System.out.println("Exception message - " + throwable.getMessage());
+			System.out.println("Method name - " + method.getName());
 
-        };
+			for (Object param : obj) {
+				System.out.println("Parameter value- " + param);
+			}
 
+		};
 
-        // return super.getAsyncUncaughtExceptionHandler();
-    }
+		// return super.getAsyncUncaughtExceptionHandler();
+	}
 
 }

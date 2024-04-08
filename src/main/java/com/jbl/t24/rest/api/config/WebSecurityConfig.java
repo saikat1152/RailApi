@@ -50,7 +50,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
-	/*~~(Migrate manually based on https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)~~>*/
+	/*
+	 * ~~(Migrate manually based on
+	 * https://spring.io/blog/2022/02/21/spring-security-without-the-
+	 * websecurityconfigureradapter)~~>
+	 */
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -64,20 +68,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // We don't need CSRF for this example
-        httpSecurity.csrf(csrf -> csrf.disable())
-                // dont authenticate this particular request
-                // .authorizeRequests().antMatchers("/employee").authenticated().//.authorizeRequests().antMatchers("/cbs/**").authenticated().
+		// We don't need CSRF for this example
+		httpSecurity.csrf(csrf -> csrf.disable())
+				// dont authenticate this particular request
+				// .authorizeRequests().antMatchers("/employee").authenticated().//.authorizeRequests().antMatchers("/cbs/**").authenticated().
 
-                // only allow authenticate request without access token
-                .authorizeRequests(requests -> requests.antMatchers("/api/token").permitAll().
-                        // all other requests need to be authenticated
-                        anyRequest().authenticated()).
-                // make sure we use stateless session; session won't be used to
-                // store user's state.
-                exceptionHandling(handling -> handling.authenticationEntryPoint(jwtAuthenticationEntryPoint)).sessionManagement(management -> management
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        httpSecurity.headers(headers -> headers.frameOptions().disable());
+				// only allow authenticate request without access token
+				.authorizeRequests(requests -> requests.antMatchers("/api/token").permitAll().
+				// all other requests need to be authenticated
+						anyRequest().authenticated())
+				.
+				// make sure we use stateless session; session won't be used to
+				// store user's state.
+				exceptionHandling(handling -> handling.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+				.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		httpSecurity.headers(headers -> headers.frameOptions().disable());
 		// Add a filter to validate the tokens with every request
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}

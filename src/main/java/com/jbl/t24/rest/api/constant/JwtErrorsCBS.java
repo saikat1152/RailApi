@@ -16,27 +16,27 @@ public class JwtErrorsCBS {
 					ResponseStatus.FIVEZ3.getValue());
 			break;
 		case "402":
-            jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ2.getText(),
-                    ResponseStatus.FIVEZ2.getValue());
-            break;
+			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ2.getText(),
+					ResponseStatus.FIVEZ2.getValue());
+			break;
 		case "403":
-            jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ0.getText(),
-                    ResponseStatus.FIVEZ0.getValue());
-            break;
+			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ0.getText(),
+					ResponseStatus.FIVEZ0.getValue());
+			break;
 		case "404":
-            jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ4.getText(),
-                    ResponseStatus.FIVEZ4.getValue());
-            break;
-        case "405":
-            jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ5.getText(),
-                    ResponseStatus.FIVEZ5.getValue());
-            break;
+			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ4.getText(),
+					ResponseStatus.FIVEZ4.getValue());
+			break;
+		case "405":
+			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ5.getText(),
+					ResponseStatus.FIVEZ5.getValue());
+			break;
 		default:
 			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ99.getText(),
 					ResponseStatus.FIVEZ99.getValue());
 		}
 		return jwtErrorResponse;
 
-    }
-	
+	}
+
 }

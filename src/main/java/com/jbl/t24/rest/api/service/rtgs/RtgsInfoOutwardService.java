@@ -11,20 +11,20 @@ import com.jbl.t24.rest.api.repository.rtgs.RtgsInfoOutwardRepository;
 @Transactional(readOnly = true)
 public class RtgsInfoOutwardService {
 
-	  @Autowired
-	  RtgsInfoOutwardRepository rtgsInfoOutwardRepository;
+	@Autowired
+	RtgsInfoOutwardRepository rtgsInfoOutwardRepository;
 
-	  @Transactional(readOnly = false)
-	  public RtgsInfoOutward save(RtgsInfoOutward entity) {
-	    return rtgsInfoOutwardRepository.save(entity);
-	  }
-
-	  public RtgsInfoOutward findByUniqueOutwardRtgsId(String uniqueOutwardRtgsId){
-	    return rtgsInfoOutwardRepository.findByUniqueOutwardRtgsId(uniqueOutwardRtgsId);
-	  }
-
-	  public RtgsInfoOutward findByCbsFtno(String cbsFtno){
-		    return rtgsInfoOutwardRepository.findByCbsFtno(cbsFtno);
-		  }
-
+	@Transactional(readOnly = false)
+	public RtgsInfoOutward save(RtgsInfoOutward entity) {
+		return rtgsInfoOutwardRepository.save(entity);
 	}
+
+	public RtgsInfoOutward findByUniqueOutwardRtgsId(String uniqueOutwardRtgsId) {
+		return rtgsInfoOutwardRepository.findByUniqueOutwardRtgsId(uniqueOutwardRtgsId);
+	}
+
+	public RtgsInfoOutward findByCbsFtno(String cbsFtno) {
+		return rtgsInfoOutwardRepository.findByCbsFtno(cbsFtno);
+	}
+
+}

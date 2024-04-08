@@ -21,9 +21,9 @@ public class JwtUserService {
 	}
 
 	public JwtUser findOne(Long id) {
-		return jwtuserRepository.getOne(id);
+		return jwtuserRepository.getById(id);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public JwtUser save(JwtUser entity) {
 		return jwtuserRepository.save(entity);
@@ -33,10 +33,9 @@ public class JwtUserService {
 	public void delete(JwtUser entity) {
 		jwtuserRepository.delete(entity);
 	}
-	
+
 	public JwtUser findByUserName(String userName) {
 		return jwtuserRepository.findByUsername(userName);
 	}
 
 }
-	

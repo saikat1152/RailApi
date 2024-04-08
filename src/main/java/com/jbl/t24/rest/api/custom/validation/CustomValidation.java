@@ -13,11 +13,11 @@ public class CustomValidation {
 	public boolean isBlankString(String string) {
 		return string == null || string.trim().isEmpty();
 	}
-	
+
 	public boolean isBlankDouble(Double doubleValue) {
 		return doubleValue == null || doubleValue <= 0;
 	}
-	
+
 	public boolean isBlankInteger(Integer intleValue) {
 		return intleValue == null || intleValue <= 0;
 	}
@@ -56,26 +56,20 @@ public class CustomValidation {
 		}
 		return false;
 	}
-	
+
 	public boolean isVersionValidInward(Integer ver) {
-		if(ver == 1 ||  ver == 2)
-		{
+		if (ver == 1 || ver == 2) {
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
-	
+
 	public boolean isVersionValidOutward(Integer ver) {
-		//String trimString = string.trim();
-		if(ver == 1 ||  ver == 2 || ver == 3)
-		{
+		// String trimString = string.trim();
+		if (ver == 1 || ver == 2 || ver == 3) {
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}

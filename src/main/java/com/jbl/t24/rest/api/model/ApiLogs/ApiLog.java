@@ -16,9 +16,9 @@ import javax.persistence.Table;
 public class ApiLog {
 
 	public ApiLog() {
-		
+
 	}
-	
+
 	public ApiLog(String protocol, String ip, String uri, String hostName, String httpRequest) {
 		this.protocol = protocol;
 		this.ip = ip;

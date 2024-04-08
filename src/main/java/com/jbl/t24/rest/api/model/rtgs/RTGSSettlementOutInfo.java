@@ -1,3 +1,4 @@
+
 package com.jbl.t24.rest.api.model.rtgs;
 
 import javax.persistence.Column;
@@ -27,9 +28,9 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @Builder
 @Audited
-public class RTGSSettlementOutInfo extends CommonFtInfo{
+public class RTGSSettlementOutInfo extends RtgsCommon {
 
-  	@Id
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "settlement_id", unique = true, nullable = false)
 	private Long settlementId;
@@ -41,7 +42,7 @@ public class RTGSSettlementOutInfo extends CommonFtInfo{
 	@Column(name = "reverse_enabled")
 	protected boolean reverseEnabled = false;
 
-    public RTGSSettlementOutInfo(){
+	public RTGSSettlementOutInfo() {
 		this.txType = "ACOS";
 	}
 

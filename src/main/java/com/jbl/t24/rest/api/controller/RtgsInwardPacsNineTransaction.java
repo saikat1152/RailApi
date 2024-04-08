@@ -14,17 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.constant.OfsSources;
+import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineInward;
-import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineOutward;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerService;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
@@ -36,54 +30,9 @@ import com.jbl.t24.rest.api.tccUtility.TccUtility;
 public class RtgsInwardPacsNineTransaction {
 
 	@Autowired
-	private FtHandlerService ftHandlerService;
-
-	@Autowired
 	private FtHandlerServiceN ftHandlerServiceN;
 
-	public ResponseEntity<?> rtgsTrasferInward(@Valid @RequestParam Map<String, String> requestParams,
-			HttpServletRequest httpServletRequest) throws Exception {
-
-		/**
-		 * Setting the versionwise OFS Message @requestOFS
-		 */
-		/**
-		 * ACOD --> BEFTN Outward
-		 * ACOR ---> RTGS Outward
-		 * ACIR ---> RTGS Inward
-		 * ACOP ---> RTGS Outward PACS 09 FC
-		 * ACIN ---> RTGS Inward PACS 09 FC
-		 * 
-		 */
-
-		/**
-		 * BEFT , RTGS, BACH
-		 * Current Timestamp YYYYMMDD HH:MM:SS
-		 * Unique ID
-		 */
-
-		/**
-		 * Currency
-		 * USD, GBP, EUR,
-		 */
-		String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,,TRANSACTION.TYPE=ACIN,DEBIT.ACCT.NO=USD1720600010888,DEBIT.CURRENCY=USD,DEBIT.AMOUNT=10,DEBIT.VALUE.DATE=20220506,CREDIT.ACCT.NO=USD1745100059999,ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,FT.DR.DETAILS=RTGS-PACS9,FT.CR.DETAILS=,COMMISSION.TYPE=,CHEQUE.NUMBER=,LOCAL.REF:3:1=,LOCAL.REF:94:1=RTGSPACS90001,LOCAL.REF:125:1=OTHER INFO,LOCAL.REF:126:1=TEST BILL,LOCAL.REF:127:1=TEST LC,LOCAL.REF:128:1=TEST NAME,LOCAL.REF:129:1=TEST INSTR,LOCAL.REF:130:1=TF00110000";
-
-		// BeftnOutwardInfo beftnInfoSave = null;
-		// BeftnOutwardInfo beftnInfoExist = null;
-
-		TccUtility tccUtility = new TccUtility();
-
-		String ofsResponse = tccUtility.sendRequest(requestOFS);
-		String[] spiltDataOfs = ofsResponse.split(",");
-		// String[] firstPart = spiltDataOfs[0].split("/");
-		// String statusFlag = firstPart[2];
-
-		return ResponseEntity.status(HttpStatus.OK).body(ofsResponse);
-
-	}
-
-
-	@RequestMapping(value = "/pacs09/inward", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/pacs09/inward", consumes = MediaType.APPLICATION_JSON_VALUE)
 
 	public ResponseEntity<?> rtgsTrasferInward(@Valid @RequestBody RtgsInfoPacsNineInward rtgsInfoPacsNineIn,
 			HttpServletRequest httpServletRequest) throws Exception {
@@ -92,7 +41,10 @@ public class RtgsInwardPacsNineTransaction {
 		String coCode = rtgsInfoPacsNineIn.getCoCode();
 		String companyCode = rtgsInfoPacsNineIn.getCompanyCode() + coCode;
 		rtgsInfoPacsNineIn.setCompanyCode(companyCode);
-		String txType = rtgsInfoPacsNineIn.getTxType();
+		String txCategory = rtgsInfoPacsNineIn.getTxCategory();
+		String txType = RtgsTransactionConstants.rtgsConstants.get(txCategory).getTransactionType();
+		rtgsInfoPacsNineIn.setTxType(txType);
+		rtgsInfoPacsNineIn.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
 		String debitAccNo = rtgsInfoPacsNineIn.getDebitAccNo();
 		String currency = rtgsInfoPacsNineIn.getCurrency();
 		String debitAmount = String.format("%.2f", rtgsInfoPacsNineIn.getDebitAmount());
@@ -101,6 +53,8 @@ public class RtgsInwardPacsNineTransaction {
 		String creditDetails = rtgsInfoPacsNineIn.getCreditDetails();
 		String commissionCode = rtgsInfoPacsNineIn.getCommissionCode();
 		String commissionType = rtgsInfoPacsNineIn.getCommissionType();
+		boolean isFc = rtgsInfoPacsNineIn.getCurrency().contains("BDT") ? false : true;
+		rtgsInfoPacsNineIn.setIsFc(isFc);
 		String otherInfo = rtgsInfoPacsNineIn.getOtherInfo();
 		String billDescription = rtgsInfoPacsNineIn.getBillDescription();
 		String lcNumber = rtgsInfoPacsNineIn.getLcNumber();
@@ -144,19 +98,19 @@ public class RtgsInwardPacsNineTransaction {
 //				+ "LOCAL.REF:129:1=" + instructionInfo +","
 //				+ "LOCAL.REF:130:1=" + tradeFinanceInfo;
 
-
 		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
 		rtgsInfoPacsNineIn.setHostname(hostIpData.get("host"));
 		rtgsInfoPacsNineIn.setIp(hostIpData.get("remoteAddr"));
 
-		final String requestOFS = String.format(OfsSources.REQUEST_OFS_STRING_P9,
-				companyCode, txType, debitAccNo,currency,debitAmount, issueDate, creditAccNo, debitDetails, creditDetails,
-				commissionCode, commissionType, uniqueFtId,otherInfo, billDescription, lcNumber, partyName,
-				instructionInfo, tradeFinanceInfo);
+		final String requestOFS = String.format(OfsSources.REQUEST_OFS_STRING_P9, companyCode, txType, debitAccNo,
+				currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, commissionCode,
+				commissionType, uniqueFtId, otherInfo, billDescription, lcNumber, partyName, instructionInfo,
+				tradeFinanceInfo);
 
-		//ResponseEntity<?> response = ftHandlerService.handleRtgsInwardPacsNineTransaction(requestOFS, rtgsInfoPacsNineIn, httpServletRequest);
+		// ResponseEntity<?> response =
+		// ftHandlerService.handleRtgsInwardPacsNineTransaction(requestOFS,
+		// rtgsInfoPacsNineIn, httpServletRequest);
 		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, rtgsInfoPacsNineIn, uniqueFtId);
-
 
 		System.out.println(response.getBody());
 		// return ResponseEntity.status(HttpStatus.OK).body(response);

@@ -53,7 +53,5 @@ public class RestReportController {
 //		Timestamp ts = Timestamp.valueOf(date.atStartOfDay());
 //		return remitterInfoService.findByBranchCodeAndDate(ts, branchCode);
 //	}
-	
-	
 
 }

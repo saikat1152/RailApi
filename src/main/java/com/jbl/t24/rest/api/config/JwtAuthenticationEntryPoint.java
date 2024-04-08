@@ -34,7 +34,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
 		int responsecode = ResponseStatus.FIVEZ0.getValue();
 		String message = ResponseStatus.FIVEZ0.getText();
 
-		//System.out.println(authException);
+		// System.out.println(authException);
 
 		if (authException instanceof BadCredentialsException) {
 			responsecode = ResponseStatus.FOURZ1.getValue();

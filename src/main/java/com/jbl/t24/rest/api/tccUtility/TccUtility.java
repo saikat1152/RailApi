@@ -30,19 +30,16 @@ public class TccUtility {
 	}
 
 	/*
-	 * 400 = ERROR IN SENDING REQUEST
-	 * 401 = CANNOT PING THE TC SERVER
-	 * 402 = REQUEST NOT VALID
-	 * 403 = INTERNAL ERROR
-	 * 404 = BLANK OFS ERROR
-	 * 405 = INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS
+	 * 400 = ERROR IN SENDING REQUEST 401 = CANNOT PING THE TC SERVER 402 = REQUEST
+	 * NOT VALID 403 = INTERNAL ERROR 404 = BLANK OFS ERROR 405 = INVALID COMPANY
+	 * SPECIFIED DURING SIGN ON PROCESS
 	 */
 
-	public void setChannel(String channel){
+	public void setChannel(String channel) {
 		this.channel = channel;
 	}
 
-	public String sendRequest(String sRequest){
+	public String sendRequest(String sRequest) {
 		String sResponse = "400";
 
 		try {
@@ -50,7 +47,7 @@ public class TccUtility {
 			/**
 			 * Create a Connection based on the channel name.
 			 */
-			
+
 			TCConnection tcConnection = tcf.createTCConnection(channel);
 			tcConnection.setMaximumRetryCount(1);
 			tcConnection.setRetryInterval(2);
@@ -91,7 +88,7 @@ public class TccUtility {
 					sResponse = tcResponse.getOFSString();
 
 					if (sResponse.length() == 1) {
-						sResponse="404";
+						sResponse = "404";
 					}
 
 					if (sResponse.contains(CBSResponseStr.invalidCompanyCodeAssigned.getText())) {

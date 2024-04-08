@@ -23,17 +23,17 @@ import lombok.ToString;
 @Builder
 
 public class FtTxResponse {
-	
-    private HttpStatus status;
+
+	private HttpStatus status;
 	private String message;
 	private int responseCode;
 	private String uniqueRTGS;
 	private String ftRef;
 	private String additionalInfo;
-    
-    @JsonFormat(pattern = "E, dd MMM Y HH:mm:ss z", timezone = "GMT+06")
+
+	@JsonFormat(pattern = "E, dd MMM Y HH:mm:ss z", timezone = "GMT+06")
 	private Timestamp timestamp = new Timestamp(new Date().getTime());
 
-    @JsonFormat(pattern = "E, dd MMM Y HH:mm:ss z", timezone = "GMT+06")
+	@JsonFormat(pattern = "E, dd MMM Y HH:mm:ss z", timezone = "GMT+06")
 	private Timestamp reverseTimestamp;
 }

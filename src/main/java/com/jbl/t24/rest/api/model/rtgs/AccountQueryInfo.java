@@ -32,14 +32,15 @@ import lombok.ToString;
 @ToString
 @Audited
 public class AccountQueryInfo extends CommonQueryInfo {
-    @Id
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "account_query_id", unique = true, nullable = false)
 	int accountQueryId;
-	
+
 	@Column(name = "account_number", length = 63)
 	@NotEmpty
-	// @Pattern(regexp = "^[0-9]{12}$|^[0-9]{13}$|^[0-9]{16}$", message = "Account Length Not Valid")
+	// @Pattern(regexp = "^[0-9]{12}$|^[0-9]{13}$|^[0-9]{16}$", message = "Account
+	// Length Not Valid")
 	String accountNumber;
 
 	@Column(name = "ofs_response", length = 2048)

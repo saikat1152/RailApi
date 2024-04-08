@@ -27,8 +27,8 @@ import lombok.ToString;
 @ToString
 @Builder
 @Audited
-public class RtgsInfoInward extends CommonFtInfo {
-	
+public class RtgsInfoInward extends RtgsCommon {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "rtgs_in_id", unique = true, nullable = false)
@@ -39,10 +39,13 @@ public class RtgsInfoInward extends CommonFtInfo {
 	@Column(name = "in_unique_id", unique = true, nullable = false, length = 23)
 	private String uniqueInwardRtgsId;
 
-	@Column(name = "category", nullable = false, length = 2)
-	private int category;
+	// @Column(name = "category", nullable = false, length = 2)
+	// private int category;
 
-	@Column(name = "transaction_type", length = 10)
-	private String txType = "ACIR";
+	// @Column(name = "transaction_type", length = 10)
+	// private String txType = "ACIR";
+
+	@Column(name = "is_fc", nullable = true)
+	private Boolean isFc;
 
 }

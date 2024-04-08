@@ -11,16 +11,16 @@ import com.jbl.t24.rest.api.repository.rtgs.RtgsInfoPacsNineInwardRepository;
 @Transactional(readOnly = true)
 public class RtgsInfoPacsNineInwardService {
 
-	  @Autowired
-	  RtgsInfoPacsNineInwardRepository rtgsInfoPacsNineInwardRepository;
+	@Autowired
+	RtgsInfoPacsNineInwardRepository rtgsInfoPacsNineInwardRepository;
 
-	  @Transactional(readOnly = false)
-	  public RtgsInfoPacsNineInward save(RtgsInfoPacsNineInward entity) {
-	    return rtgsInfoPacsNineInwardRepository.save(entity);
-	  }
+	@Transactional(readOnly = false)
+	public RtgsInfoPacsNineInward save(RtgsInfoPacsNineInward entity) {
+		return rtgsInfoPacsNineInwardRepository.save(entity);
+	}
 
-	  public RtgsInfoPacsNineInward findByUniqueInwardRtgsId(String uniqueInwardRtgsId){
-	    return rtgsInfoPacsNineInwardRepository.findByUniqueInwardRtgsId(uniqueInwardRtgsId);
-	  }
+	public RtgsInfoPacsNineInward findByUniqueInwardRtgsId(String uniqueInwardRtgsId) {
+		return rtgsInfoPacsNineInwardRepository.findByUniqueInwardRtgsId(uniqueInwardRtgsId);
+	}
 
 }

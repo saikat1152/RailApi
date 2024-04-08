@@ -12,15 +12,15 @@ import com.jbl.t24.rest.api.repository.rtgs.AccountQueryInforRepository;
 @Transactional(readOnly = true)
 public class AccountQueryInfoService {
 
-    @Autowired
+	@Autowired
 	private RestTemplate restTemplate;
 
-    @Autowired
-    private AccountQueryInforRepository accountQueryInforRepository;
+	@Autowired
+	private AccountQueryInforRepository accountQueryInforRepository;
 
-    @Transactional(readOnly = false)
-    public AccountQueryInfo save(AccountQueryInfo entity){
-        return accountQueryInforRepository.save(entity);
-    }
-    
+	@Transactional(readOnly = false)
+	public AccountQueryInfo save(AccountQueryInfo entity) {
+		return accountQueryInforRepository.save(entity);
+	}
+
 }

@@ -12,20 +12,20 @@ import com.jbl.t24.rest.api.repository.rtgs.RtgsInfoPacsNineOutwardRepository;
 @Transactional(readOnly = true)
 public class RtgsInfoPacsNineOutwardService {
 
-	  @Autowired
-	  RtgsInfoPacsNineOutwardRepository rtgsInfoPacsNineOutwardRepository;
+	@Autowired
+	RtgsInfoPacsNineOutwardRepository rtgsInfoPacsNineOutwardRepository;
 
-	  @Transactional(readOnly = false)
-	  public RtgsInfoPacsNineOutward save(RtgsInfoPacsNineOutward entity) {
-	    return rtgsInfoPacsNineOutwardRepository.save(entity);
-	  }
+	@Transactional(readOnly = false)
+	public RtgsInfoPacsNineOutward save(RtgsInfoPacsNineOutward entity) {
+		return rtgsInfoPacsNineOutwardRepository.save(entity);
+	}
 
-	  public RtgsInfoPacsNineOutward findByUniqueOutwardRtgsId(String uniqueOutwardRtgsId){
-	    return rtgsInfoPacsNineOutwardRepository.findByUniqueOutwardRtgsId(uniqueOutwardRtgsId);
-	  }
-	  
-	  public RtgsInfoPacsNineOutward findByCbsFtno(String cbsFtno){
-		    return rtgsInfoPacsNineOutwardRepository.findByCbsFtno(cbsFtno);
-		  }
+	public RtgsInfoPacsNineOutward findByUniqueOutwardRtgsId(String uniqueOutwardRtgsId) {
+		return rtgsInfoPacsNineOutwardRepository.findByUniqueOutwardRtgsId(uniqueOutwardRtgsId);
+	}
+
+	public RtgsInfoPacsNineOutward findByCbsFtno(String cbsFtno) {
+		return rtgsInfoPacsNineOutwardRepository.findByCbsFtno(cbsFtno);
+	}
 
 }

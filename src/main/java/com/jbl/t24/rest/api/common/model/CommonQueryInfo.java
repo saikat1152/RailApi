@@ -20,14 +20,14 @@ import lombok.ToString;
 @Setter
 @ToString
 public abstract class CommonQueryInfo {
-    @CreationTimestamp
-    @Column(name = "QUERY_DATE")
-    protected Timestamp queryDate;
-    protected String ip;
-    protected String hostname;
+	@CreationTimestamp
+	@Column(name = "QUERY_DATE")
+	protected Timestamp queryDate;
+	protected String ip;
+	protected String hostname;
 
-    protected String status;
-    // @Nullable
-    @Column(name="RESPONSE_DATA")
-    protected String responseData;
+	protected String status;
+	// @Nullable
+	@Column(name = "RESPONSE_DATA")
+	protected String responseData;
 }

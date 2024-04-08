@@ -12,15 +12,15 @@ import com.jbl.t24.rest.api.repository.rtgs.SignQueryInfoRepository;
 @Transactional(readOnly = true)
 public class SignQueryInfoService {
 
-    @Autowired
+	@Autowired
 	private RestTemplate restTemplate;
 
-    @Autowired
-    private SignQueryInfoRepository SignQueryInfoService;
+	@Autowired
+	private SignQueryInfoRepository SignQueryInfoService;
 
-    @Transactional(readOnly = false)
-    public SignatureQueryInfo save(SignatureQueryInfo entity){
-        return SignQueryInfoService.save(entity);
-    }
-    
+	@Transactional(readOnly = false)
+	public SignatureQueryInfo save(SignatureQueryInfo entity) {
+		return SignQueryInfoService.save(entity);
+	}
+
 }

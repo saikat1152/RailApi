@@ -2,8 +2,7 @@ package com.jbl.t24.rest.api.enums;
 
 public enum AccountNature {
 
-	PERSONAL(1, "Personal"),
-	OTHER(2, "Others");
+	PERSONAL(1, "Personal"), OTHER(2, "Others");
 
 	private final int value;
 	private final String text;

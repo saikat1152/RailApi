@@ -22,9 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.Base64Utils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,7 +41,6 @@ import com.jbl.t24.rest.api.model.rtgs.SignatureQueryInfo;
 import com.jbl.t24.rest.api.service.rtgs.AccountQueryInfoService;
 import com.jbl.t24.rest.api.service.rtgs.SignQueryInfoService;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
-
 
 @RestController
 @CrossOrigin
@@ -63,7 +62,7 @@ public class VerificationController {
 	// @Value("${live.image.path}")
 	private String ROOT_PATH;
 
-	@RequestMapping(value = "/sign-check", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/sign-check", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> signatureImage(@Valid @RequestBody SignatureQueryInfo signatureQueryInfo,
 			HttpServletRequest httpServletRequest) throws Exception {
 
@@ -103,19 +102,17 @@ public class VerificationController {
 			 */
 
 			for (int i = 2; i <= allData.length; i++) {
-				if (allData[i].toLowerCase().contains(".jpg") 
-				|| allData[i].toLowerCase().contains(".png")
-				|| allData[i].toLowerCase().contains(".jpeg")
-				|| allData[i].toLowerCase().contains(".bmp")) {
+				if (allData[i].toLowerCase().contains(".jpg") || allData[i].toLowerCase().contains(".png")
+						|| allData[i].toLowerCase().contains(".jpeg") || allData[i].toLowerCase().contains(".bmp")) {
 					imageRelativePath = allData[i].replace("\"", "");
-					if((allData[i].toLowerCase().contains(".jpg"))){
-						imageFormat ="jpg";
-					}else if((allData[i].toLowerCase().contains(".png"))){
-						imageFormat ="png";
-					}else if((allData[i].toLowerCase().contains(".jpeg"))){
-						imageFormat ="jpeg";
-					}else if((allData[i].toLowerCase().contains(".bmp"))){
-						imageFormat ="bmp";
+					if ((allData[i].toLowerCase().contains(".jpg"))) {
+						imageFormat = "jpg";
+					} else if ((allData[i].toLowerCase().contains(".png"))) {
+						imageFormat = "png";
+					} else if ((allData[i].toLowerCase().contains(".jpeg"))) {
+						imageFormat = "jpeg";
+					} else if ((allData[i].toLowerCase().contains(".bmp"))) {
+						imageFormat = "bmp";
 					}
 					break;
 				}
@@ -161,8 +158,7 @@ public class VerificationController {
 				logger.info("Image Fetching Error: " + e.getStackTrace());
 
 				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
-                            ResponseStatus.FOURZ25.getText(),
-                            ResponseStatus.FOURZ25.getValue());
+						ResponseStatus.FOURZ25.getText(), ResponseStatus.FOURZ25.getValue());
 
 				AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(ResponseStatus.FOURZ25.getText(),
 						ResponseStatus.FOURZ25.getValue(), false);
@@ -178,9 +174,8 @@ public class VerificationController {
 			}
 		} else {
 
-			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
-                            ResponseStatus.FOURZ25.getText(),
-                            ResponseStatus.FOURZ25.getValue());
+			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ25.getText(),
+					ResponseStatus.FOURZ25.getValue());
 
 			AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(ResponseStatus.FOURZ25.getText(),
 					ResponseStatus.FOURZ25.getValue(), false);
@@ -202,7 +197,7 @@ public class VerificationController {
 	 * Method for saving image to local
 	 */
 
-	@RequestMapping(value = "/acct-check", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/acct-check", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> accountInfoNew(@Valid @RequestBody AccountQueryInfo accountQueryInfo,
 			HttpServletRequest httpServletRequest) throws Exception {
 
@@ -220,7 +215,7 @@ public class VerificationController {
 		accountQueryInfo.setHostname(host);
 
 		TccUtility tccUtility = new TccUtility();
-		
+
 		String requestOFS = String.format(OfsSources.OFS_ACC_ENQUIRY, accountNo);
 		String responseData = tccUtility.sendRequest(requestOFS);
 
@@ -296,14 +291,14 @@ public class VerificationController {
 
 						JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
 								ResponseStatus.FOURZ13.getText(), ResponseStatus.FOURZ13.getValue());
-						AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(
-								message, ResponseStatus.FOURZ13.getValue(), false);
+						AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(message,
+								ResponseStatus.FOURZ13.getValue(), false);
 						logger.info("Account Query Error " + jwtErrorResponse.getMessage());
 						String response = Mapper.mapToJsonString(jwtErrorResponse);
 						accountQueryInfo.setResponseData(response);
 
 						accountQueryInfoService.save(accountQueryInfo);
-						
+
 						return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 					}
 
@@ -313,8 +308,8 @@ public class VerificationController {
 					JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
 							ResponseStatus.FOURZ7.getText(), ResponseStatus.FOURZ7.getValue());
 
-					AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(
-							message, ResponseStatus.FOURZ13.getValue(), false);
+					AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(message,
+							ResponseStatus.FOURZ13.getValue(), false);
 
 					String response = Mapper.mapToJsonString(jwtErrorResponse);
 					accountQueryInfo.setResponseData(response);

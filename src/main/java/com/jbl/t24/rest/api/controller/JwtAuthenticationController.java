@@ -39,7 +39,7 @@ import io.jsonwebtoken.impl.DefaultClaims;
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -96,7 +96,7 @@ public class JwtAuthenticationController {
 		Objects.requireNonNull(password);
 
 		// check request IP address is authorize or not
-		
+
 		boolean status = this.checkRequestIP(userName, remoteAddr);
 		if (!status) {
 			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.BAD_REQUEST,

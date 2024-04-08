@@ -14,8 +14,8 @@ public class JwtErrorResponse {
 	private HttpStatus status;
 	private String message;
 	private int responseCode;
-	
-	@JsonFormat(pattern="E, DD MMM Y HH:mm:ss z", timezone = "GMT+06")
+
+	@JsonFormat(pattern = "E, DD MMM Y HH:mm:ss z", timezone = "GMT+06")
 	private Timestamp timestamp = new Timestamp(new Date().getTime());
 	private List<String> errors;
 
@@ -31,8 +31,9 @@ public class JwtErrorResponse {
 		this.responseCode = responseCode;
 		this.timestamp = timestamp;
 	}
-	
-	public JwtErrorResponse(HttpStatus status, String message, int responseCode, Timestamp timestamp, final List<String> errors) {
+
+	public JwtErrorResponse(HttpStatus status, String message, int responseCode, Timestamp timestamp,
+			final List<String> errors) {
 		super();
 		this.status = status;
 		this.message = message;
@@ -41,14 +42,15 @@ public class JwtErrorResponse {
 		this.errors = errors;
 	}
 
-	public JwtErrorResponse(HttpStatus status, String message, int responseCode, Timestamp timestamp, final String error) {
-        super();
-        this.status = status;
-        this.message = message;
+	public JwtErrorResponse(HttpStatus status, String message, int responseCode, Timestamp timestamp,
+			final String error) {
+		super();
+		this.status = status;
+		this.message = message;
 		this.responseCode = responseCode;
 		this.timestamp = timestamp;
-        errors = Arrays.asList(error);
-    }
+		errors = Arrays.asList(error);
+	}
 
 	public HttpStatus getStatus() {
 		return status;
@@ -89,7 +91,5 @@ public class JwtErrorResponse {
 	public void setErrors(List<String> errors) {
 		this.errors = errors;
 	}
-	
-	
 
 }
