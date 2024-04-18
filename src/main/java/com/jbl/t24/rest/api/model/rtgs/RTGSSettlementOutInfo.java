@@ -1,4 +1,3 @@
-
 package com.jbl.t24.rest.api.model.rtgs;
 
 import javax.persistence.Column;
@@ -22,10 +21,10 @@ import lombok.ToString;
 @Table(name = "rtgs_settlement_out_info")
 
 @AllArgsConstructor
-// @NoArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
-@ToString(callSuper = true)
+@ToString
 @Builder
 @Audited
 public class RTGSSettlementOutInfo extends RtgsCommon {
@@ -42,8 +41,8 @@ public class RTGSSettlementOutInfo extends RtgsCommon {
 	@Column(name = "reverse_enabled")
 	protected boolean reverseEnabled = false;
 
-	public RTGSSettlementOutInfo() {
-		this.txType = "ACOS";
-	}
+//	public RTGSSettlementOutInfo() {
+//		this.txType = "ACOS";
+//	}
 
 }

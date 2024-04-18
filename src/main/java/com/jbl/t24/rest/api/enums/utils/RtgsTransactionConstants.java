@@ -37,11 +37,11 @@ public class RtgsTransactionConstants {
 		rtgsConstants.put("FC_09_IN_CNY", ConstantValues.builder().transactionType("ACIN").code(9507).build());
 
 		rtgsConstants.put("BDT_08_OUT_S", ConstantValues.builder().transactionType("ACOS").code(6801).build());
-//		rtgsConstants.put("FC_08_OUT_USD_S", ConstantValues.builder().transactionType(null).code(6803).build());
-//		rtgsConstants.put("FC_08_OUT_EUR_S", ConstantValues.builder().transactionType(null).code(6804).build());
-//		rtgsConstants.put("FC_08_OUT_GBP_S", ConstantValues.builder().transactionType(null).code(6805).build());
-//		rtgsConstants.put("FC_08_OUT_JPY_S", ConstantValues.builder().transactionType(null).code(6806).build());
-//		rtgsConstants.put("FC_08_OUT_CNY_S", ConstantValues.builder().transactionType(null).code(6807).build());
+		rtgsConstants.put("FC_08_OUT_USD_S", ConstantValues.builder().transactionType("ACOS").code(6803).build());
+		rtgsConstants.put("FC_08_OUT_EUR_S", ConstantValues.builder().transactionType("ACOS").code(6804).build());
+		rtgsConstants.put("FC_08_OUT_GBP_S", ConstantValues.builder().transactionType("ACOS").code(6805).build());
+		rtgsConstants.put("FC_08_OUT_JPY_S", ConstantValues.builder().transactionType("ACOS").code(6806).build());
+		rtgsConstants.put("FC_08_OUT_CNY_S", ConstantValues.builder().transactionType("ACOS").code(6807).build());
 
 		rtgsConstants.put("BDT_08_IN_S", ConstantValues.builder().transactionType("ACIS").code(7801).build());
 		rtgsConstants.put("FC_08_IN_USD_S", ConstantValues.builder().transactionType("ACIS").code(7803).build());

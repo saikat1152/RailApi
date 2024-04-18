@@ -21,10 +21,10 @@ import lombok.ToString;
 @Table(name = "rtgs_settlement_in_info")
 
 @AllArgsConstructor
-// @NoArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
-@ToString(callSuper = true)
+@ToString
 @Builder
 @Audited
 public class RTGSSettlementInInfo extends RtgsCommon {
@@ -41,8 +41,8 @@ public class RTGSSettlementInInfo extends RtgsCommon {
 	@Column(name = "reverse_enabled")
 	protected boolean reverseEnabled = false;
 
-	public RTGSSettlementInInfo() {
-		this.txType = "ACIS";
-	}
+//	public RTGSSettlementInInfo() {
+//		this.txType = "ACIS";
+//	}
 
 }

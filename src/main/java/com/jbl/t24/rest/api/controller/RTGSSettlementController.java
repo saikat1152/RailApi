@@ -23,6 +23,7 @@ import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementOutInfo;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerService;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
 import com.jbl.t24.rest.api.service.rtgs.OfsMessageGenerator;
+import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 
 @RestController
 @CrossOrigin
@@ -40,12 +41,17 @@ public class RTGSSettlementController {
 	public ResponseEntity<?> settlementInward(@Valid @RequestBody RTGSSettlementInInfo settlementInfo,
 			HttpServletRequest httpServletRequest) throws Exception {
 
-		if (!settlementInfo.getTxCategory().equals("PACS08-Inward")
-				&& !settlementInfo.getTxCategory().equals("PACS09-Inward")) {
-			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ28.getText(),
-					ResponseStatus.FOURZ28.getValue());
-			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
-		}
+		// if (!settlementInfo.getTxCategory().equals("PACS08-Inward")
+		// 		&& !settlementInfo.getTxCategory().equals("PACS09-Inward")) {
+		// 	JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ28.getText(),
+		// 			ResponseStatus.FOURZ28.getValue());
+		// 	return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
+		// }
+
+		String txCategory = settlementInfo.getTxCategory();
+		String txType = RtgsTransactionConstants.rtgsConstants.get(txCategory).getTransactionType();
+		settlementInfo.setTxType(txType);
+		settlementInfo.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
 
 		final String requestOFS = OfsMessageGenerator.generateOfsMessage(settlementInfo,
 				settlementInfo.getUniqueSettlementtId());
@@ -65,12 +71,17 @@ public class RTGSSettlementController {
 	public ResponseEntity<?> settlementOutward(@Valid @RequestBody RTGSSettlementOutInfo settlementOutInfo,
 			HttpServletRequest httpServletRequest) throws Exception {
 
-		if (!settlementOutInfo.getTxCategory().equals("PACS08-Outward")
-				&& !settlementOutInfo.getTxCategory().equals("PACS09-Outward")) {
-			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ28.getText(),
-					ResponseStatus.FOURZ28.getValue());
-			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
-		}
+		// if (!settlementOutInfo.getTxCategory().equals("PACS08-Outward")
+		// 		&& !settlementOutInfo.getTxCategory().equals("PACS09-Outward")) {
+		// 	JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ28.getText(),
+		// 			ResponseStatus.FOURZ28.getValue());
+		// 	return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
+		// }
+
+		String txCategory = settlementOutInfo.getTxCategory();
+		String txType = RtgsTransactionConstants.rtgsConstants.get(txCategory).getTransactionType();
+		settlementOutInfo.setTxType(txType);
+		settlementOutInfo.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
 
 		final String requestOFS = OfsMessageGenerator.generateOfsMessage(settlementOutInfo,
 				settlementOutInfo.getUniqueSettlementtId());

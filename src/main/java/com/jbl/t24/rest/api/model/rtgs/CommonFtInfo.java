@@ -12,14 +12,11 @@ import javax.validation.constraints.Pattern.Flag;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.envers.Audited;
 
-import com.jbl.t24.rest.api.enums.utils.DoubleEqualityCheck;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import oracle.net.aso.f;
 
 @MappedSuperclass
 @AllArgsConstructor

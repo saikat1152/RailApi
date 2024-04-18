@@ -19,7 +19,7 @@ import lombok.Setter;
 @MappedSuperclass
 public class RtgsCommon extends CommonFtInfo{
     
-    @Column(name = "CATEGORY_CODE", nullable = true, length = 5)
+    @Column(name = "CATEGORY_CODE", nullable = true, length = 10)
 	protected int categoryCode;
     
     @Column(name = "is_fc", nullable = true)
