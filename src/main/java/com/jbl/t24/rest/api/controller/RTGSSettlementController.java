@@ -54,7 +54,7 @@ public class RTGSSettlementController {
 		settlementInfo.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
 
 		final String requestOFS = OfsMessageGenerator.generateOfsMessage(settlementInfo,
-				settlementInfo.getUniqueSettlementtId());
+				settlementInfo.getUniqueSettlementtId(), httpServletRequest);
 		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, settlementInfo,
 				settlementInfo.getUniqueSettlementtId());
 
@@ -84,7 +84,7 @@ public class RTGSSettlementController {
 		settlementOutInfo.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
 
 		final String requestOFS = OfsMessageGenerator.generateOfsMessage(settlementOutInfo,
-				settlementOutInfo.getUniqueSettlementtId());
+				settlementOutInfo.getUniqueSettlementtId(),httpServletRequest);
 		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, settlementOutInfo,
 				settlementOutInfo.getUniqueSettlementtId());
 

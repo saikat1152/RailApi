@@ -16,7 +16,7 @@ public class RtgsTransactionConstants {
 		rtgsConstants.put("FC_08_OUT_CNY", ConstantValues.builder().transactionType("ACRO").code(8007).build());
 
 		rtgsConstants.put("BDT_08_IN", ConstantValues.builder().transactionType("ACIR").code(8501).build());
-		rtgsConstants.put("FC_09_IN_USD", ConstantValues.builder().transactionType("ACRI").code(8503).build());
+		rtgsConstants.put("FC_08_IN_USD", ConstantValues.builder().transactionType("ACRI").code(8503).build());
 		rtgsConstants.put("FC_08_IN_EUR", ConstantValues.builder().transactionType("ACRI").code(8504).build());
 		rtgsConstants.put("FC_08_IN_GBP", ConstantValues.builder().transactionType("ACRI").code(8505).build());
 		rtgsConstants.put("FC_08_IN_JPY", ConstantValues.builder().transactionType("ACRI").code(8506).build());

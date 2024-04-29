@@ -42,6 +42,8 @@ import com.jbl.t24.rest.api.service.rtgs.AccountQueryInfoService;
 import com.jbl.t24.rest.api.service.rtgs.SignQueryInfoService;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
+
+
 @RestController
 @CrossOrigin
 @RequestMapping("/verify")
@@ -224,7 +226,7 @@ public class VerificationController {
 		if (responseData.startsWith("40")) {
 			JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(responseData);
 			accountQueryInfo.setStatus("3");
-			logger.info("Account Query Error " + jwtErrorResponse.getMessage());
+			logger.info("Account Query Error " + jwtErrorResponse.getMessage() + "account No:  " + accountNo);
 			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 		} else {
 			try {

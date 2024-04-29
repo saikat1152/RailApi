@@ -2,6 +2,7 @@ package com.jbl.t24.rest.api.service.rtgs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
@@ -19,6 +20,7 @@ import com.jbl.t24.rest.api.repository.rtgs.RTGSSettlementInInfoRepository;
 import com.jbl.t24.rest.api.repository.rtgs.RTGSSettlementOutInfoRepository;
 
 @Service
+@Transactional
 public class RtgsInfoService {
 
 	@Autowired

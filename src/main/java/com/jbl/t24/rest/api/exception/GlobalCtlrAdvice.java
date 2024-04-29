@@ -1,5 +1,8 @@
 package com.jbl.t24.rest.api.exception;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 //import java.util.ArrayList;
 
 //import java.util.List;
@@ -56,45 +59,60 @@ import com.jbl.t24.rest.api.enums.ResponseStatus;
 @RestControllerAdvice
 public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 
-//	@ExceptionHandler(NullPointerException.class)
-//	public ResponseEntity<?> globalExceptionHandler(Exception ex, WebRequest request) {
-//
-//		JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.BAD_REQUEST,
-//				ResponseStatus.FOURZ0.getText(), ResponseStatus.FOURZ0.getValue());
-//		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jwtErrorResponse);
-//	}
-//
-//	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-//	public ResponseEntity<?> globalExceptionHandlerMediaType(Exception ex, WebRequest request) {
-//
-//		JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.FORBIDDEN, ResponseStatus.FOURZ15.getText(),
-//				ResponseStatus.FOURZ15.getValue());
-//
-//		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(jwtErrorResponse);
-//	}
-//
-//	@ExceptionHandler(HttpMessageNotReadableException.class)
-//	public ResponseEntity<?> globalExceptionHandlerReadable(Exception ex, WebRequest request) {
-//
-//		JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
-//				ResponseStatus.FOURZ16.getText(), ResponseStatus.FOURZ16.getValue());
-//
-//		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jwtErrorResponse);
-//	}
-//
-//	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-//	public ResponseEntity<?> globalExceptionHandlerReadableRequestMethod(Exception ex, WebRequest request) {
-//
-//		JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.FORBIDDEN, ResponseStatus.FOURZ5.getText(),
-//				ResponseStatus.FOURZ5.getValue());
-//
-//		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(jwtErrorResponse);
-//	}
+	Logger logger = LogManager.getLogger(GlobalCtlrAdvice.class);
+
+	// @ExceptionHandler(NullPointerException.class)
+	// public ResponseEntity<?> globalExceptionHandler(Exception ex, WebRequest
+	// request) {
+	//
+	// JwtErrorResponse jwtErrorResponse = new
+	// JwtErrorResponse(HttpStatus.BAD_REQUEST,
+	// ResponseStatus.FOURZ0.getText(), ResponseStatus.FOURZ0.getValue());
+	// return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jwtErrorResponse);
+	// }
+	//
+	// @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+	// public ResponseEntity<?> globalExceptionHandlerMediaType(Exception ex,
+	// WebRequest request) {
+	//
+	// JwtErrorResponse jwtErrorResponse = new
+	// JwtErrorResponse(HttpStatus.FORBIDDEN, ResponseStatus.FOURZ15.getText(),
+	// ResponseStatus.FOURZ15.getValue());
+	//
+	// return ResponseEntity.status(HttpStatus.FORBIDDEN).body(jwtErrorResponse);
+	// }
+	//
+	// @ExceptionHandler(HttpMessageNotReadableException.class)
+	// public ResponseEntity<?> globalExceptionHandlerReadable(Exception ex,
+	// WebRequest request) {
+	//
+	// JwtErrorResponse jwtErrorResponse = new
+	// JwtErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
+	// ResponseStatus.FOURZ16.getText(), ResponseStatus.FOURZ16.getValue());
+	//
+	// return
+	// ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jwtErrorResponse);
+	// }
+	//
+	// @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	// public ResponseEntity<?>
+	// globalExceptionHandlerReadableRequestMethod(Exception ex, WebRequest request)
+	// {
+	//
+	// JwtErrorResponse jwtErrorResponse = new
+	// JwtErrorResponse(HttpStatus.FORBIDDEN, ResponseStatus.FOURZ5.getText(),
+	// ResponseStatus.FOURZ5.getValue());
+	//
+	// return ResponseEntity.status(HttpStatus.FORBIDDEN).body(jwtErrorResponse);
+	// }
 
 	// 400
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		logger.info(ex.getClass().getName());
+		logger.error("error", ex);
 
 		List<String> errors = new ArrayList<String>();
 
@@ -115,6 +133,7 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleBindException(final BindException ex, final HttpHeaders headers,
 			final HttpStatus status, final WebRequest request) {
 		logger.info(ex.getClass().getName());
+		logger.error("error", ex);
 		//
 		final List<String> errors = new ArrayList<String>();
 		for (final FieldError error : ex.getBindingResult().getFieldErrors()) {
@@ -133,6 +152,7 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleTypeMismatch(final TypeMismatchException ex, final HttpHeaders headers,
 			final HttpStatus status, final WebRequest request) {
 		logger.info(ex.getClass().getName());
+		logger.error("error", ex);
 		//
 		final String error = ex.getValue() + " value for " + ex.getPropertyName() + " should be of type "
 				+ ex.getRequiredType();
@@ -146,6 +166,7 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleMissingServletRequestPart(final MissingServletRequestPartException ex,
 			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		logger.info(ex.getClass().getName());
+		logger.error("error", ex);
 		//
 		final String error = ex.getRequestPartName() + " part is missing";
 		Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
@@ -159,6 +180,7 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 			final MissingServletRequestParameterException ex, final HttpHeaders headers, final HttpStatus status,
 			final WebRequest request) {
 		logger.info(ex.getClass().getName());
+		logger.error("error", ex);
 		//
 		final String error = ex.getParameterName() + " parameter is missing";
 		Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
@@ -171,6 +193,7 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleMethodArgumentTypeMismatch(final MethodArgumentTypeMismatchException ex,
 			final WebRequest request) {
 		logger.info(ex.getClass().getName());
+		logger.error("error", ex);
 		//
 		final String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
 		Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
@@ -183,6 +206,7 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleConstraintViolation(final ConstraintViolationException ex,
 			final WebRequest request) {
 		logger.info(ex.getClass().getName());
+		logger.error("error", ex);
 		//
 		final List<String> errors = new ArrayList<String>();
 		for (final ConstraintViolation<?> violation : ex.getConstraintViolations()) {
@@ -201,6 +225,7 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleNoHandlerFoundException(final NoHandlerFoundException ex,
 			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		logger.info(ex.getClass().getName());
+		logger.error("error", ex);
 		//
 		final String error = "No handler found for " + ex.getHttpMethod() + " " + ex.getRequestURL();
 		Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
@@ -216,6 +241,7 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 			final HttpRequestMethodNotSupportedException ex, final HttpHeaders headers, final HttpStatus status,
 			final WebRequest request) {
 		logger.info(ex.getClass().getName());
+		logger.error("error", ex);
 		//
 		final StringBuilder builder = new StringBuilder();
 		builder.append(ex.getMethod());
@@ -234,6 +260,7 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(final HttpMediaTypeNotSupportedException ex,
 			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		logger.info(ex.getClass().getName());
+		logger.error("error", ex);
 		//
 		final StringBuilder builder = new StringBuilder();
 		builder.append(ex.getContentType());
@@ -241,10 +268,27 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 		// ex.getSupportedMediaTypes().forEach(t -> builder.append(t + " "));
 
 		Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
-		final JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.UNSUPPORTED_MEDIA_TYPE,
-				ResponseStatus.FOURZ15.getText(), ResponseStatus.FOURZ15.getValue(), timestamp,
-				builder.substring(0, builder.length() - 2));
+		// final JwtErrorResponse jwtErrorResponse = new
+		// JwtErrorResponse(HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+		// ResponseStatus.FOURZ15.getText(), ResponseStatus.FOURZ15.getValue(),
+		// timestamp,
+		// builder.substring(0, builder.length() - 2));
+		// return new ResponseEntity<Object>(jwtErrorResponse, new HttpHeaders(),
+		// jwtErrorResponse.getStatus());
+
+		final JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
+				ErrorMessageGenerator(ex).toString(), ResponseStatus.FIVEZ0.getValue(), timestamp,
+				ErrorMessageGenerator(ex));
 		return new ResponseEntity<Object>(jwtErrorResponse, new HttpHeaders(), jwtErrorResponse.getStatus());
+	}
+
+	private List<String> ErrorMessageGenerator(Exception e) {
+		String errorMessage = e.getStackTrace()[0].getFileName() + " " + e.getStackTrace()[0].getLineNumber()
+				+ " " + e.getMessage();
+		List<String> errorList = new ArrayList<>();
+		errorList.add(errorMessage);
+
+		return errorList;
 	}
 
 	// 500

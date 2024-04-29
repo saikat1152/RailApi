@@ -3,14 +3,19 @@ package com.jbl.t24.rest.api.service.rtgs;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
+import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementOutInfo;
+import com.jbl.t24.rest.api.model.rtgs.RtgsCommon;
 
 @Service
 public class OfsMessageGenerator {
@@ -53,7 +58,7 @@ public class OfsMessageGenerator {
 
 	}
 
-	public static String generateOfsMessage(CommonFtInfo ftInfo, String uniqueId) {
+	public static String generateOfsMessage(RtgsCommon ftInfo, String uniqueId, HttpServletRequest httpServletRequest) {
 
 		String uniqueFtId = "";
 
@@ -87,6 +92,10 @@ public class OfsMessageGenerator {
 		Objects.requireNonNull(debitAmount);
 		Objects.requireNonNull(creditAccNo);
 		Objects.requireNonNull(currency);
+
+		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
+		ftInfo.setHostname(hostIpData.get("host"));
+		ftInfo.setIp(hostIpData.get("remoteAddr"));
 
 		requestOFS = String.format(OfsSources.REQUEST_OFS_STRING, companyCode, txType, debitAccNo, currency,
 				debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, uniqueFtId);

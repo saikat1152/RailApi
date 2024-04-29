@@ -1,9 +1,9 @@
-spring:
-  application:
-    name: BEFTN
-  zipkin:
-    base-url: http://172.17.22.63:9411/
-  # datasource:
+# spring:
+#   application:
+#     name: BEFTN
+#   zipkin:
+#     base-url: http://172.17.22.63:9411/
+#   # datasource:
   #   hikari:
   #     minimumIdle: 2
   #     maximumPoolSize: 20
@@ -24,13 +24,20 @@ spring:
 #     hostname: localhost
 
 
-logging:
-  file: 
-   path: src\main\webapp\WEB-INF\logfiles
-  #  name: \src\main\resources\logfiles\test.log
+# logging:
+#   file.name: 
+#    path: src\main\webapp\WEB-INF\logfiles
 
-
-  
-
-
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, beans, diskSpace
+    health:
+      sensitive: false 
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+      group:
+        custom:
+          include: db, diskspace

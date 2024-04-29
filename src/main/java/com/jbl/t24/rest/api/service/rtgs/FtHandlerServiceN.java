@@ -31,7 +31,7 @@ import java.util.Map;
 
 @Service
 public class FtHandlerServiceN {
-	Logger logger = LogManager.getLogger(FtHandlerService.class);
+	Logger logger = LogManager.getLogger(FtHandlerServiceN.class);
 
 	@Autowired
 	RtgsInfoService service;
@@ -118,18 +118,31 @@ public class FtHandlerServiceN {
 
 				logger.info("FT Alreeady Exists but Failed");
 
+				logger.info( ftExist.getClass().getSimpleName()+" is being saved as Pending before re-CBS Checking");
+                ftExist.setStatus(FtStatus.PENDING.getValue());
+                service.save(ftExist);
+
 				String uniqueIdTransactioncheck = RtgsUniqueIdTransactionCheck.checkTransactionByUniqueId(uniqueId);
 
 				if ((uniqueIdTransactioncheck.startsWith("40") && !uniqueIdTransactioncheck.equals("407"))
 						|| uniqueIdTransactioncheck.equals("499")) {
 
-					ftSave = ftExist;
-					JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(uniqueIdTransactioncheck);
+					// ftSave = ftExist;
+					// JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(uniqueIdTransactioncheck);
 
-					ftSave.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
-					ftSave.setOfsResponse(uniqueIdTransactioncheck);
+					// ftSave.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
+					// ftSave.setOfsResponse(uniqueIdTransactioncheck);
 
 					service.save(ftSave);
+
+				    JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(uniqueIdTransactioncheck);
+
+
+                    ftExist.setStatus(FtStatus.FAILED.getValue());
+                    ftExist.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
+                    ftExist.setOfsResponse(uniqueIdTransactioncheck);
+
+                    service.save(ftExist);
 
 					logger.error("Server Error:: " + jwtErrorResponse);
 
@@ -138,7 +151,7 @@ public class FtHandlerServiceN {
 				} else if (uniqueIdTransactioncheck.contains("cbsFtNumber")) {
 
 					Map<String, String> cbsSuccessTrData = Mapper.readValueForMap(uniqueIdTransactioncheck);
-					ftSave = ftExist;
+					// ftSave = ftExist;
 
 					FtTxResponseBuilder ftResponse = FtTxResponse.builder();
 
@@ -149,13 +162,13 @@ public class FtHandlerServiceN {
 
 					String ftResponseStr = Mapper.mapToJsonString(ftResponse.build());
 
-					ftSave.setStatus(2);
-					ftSave.setFtResponseStr(ftResponseStr);
-					ftSave.setCbsFtno(cbsSuccessTrData.get("cbsFtNumber"));
-					ftSave.setOfsResponse(cbsSuccessTrData.get("ofsResponse"));
-					ftSave.setDebitAmount(Double.parseDouble(cbsSuccessTrData.get("ammount")));
+					ftExist.setStatus(2);
+					ftExist.setFtResponseStr(ftResponseStr);
+					ftExist.setCbsFtno(cbsSuccessTrData.get("cbsFtNumber"));
+					ftExist.setOfsResponse(cbsSuccessTrData.get("ofsResponse"));
+					ftExist.setDebitAmount(Double.parseDouble(cbsSuccessTrData.get("ammount")));
 
-					service.save(ftSave);
+					service.save(ftExist);
 
 					logger.info("FT Transaction Data Saved");
 					logger.info("Ft Handle Service Finished");

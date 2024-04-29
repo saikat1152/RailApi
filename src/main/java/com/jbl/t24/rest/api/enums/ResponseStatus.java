@@ -30,6 +30,7 @@ public enum ResponseStatus {
 	FIVEZ0(500, "Internal Server Error!"), FIVEZ2(502, "REQUEST NOT VALID"), FIVEZ3(503, "Service Unavailable!"),
 	FIVEZ4(504, "Response NONE Due to Unresponsive CBS!"),
 	FIVEZ5(505, "INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS!"),
+	FIVEZ7(507, "String Response Processing Results in Error"),
 
 	FIVEZ27(527, "Cannot Do New CBS Transaction Beacause An Transaction Is On Already Processing!"),
 	FIVEZ28(528, "Resubmitted data mismatched"),

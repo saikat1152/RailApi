@@ -12,6 +12,8 @@ import javax.validation.constraints.Pattern.Flag;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.envers.Audited;
 
+import com.jbl.t24.rest.api.custom.validation.ValidTxCategory;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +44,7 @@ public abstract class CommonFtInfo {
 	protected String companyCode = "BD001";
 
 	@Column(name = "transaction_category", length = 20)
+	@ValidTxCategory
 	protected String txCategory;
 	// protected String txCategory = "RTGS";
 
@@ -118,5 +121,7 @@ public abstract class CommonFtInfo {
 
 	@Column(name = "reverse_enabled")
 	protected boolean reverseEnabled = true;
+
+
 
 }
