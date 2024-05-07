@@ -265,6 +265,7 @@ public class VerificationController {
 						accountInfo.setMessage(ResponseStatus.TWOZ0.getText());
 						accountInfo.setResponseCode(ResponseStatus.TWOZ0.getValue());
 						accountInfo.setAccountType(secondPart[17]);
+						accountInfo.setAccountCatCode(secondPart[18]);
 
 						if (flagValue.equals("1")) {
 							accountInfo.setInactive(false);

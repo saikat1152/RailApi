@@ -48,4 +48,8 @@ public class AccountQueryInfo extends CommonQueryInfo {
 
 	@Column(name = "account_details", length = 500)
 	String accountDetails;
+
+	@Column(name = "account_cat_code", nullable = true, length = 15)
+	String accountCatCode;
+
 }

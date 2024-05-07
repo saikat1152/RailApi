@@ -28,5 +28,5 @@ public class AccountInfo {
 	private String currency;
 	private String accountType;
 	private boolean isInactive;
-
+	private String accountCatCode;
 }
