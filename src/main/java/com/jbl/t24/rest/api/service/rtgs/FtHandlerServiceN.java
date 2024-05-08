@@ -19,6 +19,8 @@ import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineInInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineOutInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementOutInfo;
 import com.jbl.t24.rest.api.model.rtgs.RtgsCommon;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoInward;
@@ -81,6 +83,12 @@ public class FtHandlerServiceN {
 		} else if (ftInfo instanceof RTGSSettlementOutInfo) {
 			ftSave = new RTGSSettlementOutInfo();
 			ftExist = new RTGSSettlementOutInfo();
+		} else if (ftInfo instanceof RTGSSettlementNineInInfo) {
+			ftSave = new RTGSSettlementNineInInfo();
+			ftExist = new RTGSSettlementNineInInfo();
+		} else if (ftInfo instanceof RTGSSettlementNineOutInfo) {
+			ftSave = new RTGSSettlementNineOutInfo();
+			ftExist = new RTGSSettlementNineOutInfo();
 		}
 
 		TccUtility tccUtility = new TccUtility();

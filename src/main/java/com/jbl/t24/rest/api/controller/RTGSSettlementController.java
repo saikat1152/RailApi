@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineInInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineOutInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementOutInfo;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerService;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
@@ -34,24 +36,13 @@ public class RTGSSettlementController {
 	@Autowired
 	FtHandlerServiceN ftHandlerServiceN;
 
-	Logger logger = LogManager.getLogger(FtHandlerService.class);
+	Logger logger = LogManager.getLogger(RTGSSettlementController.class);
+
 
 	@PostMapping(value = "/settlement-in", consumes = MediaType.APPLICATION_JSON_VALUE)
 
 	public ResponseEntity<?> settlementInward(@Valid @RequestBody RTGSSettlementInInfo settlementInfo,
 			HttpServletRequest httpServletRequest) throws Exception {
-
-		// if (!settlementInfo.getTxCategory().equals("PACS08-Inward")
-		// 		&& !settlementInfo.getTxCategory().equals("PACS09-Inward")) {
-		// 	JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ28.getText(),
-		// 			ResponseStatus.FOURZ28.getValue());
-		// 	return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
-		// }
-
-		String txCategory = settlementInfo.getTxCategory();
-		String txType = RtgsTransactionConstants.rtgsConstants.get(txCategory).getTransactionType();
-		settlementInfo.setTxType(txType);
-		settlementInfo.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
 
 		final String requestOFS = OfsMessageGenerator.generateOfsMessage(settlementInfo,
 				settlementInfo.getUniqueSettlementtId(), httpServletRequest);
@@ -71,18 +62,6 @@ public class RTGSSettlementController {
 	public ResponseEntity<?> settlementOutward(@Valid @RequestBody RTGSSettlementOutInfo settlementOutInfo,
 			HttpServletRequest httpServletRequest) throws Exception {
 
-		// if (!settlementOutInfo.getTxCategory().equals("PACS08-Outward")
-		// 		&& !settlementOutInfo.getTxCategory().equals("PACS09-Outward")) {
-		// 	JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ28.getText(),
-		// 			ResponseStatus.FOURZ28.getValue());
-		// 	return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
-		// }
-
-		String txCategory = settlementOutInfo.getTxCategory();
-		String txType = RtgsTransactionConstants.rtgsConstants.get(txCategory).getTransactionType();
-		settlementOutInfo.setTxType(txType);
-		settlementOutInfo.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
-
 		final String requestOFS = OfsMessageGenerator.generateOfsMessage(settlementOutInfo,
 				settlementOutInfo.getUniqueSettlementtId(),httpServletRequest);
 		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, settlementOutInfo,
@@ -92,6 +71,41 @@ public class RTGSSettlementController {
 		logger.info("RTGS Outward Settlement Process Finished");
 		// return ResponseEntity.status(HttpStatus.OK).body(response);
 		System.out.println("---- " + settlementOutInfo);
+		return response;
+	}
+
+
+	@PostMapping(value = "/settlement-nine-in", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> settlementNineInward(@Valid @RequestBody RTGSSettlementNineInInfo settlementNineInfo,
+			HttpServletRequest httpServletRequest) throws Exception {
+	
+		final String requestOFS = OfsMessageGenerator.generateOfsMessage(settlementNineInfo,
+		settlementNineInfo.getUniqueSettlementtId(), httpServletRequest);
+		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, settlementNineInfo,
+		settlementNineInfo.getUniqueSettlementtId());
+
+		System.out.println(response.getBody());
+		logger.info("RTGS Pacs09 Inward Settlement Process Finished");
+		// return ResponseEntity.status(HttpStatus.OK).body(response);
+		System.out.println("---- " + settlementNineInfo);
+		return response;
+
+	}
+
+
+	@PostMapping(value = "/settlement-nine-out", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> settlementNineOutward(@Valid @RequestBody RTGSSettlementNineOutInfo settlementNineOutInfo,
+			HttpServletRequest httpServletRequest) throws Exception {
+
+		final String requestOFS = OfsMessageGenerator.generateOfsMessage(settlementNineOutInfo,
+		settlementNineOutInfo.getUniqueSettlementtId(),httpServletRequest);
+		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, settlementNineOutInfo,
+		settlementNineOutInfo.getUniqueSettlementtId());
+
+		System.out.println(response.getBody());
+		logger.info("RTGS Pacs09 Outward Settlement Process Finished");
+		// return ResponseEntity.status(HttpStatus.OK).body(response);
+		System.out.println("---- " + settlementNineOutInfo);
 		return response;
 	}
 

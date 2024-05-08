@@ -41,8 +41,5 @@ public class RTGSSettlementOutInfo extends RtgsCommon {
 	@Column(name = "reverse_enabled")
 	protected boolean reverseEnabled = false;
 
-//	public RTGSSettlementOutInfo() {
-//		this.txType = "ACOS";
-//	}
 
 }

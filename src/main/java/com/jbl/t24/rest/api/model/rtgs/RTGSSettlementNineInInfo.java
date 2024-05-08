@@ -18,7 +18,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "rtgs_settlement_in_info")
+@Table(name = "rtgs_settlement_nine_in_info")
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,7 +27,7 @@ import lombok.ToString;
 @ToString
 @Builder
 @Audited
-public class RTGSSettlementInInfo extends RtgsCommon {
+public class RTGSSettlementNineInInfo extends RtgsCommon {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

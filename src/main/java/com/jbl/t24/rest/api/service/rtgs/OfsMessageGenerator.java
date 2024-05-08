@@ -12,8 +12,11 @@ import org.springframework.stereotype.Service;
 
 import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.constant.OfsSources;
+import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineInInfo;
+import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineOutInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementOutInfo;
 import com.jbl.t24.rest.api.model.rtgs.RtgsCommon;
 
@@ -66,12 +69,16 @@ public class OfsMessageGenerator {
 			uniqueFtId = ((RTGSSettlementInInfo) ftInfo).getUniqueSettlementtId();
 		} else if (ftInfo instanceof RTGSSettlementOutInfo) {
 			uniqueFtId = ((RTGSSettlementOutInfo) ftInfo).getUniqueSettlementtId();
+		} else if (ftInfo instanceof RTGSSettlementNineInInfo) {
+			uniqueFtId = ((RTGSSettlementNineInInfo) ftInfo).getUniqueSettlementtId();
+		} else if (ftInfo instanceof RTGSSettlementNineOutInfo) {
+			uniqueFtId = ((RTGSSettlementNineOutInfo) ftInfo).getUniqueSettlementtId();
 		}
 		String requestOFS = "";
 		String coCode = ftInfo.getCoCode();
 		String companyCode = ftInfo.getCompanyCode() + coCode;
 		ftInfo.setCompanyCode(companyCode);
-		String txType = ftInfo.getTxType();
+		// String txType = ftInfo.getTxType();
 		String debitAccNo = ftInfo.getDebitAccNo();
 		String currency = ftInfo.getCurrency();
 		String debitAmount = String.format("%.2f", ftInfo.getDebitAmount());
@@ -81,6 +88,11 @@ public class OfsMessageGenerator {
 		String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
 		Timestamp t = new Timestamp(new Date().getTime());
 		ftInfo.setIssueDate(t);
+
+		String txCategory = ftInfo.getTxCategory();
+		String txType = RtgsTransactionConstants.rtgsConstants.get(txCategory).getTransactionType();
+		ftInfo.setTxType(txType);
+		ftInfo.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
 
 		// * Comment it for later Live deployment*/
 		issueDate = "20220506";
