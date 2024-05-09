@@ -31,7 +31,8 @@ public class FtTxResponse {
 	private String ftRef;
 	private String additionalInfo;
 
-	@JsonFormat(pattern = "E, dd MMM Y HH:mm:ss z", timezone = "GMT+06")
+	// @JsonFormat(pattern = "E, dd MMM Y HH:mm:ss z", timezone = "GMT+06")
+	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss")
 	private Timestamp timestamp = new Timestamp(new Date().getTime());
 
 	@JsonFormat(pattern = "E, dd MMM Y HH:mm:ss z", timezone = "GMT+06")

@@ -16,6 +16,7 @@ import com.jbl.t24.rest.api.constant.RtgsUniqueIdTransactionCheck;
 import com.jbl.t24.rest.api.enums.FtStatus;
 import com.jbl.t24.rest.api.enums.RTGSCategory;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
+import com.jbl.t24.rest.api.enums.utils.ErrorMessageGenerator;
 import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
@@ -232,11 +233,11 @@ public class FtHandlerServiceN {
 				wrapper = processor.handleResponseOfs(responseData, 0);
 				ftResponse.ftRef(wrapper.getFtRef()).message(wrapper.getMessage())
 						.responseCode(wrapper.getResponseCode()).additionalInfo(wrapper.getAdditionalInfo())
-						.timestamp(ftSave.getIssueDate());
+						// .timestamp(ftSave.getIssueDate());
+						.timestamp(wrapper.getCbsHittingTime());
 			} catch (Exception e1) {
 
-				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ0.getText(),
-						ResponseStatus.FIVEZ0.getValue());
+				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ErrorMessageGenerator.getErrorMessage(e1),ResponseStatus.FIVEZ0.getValue());
 				ftSave.setStatus(FtStatus.FAILED.getValue());
 				ftSave.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
 				ftSave.setOfsResponse(responseData);

@@ -1,18 +1,21 @@
 package com.jbl.t24.rest.api.service.rtgs;
 
+import java.text.ParseException;
+
 import org.springframework.stereotype.Service;
 
 import com.jbl.t24.rest.api.common.model.ResponseMsgProcessorWrapper;
 import com.jbl.t24.rest.api.enums.CBSResponseStr;
 import com.jbl.t24.rest.api.enums.FtStatus;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
+import com.jbl.t24.rest.api.enums.utils.TimeStampConverter;
 
 @Service
 public class ResponseMessageProcessor {
 
 	ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
 
-	public ResponseMsgProcessorWrapper handleResponseOfs(String responseData, int reverseFlag) {
+	public ResponseMsgProcessorWrapper handleResponseOfs(String responseData, int reverseFlag) throws ParseException {
 
 		String[] spiltData = responseData.split(",");
 		String[] firstPart = spiltData[0].split("/");
@@ -20,6 +23,7 @@ public class ResponseMessageProcessor {
 		// if(spiltData.length()>2){
 
 		// }
+		
 		String additionalInfo_2nd_part = spiltData.length > 2 ? spiltData[2] : "NONE";
 		String additionalInfo = spiltData[1].split("=")[1] + " : " + additionalInfo_2nd_part;
 
@@ -28,12 +32,16 @@ public class ResponseMessageProcessor {
 			String ftRef = firstPart[0];
 			String uniqueOperationTransactionId = spiltData[20].split("=")[1];
 
+			String cbsHittinTimeStr = spiltData[48].split("=")[1].replace("\"", "");
+			wrapper.setCbsHittingTime(TimeStampConverter.getCbsHittingTimeStamp(cbsHittinTimeStr));
+
 			wrapper.setFtRef(ftRef);
 			wrapper.setMessage(reverseFlag == 0 ? ResponseStatus.TWOZ0.getText() : ResponseStatus.TWOZ5.getText());
 			wrapper.setResponseCode(
 					reverseFlag == 0 ? ResponseStatus.TWOZ0.getValue() : ResponseStatus.TWOZ5.getValue());
 			wrapper.setFtStatus(reverseFlag == 0 ? FtStatus.SUCCESS.getValue() : FtStatus.REVERSED.getValue());
 			wrapper.setUniqueOperationTransactionId(uniqueOperationTransactionId);
+		
 			break;
 
 		default:
@@ -192,6 +200,8 @@ public class ResponseMessageProcessor {
 			}
 			break;
 		}
+
+		
 
 		wrapper.setAdditionalInfo(additionalInfo);
 		return wrapper;

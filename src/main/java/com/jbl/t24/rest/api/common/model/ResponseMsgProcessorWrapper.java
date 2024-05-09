@@ -1,5 +1,7 @@
 package com.jbl.t24.rest.api.common.model;
 
+import java.sql.Timestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +22,7 @@ public class ResponseMsgProcessorWrapper {
 	private String additionalInfo;
 	private String ftRef;
 	private String uniqueOperationTransactionId;
+	private Timestamp cbsHittingTime;
 
 	public void setWrapperValues(String ftRef, String message, int responseCode, int ftStatus) {
 		this.message = message;
