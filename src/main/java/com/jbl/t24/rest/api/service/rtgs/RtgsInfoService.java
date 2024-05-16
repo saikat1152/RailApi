@@ -8,6 +8,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
+import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineInInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineOutInfo;
@@ -53,7 +56,9 @@ public class RtgsInfoService {
 
 	Logger logger = LogManager.getLogger(RtgsInfoService.class);
 
-	public static final String RTGS_PACS08_REVERSE_TRANSACTION = "1";
+	public static final String RTGS_PACS08_REVERSE_TRANSACTION = "8";
+
+	public static final String RTGS_PACS09_REVERSE_TRANSACTION = "9";
 
 	// public CommonFtInfo findByUniqueId(CommonFtInfo ftInfo, String uniqueId) {
 	// if (ftInfo instanceof RtgsInfoInward) {
@@ -141,6 +146,7 @@ public class RtgsInfoService {
 		} else if(entity instanceof RTGSSettlementNineOutInfo) {
 			settlementNineOutInfoRepository.save((RTGSSettlementNineOutInfo) entity);
 		} else {
+			// TODO: Error Msg Handling
 			logger.error("RtgsInfoService: Repository doesnot exists in - "+ getClass());
 		}
 	}
@@ -157,10 +163,13 @@ public class RtgsInfoService {
 	public RtgsCommon findByCbsFtNo(String flag, String cbsFtNo) {
 		if (flag.equals(RTGS_PACS08_REVERSE_TRANSACTION)) {
 			return infoOutwardRepository.findByCbsFtno(cbsFtNo);
-		} else {
+		} else if(flag.equals(RTGS_PACS09_REVERSE_TRANSACTION)) {
 			return infoPacsNineOutwardRepository.findByCbsFtno(cbsFtNo);
+		} else {
+			// TODO: Error Msg Handling
+			logger.error("RtgsInfoService:  Version should be 8 0r 9 - "+ getClass());
+			return null;
 		}
-
 	}
 
 	// public Boolean checkReverseNotAllowable(Integer Code) {

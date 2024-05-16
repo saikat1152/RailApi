@@ -35,6 +35,6 @@ public class FtTxResponse {
 	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss")
 	private Timestamp timestamp = new Timestamp(new Date().getTime());
 
-	@JsonFormat(pattern = "E, dd MMM Y HH:mm:ss z", timezone = "GMT+06")
+	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss")
 	private Timestamp reverseTimestamp;
 }

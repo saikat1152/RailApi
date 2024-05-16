@@ -1,6 +1,10 @@
 package com.jbl.t24.rest.api.service.rtgs;
 
 import java.text.ParseException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,17 @@ public class ResponseMessageProcessor {
 	public ResponseMsgProcessorWrapper handleResponseOfs(String responseData, int reverseFlag) throws ParseException {
 
 		String[] spiltData = responseData.split(",");
+		String[] mapSplitDataArray = Arrays.copyOfRange(spiltData, 1, spiltData.length);
+		Map<String, String> splitDataMap = Arrays.stream(mapSplitDataArray)
+			.map(s -> s.split("="))
+			.collect(Collectors.toMap(
+				// arr -> arr[0].split(":1:1")[0],
+				arr -> arr[0].split(":\\d+:")[0],
+				arr -> arr[1],
+				(e1, e2) -> e1,
+				HashMap::new));
+
+			
 		String[] firstPart = spiltData[0].split("/");
 		String statusFlag = firstPart[2];
 		// if(spiltData.length()>2){
@@ -32,7 +47,8 @@ public class ResponseMessageProcessor {
 			String ftRef = firstPart[0];
 			String uniqueOperationTransactionId = spiltData[20].split("=")[1];
 
-			String cbsHittinTimeStr = spiltData[48].split("=")[1].replace("\"", "");
+			// String cbsHittinTimeStr = spiltData[48].split("=")[1].replace("\"", "");
+			String cbsHittinTimeStr = splitDataMap.get("DATE.TIME");
 			wrapper.setCbsHittingTime(TimeStampConverter.getCbsHittingTimeStamp(cbsHittinTimeStr));
 
 			wrapper.setFtRef(ftRef);
