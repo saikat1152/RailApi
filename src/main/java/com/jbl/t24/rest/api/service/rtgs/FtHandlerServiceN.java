@@ -136,16 +136,8 @@ public class FtHandlerServiceN {
 				if ((uniqueIdTransactioncheck.startsWith("40") && !uniqueIdTransactioncheck.equals("407"))
 						|| uniqueIdTransactioncheck.equals("499")) {
 
-					// ftSave = ftExist;
-					// JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(uniqueIdTransactioncheck);
-
-					// ftSave.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
-					// ftSave.setOfsResponse(uniqueIdTransactioncheck);
-
-					service.save(ftSave);
-
+					
 				    JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(uniqueIdTransactioncheck);
-
 
                     ftExist.setStatus(FtStatus.FAILED.getValue());
                     ftExist.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));

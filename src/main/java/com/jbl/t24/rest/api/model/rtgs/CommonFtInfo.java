@@ -12,6 +12,7 @@ import javax.validation.constraints.Pattern.Flag;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.envers.Audited;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jbl.t24.rest.api.custom.validation.ValidTxCategory;
 
 import lombok.AllArgsConstructor;
@@ -64,6 +65,7 @@ public abstract class CommonFtInfo {
 
 	@CreationTimestamp
 	@Column(name = "issue_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = true, nullable = false)
+	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss")
 	protected Timestamp issueDate;
 
 	// @Pattern(regexp = ACCOUNT_NUMBER_PATTERN, message = "Credit Account Pattern
@@ -114,6 +116,7 @@ public abstract class CommonFtInfo {
 
 	// @CreationTimestamp
 	@Column(name = "reverse_date", columnDefinition = "TIMESTAMP", updatable = true, nullable = true)
+	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss")
 	protected Timestamp reverseDate;
 
 	@Column(name = "transaction_type")

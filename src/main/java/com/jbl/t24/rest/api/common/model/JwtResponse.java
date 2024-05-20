@@ -17,11 +17,11 @@ public class JwtResponse {
 	private String userName;
 
 //	@JsonFormat(pattern = "E, DD MMM Y HH:mm:ss z", timezone = "GMT+06")
-	@JsonFormat(pattern = "Y-MM-dd HH:mm:ss", timezone = "GMT+06")
+	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss")
 	private Date issued;
 
 //	@JsonFormat(pattern = "E, DD MMM Y HH:mm:ss z", timezone = "GMT+06")
-	@JsonFormat(pattern = "Y-MM-dd HH:mm:ss", timezone = "GMT+06")
+	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss")
 	private Date expires;
 	private String message = ResponseStatus.TWOZ0.getText();
 	private int responseCode = ResponseStatus.TWOZ0.getValue();

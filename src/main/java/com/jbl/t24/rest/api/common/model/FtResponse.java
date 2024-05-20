@@ -17,7 +17,7 @@ public class FtResponse {
 //	private int creditAccountCategory;
 	private String additionalInfo;
 
-	@JsonFormat(pattern = "E, DD MMM Y HH:mm:ss z", timezone = "GMT+06")
+	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss")
 	private Timestamp timestamp = new Timestamp(new Date().getTime());
 
 	public HttpStatus getStatus() {

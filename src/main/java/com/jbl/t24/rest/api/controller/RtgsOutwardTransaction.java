@@ -91,8 +91,8 @@ public class RtgsOutwardTransaction {
 		 */
 
 		final String requestOFS = String.format(OfsSources.REQUEST_OFS_STRING, companyCode, txType, debitAccNo,
-				currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, uniqueFtId, commissionCode,
-				commissionType);
+				currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, commissionCode,
+				commissionType, uniqueFtId);
 
 		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
 		rtgsInfoOut.setHostname(hostIpData.get("host"));

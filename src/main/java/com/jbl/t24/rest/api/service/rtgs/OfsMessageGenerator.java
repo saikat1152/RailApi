@@ -50,12 +50,21 @@ public class OfsMessageGenerator {
 		Objects.requireNonNull(creditAccNo);
 		Objects.requireNonNull(currency);
 
-		requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0," + companyCode + ",,TRANSACTION.TYPE=" + txType + ","
-				+ "DEBIT.ACCT.NO=" + debitAccNo + "," + "DEBIT.CURRENCY=" + currency + "," + "DEBIT.AMOUNT="
-				+ debitAmount + "," + "DEBIT.VALUE.DATE=" + issueDate + "," + "CREDIT.ACCT.NO=" + creditAccNo + ","
-				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1," + "FT.DR.DETAILS=" + debitDetails + "," + "FT.CR.DETAILS="
-				+ creditDetails + "," + "COMMISSION.TYPE=," + "CHEQUE.NUMBER=," + "LOCAL.REF:3:1=," + "LOCAL.REF:94:1="
-				+ uniqueFtId;
+		requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0," 
+				+ companyCode 
+				+ ",,TRANSACTION.TYPE=" + txType + ","
+				+ "DEBIT.ACCT.NO=" + debitAccNo + "," 
+				+ "DEBIT.CURRENCY=" + currency 
+				+ "," + "DEBIT.AMOUNT="+ debitAmount
+				+ "," + "DEBIT.VALUE.DATE=" + issueDate 
+				+ "," + "CREDIT.ACCT.NO=" + creditAccNo + ","
+				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1," 
+				+ "FT.DR.DETAILS=" + debitDetails 
+				+ "," + "FT.CR.DETAILS="+ creditDetails + "," 
+				+ "COMMISSION.TYPE=," 
+				+ "CHEQUE.NUMBER=," 
+				+ "LOCAL.REF:3:1=," 
+				+ "LOCAL.REF:94:1="+ uniqueFtId;
 
 		return requestOFS;
 
@@ -110,7 +119,7 @@ public class OfsMessageGenerator {
 		ftInfo.setIp(hostIpData.get("remoteAddr"));
 
 		requestOFS = String.format(OfsSources.REQUEST_OFS_STRING, companyCode, txType, debitAccNo, currency,
-				debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, uniqueFtId);
+				debitAmount, issueDate, creditAccNo, debitDetails, creditDetails,"","",uniqueFtId);
 
 		System.out.println(requestOFS);
 

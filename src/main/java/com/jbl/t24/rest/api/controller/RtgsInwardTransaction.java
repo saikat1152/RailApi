@@ -92,8 +92,8 @@ public class RtgsInwardTransaction {
 		rtgsInfoInward.setIp(hostIpData.get("remoteAddr"));
 
 		final String requestOFS = String.format(OfsSources.REQUEST_OFS_STRING, companyCode, txType, debitAccNo,
-				currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, uniqueFtId, commissionCode,
-				commissionType);
+				currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, commissionCode,
+				commissionType, uniqueFtId);
 
 //		ResponseEntity<?> response = ftHandlerService.handleRtgsInwardTransaction(requestOFS, rtgsInfoInward, httpServletRequest);
 		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, rtgsInfoInward, uniqueFtId);

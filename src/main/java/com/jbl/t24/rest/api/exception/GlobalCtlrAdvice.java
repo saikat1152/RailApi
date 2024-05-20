@@ -301,7 +301,7 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 
 		Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
 		final JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
-				ResponseStatus.FIVEZ0.getText(), ResponseStatus.FIVEZ0.getValue(), timestamp);
+				ex.getMessage(), ResponseStatus.FIVEZ0.getValue(), timestamp, ErrorMessageGenerator(ex));
 		return new ResponseEntity<Object>(jwtErrorResponse, new HttpHeaders(), jwtErrorResponse.getStatus());
 	}
 
