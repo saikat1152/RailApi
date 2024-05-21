@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.MappedSuperclass;
 
+import org.hibernate.envers.Audited;
+
 import com.jbl.t24.rest.api.enums.utils.DoubleEqualityCheck;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
+@Audited
 public class RtgsCommon extends CommonFtInfo{
     
     @Column(name = "CATEGORY_CODE", nullable = true, length = 10)

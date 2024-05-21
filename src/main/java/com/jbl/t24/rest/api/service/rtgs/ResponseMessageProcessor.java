@@ -49,8 +49,13 @@ public class ResponseMessageProcessor {
 
 			// String cbsHittinTimeStr = spiltData[48].split("=")[1].replace("\"", "");
 			String cbsHittinTimeStr = splitDataMap.get("DATE.TIME");
+			String commissionAmount = splitDataMap.getOrDefault("COMMISSION.AMT", "");
+			commissionAmount = commissionAmount.isBlank()?"0":commissionAmount.substring(3);
+			String vat = splitDataMap.getOrDefault("TAX.AMT","");
+			vat = vat.isBlank()?"0":vat.substring(3);
 			wrapper.setCbsHittingTime(TimeStampConverter.getCbsHittingTimeStamp(cbsHittinTimeStr));
-
+			wrapper.setCommission(Double.parseDouble(commissionAmount));
+			wrapper.setVat(Double.parseDouble(vat));
 			wrapper.setFtRef(ftRef);
 			wrapper.setMessage(reverseFlag == 0 ? ResponseStatus.TWOZ0.getText() : ResponseStatus.TWOZ5.getText());
 			wrapper.setResponseCode(

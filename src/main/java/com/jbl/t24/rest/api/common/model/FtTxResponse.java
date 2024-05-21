@@ -30,6 +30,8 @@ public class FtTxResponse {
 	private String uniqueRTGS;
 	private String ftRef;
 	private String additionalInfo;
+	private Double commission;
+	private Double vat;
 
 	// @JsonFormat(pattern = "E, dd MMM Y HH:mm:ss z", timezone = "GMT+06")
 	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss")

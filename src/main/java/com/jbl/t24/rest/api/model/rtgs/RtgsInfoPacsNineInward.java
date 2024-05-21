@@ -40,13 +40,6 @@ public class RtgsInfoPacsNineInward extends RtgsCommon {
 	@Column(name = "in_unique_id", unique = true, nullable = false, length = 23)
 	private String uniqueInwardRtgsId;
 
-	// @Column(name = "transaction_type", length = 10)
-	// private String txType = "ACIN";
-
-	// @NotNull(message = "Category is Blank")
-	// @Column(name = "category", nullable = false, length = 5)
-	// private int category;
-
 	// @NotNull(message = "Bill Description is Missing")
 	@Column(name = "bill_description", nullable = true, length = 23)
 	private String billDescription;

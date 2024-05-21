@@ -40,14 +40,10 @@ public class RtgsInfoOutward extends RtgsCommon {
 	@Column(name = "out_unique_id", unique = true, nullable = false, length = 23)
 	private String uniqueOutwardRtgsId;
 
-	// @Column(name = "category_code", nullable = false, length = 5)
-	// private int category;
+	@Column(name = "COMMISSION", nullable = true, precision = 10, scale = 2)
+	protected double commission;
 
-//	private String txType = "ACOR";
+	@Column(name = "VAT", nullable = true, precision = 10, scale = 2)
+	protected double vat;
 
-//	@Column(name = "transaction_type", length = 10)
-//    private String txType;
-
-	// @Column(name = "is_fc", nullable = true)
-	// private Boolean isFc;
 }

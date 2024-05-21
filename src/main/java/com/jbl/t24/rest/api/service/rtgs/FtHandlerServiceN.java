@@ -54,19 +54,20 @@ public class FtHandlerServiceN {
 		if (ftInfo instanceof RtgsInfoInward) {
 			ftSave = new RtgsInfoInward();
 			ftExist = new RtgsInfoInward();
-			
+
 		} else if (ftInfo instanceof RtgsInfoOutward) {
 			ftSave = new RtgsInfoOutward();
 			ftExist = new RtgsInfoOutward();
 			// RtgsInfoOutward temp = (RtgsInfoOutward) ftInfo;
 			ftSave = (RtgsInfoOutward) ftInfo;
-		
+
 			// String category = ftInfo.getTxCategory();
 			// int category = ftInfo.getCategoryCode();
 
-//			if (category.equals(RTGSCategory.RTGSPACS8OUTBDT.getValue())
-			
-			if (ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTBDT.getText()) && ftInfo.getDebitAmount() < RTGS_OUWARD_PACS8_MIN_VALUE) {
+			// if (category.equals(RTGSCategory.RTGSPACS8OUTBDT.getValue())
+
+			if (ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTBDT.getText())
+					&& ftInfo.getDebitAmount() < RTGS_OUWARD_PACS8_MIN_VALUE) {
 				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
 						ResponseStatus.FOURZ26.getText(), ResponseStatus.FOURZ26.getValue());
 				return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
@@ -127,23 +128,22 @@ public class FtHandlerServiceN {
 
 				logger.info("FT Alreeady Exists but Failed");
 
-				logger.info( ftExist.getClass().getSimpleName()+" is being saved as Pending before re-CBS Checking");
-                ftExist.setStatus(FtStatus.PENDING.getValue());
-                service.save(ftExist);
+				logger.info(ftExist.getClass().getSimpleName() + " is being saved as Pending before re-CBS Checking");
+				ftExist.setStatus(FtStatus.PENDING.getValue());
+				service.save(ftExist);
 
 				String uniqueIdTransactioncheck = RtgsUniqueIdTransactionCheck.checkTransactionByUniqueId(uniqueId);
 
 				if ((uniqueIdTransactioncheck.startsWith("40") && !uniqueIdTransactioncheck.equals("407"))
 						|| uniqueIdTransactioncheck.equals("499")) {
 
-					
-				    JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(uniqueIdTransactioncheck);
+					JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(uniqueIdTransactioncheck);
 
-                    ftExist.setStatus(FtStatus.FAILED.getValue());
-                    ftExist.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
-                    ftExist.setOfsResponse(uniqueIdTransactioncheck);
+					ftExist.setStatus(FtStatus.FAILED.getValue());
+					ftExist.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
+					ftExist.setOfsResponse(uniqueIdTransactioncheck);
 
-                    service.save(ftExist);
+					service.save(ftExist);
 
 					logger.error("Server Error:: " + jwtErrorResponse);
 
@@ -178,7 +178,7 @@ public class FtHandlerServiceN {
 
 				}
 
-				if(!ftInfo.isEqual(ftExist)){
+				if (!ftInfo.isEqual(ftExist)) {
 					logger.info("Rehitted block entered. data mismatched");
 					JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
 							ResponseStatus.FIVEZ28.getText(), ResponseStatus.FIVEZ28.getValue());
@@ -226,10 +226,13 @@ public class FtHandlerServiceN {
 				ftResponse.ftRef(wrapper.getFtRef()).message(wrapper.getMessage())
 						.responseCode(wrapper.getResponseCode()).additionalInfo(wrapper.getAdditionalInfo())
 						// .timestamp(ftSave.getIssueDate());
+						.commission(wrapper.getCommission())
+						.vat(wrapper.getVat())
 						.timestamp(wrapper.getCbsHittingTime());
 			} catch (Exception e1) {
 
-				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ErrorMessageGenerator.getErrorMessage(e1),ResponseStatus.FIVEZ0.getValue());
+				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
+						ErrorMessageGenerator.getErrorMessage(e1), ResponseStatus.FIVEZ0.getValue());
 				ftSave.setStatus(FtStatus.FAILED.getValue());
 				ftSave.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
 				ftSave.setOfsResponse(responseData);
@@ -245,6 +248,15 @@ public class FtHandlerServiceN {
 			ftSave.setFtResponseStr(ftResponseStr);
 			ftSave.setCbsFtno(ftResponse.build().getFtRef());
 			ftSave.setOfsResponse(responseData);
+
+			if (ftInfo instanceof RtgsInfoOutward) {
+				((RtgsInfoOutward) ftSave).setCommission(wrapper.getCommission());
+				((RtgsInfoOutward) ftSave).setVat(wrapper.getVat());
+
+			} else if (ftInfo instanceof RtgsInfoPacsNineOutward) {
+				((RtgsInfoPacsNineOutward) ftSave).setCommission(wrapper.getCommission());
+				((RtgsInfoPacsNineOutward) ftSave).setVat(wrapper.getVat());
+			}
 
 			try {
 

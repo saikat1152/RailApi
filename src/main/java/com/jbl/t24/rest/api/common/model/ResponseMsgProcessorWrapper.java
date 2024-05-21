@@ -23,6 +23,8 @@ public class ResponseMsgProcessorWrapper {
 	private String ftRef;
 	private String uniqueOperationTransactionId;
 	private Timestamp cbsHittingTime;
+	private double commission;
+	private double vat;
 
 	public void setWrapperValues(String ftRef, String message, int responseCode, int ftStatus) {
 		this.message = message;

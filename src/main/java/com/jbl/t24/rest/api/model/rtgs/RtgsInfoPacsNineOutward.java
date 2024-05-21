@@ -40,13 +40,6 @@ public class RtgsInfoPacsNineOutward extends RtgsCommon {
 	@Column(name = "out_unique_id", unique = true, nullable = false, length = 23)
 	private String uniqueOutwardRtgsId;
 
-	// @Column(name = "transaction_type", length = 10)
-	// private String txType = "ACOP";
-
-	// @NotNull(message = "Category is Blank")
-	// @Column(name = "category", nullable = false, length = 5)
-	// private int category;
-
 	// @NotNull(message = "Bill Description is Missing")
 	@Column(name = "bill_description", nullable = true, length = 23)
 	private String billDescription;
@@ -70,5 +63,11 @@ public class RtgsInfoPacsNineOutward extends RtgsCommon {
 	// @NotNull(message = "Other Info is Missing")
 	@Column(name = "other_info", nullable = true, length = 23)
 	private String otherInfo;
+
+	@Column(name = "COMMISSION", nullable = true, precision = 10, scale = 2)
+	protected double commission;
+
+	@Column(name = "VAT", nullable = true, precision = 10, scale = 2)
+	protected double vat;
 
 }

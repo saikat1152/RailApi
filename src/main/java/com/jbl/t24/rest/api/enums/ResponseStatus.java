@@ -32,6 +32,7 @@ public enum ResponseStatus {
 	FIVEZ3(503, "Service Unavailable!"),
 	FIVEZ4(504, "Response NONE Due to Unresponsive CBS!"),
 	FIVEZ5(505, "INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS!"),
+	FIVEZ6(506, "INVALID/ NO SIGN ON NAME SUPPLIED DURING SIGN ON PROCESS!"),
 	FIVEZ7(507, "String Response Processing Results in Error"),
 
 	FIVEZ27(527, "Cannot Do New CBS Transaction Beacause An Transaction Is On Already Processing!"),
