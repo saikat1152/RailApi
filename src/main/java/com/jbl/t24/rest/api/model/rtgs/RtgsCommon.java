@@ -26,7 +26,7 @@ public class RtgsCommon extends CommonFtInfo{
 	protected int categoryCode;
     
     @Column(name = "is_fc", nullable = true)
-	protected boolean isFc;
+	protected Boolean isFc;
 
     public boolean isEqual(RtgsCommon ftInfo){
 		if(this.debitAccNo.equals(ftInfo.debitAccNo)
