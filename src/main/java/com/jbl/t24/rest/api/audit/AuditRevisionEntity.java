@@ -19,6 +19,7 @@ public class AuditRevisionEntity extends DefaultRevisionEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	@Column(name="LOG_USER")
 	private String logUser;
 
 	public AuditRevisionEntity() {
