@@ -117,6 +117,22 @@ public class FtHandlerServiceN {
 			}
 
 			else {
+
+				if (!ftInfo.isEqual(ftExist)) {
+					logger.info("Resubmitted data mismatched block entered");
+
+					JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
+							ResponseStatus.FIVEZ28.getText(), ResponseStatus.FIVEZ28.getValue());
+
+					// ftExist.setStatus(FtStatus.FAILED.getValue());
+					// ftExist.setIssueDate(ftInfo.getIssueDate());
+					// ftExist.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
+
+					// service.save(ftExist);
+
+					return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
+				}
+
 				logger.info("FT Alreeady Exists but Failed or Pending");
 
 				if (statusExist == FtStatus.PENDING.getValue()) {
@@ -127,7 +143,7 @@ public class FtHandlerServiceN {
 				}
 
 				logger.info("FT Alreeady Exists but Failed");
-
+				// TODO: Pending issue in pacs9 inward
 				logger.info(ftExist.getClass().getSimpleName() + " is being saved as Pending before re-CBS Checking");
 				ftExist.setStatus(FtStatus.PENDING.getValue());
 				service.save(ftExist);
@@ -142,6 +158,8 @@ public class FtHandlerServiceN {
 					ftExist.setStatus(FtStatus.FAILED.getValue());
 					ftExist.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
 					ftExist.setOfsResponse(uniqueIdTransactioncheck);
+
+					ftExist.setIssueDate(ftInfo.getIssueDate());
 
 					service.save(ftExist);
 
@@ -162,7 +180,8 @@ public class FtHandlerServiceN {
 							.timestamp(ftInfo.getIssueDate());
 
 					String ftResponseStr = Mapper.mapToJsonString(ftResponse.build());
-
+					
+					ftExist.setIssueDate(ftInfo.getIssueDate());
 					ftExist.setStatus(2);
 					ftExist.setFtResponseStr(ftResponseStr);
 					ftExist.setCbsFtno(cbsSuccessTrData.get("cbsFtNumber"));
@@ -178,12 +197,7 @@ public class FtHandlerServiceN {
 
 				}
 
-				if (!ftInfo.isEqual(ftExist)) {
-					logger.info("Rehitted block entered. data mismatched");
-					JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
-							ResponseStatus.FIVEZ28.getText(), ResponseStatus.FIVEZ28.getValue());
-					return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
-				}
+				
 
 				ftSave = ftExist;
 				ftSave.setCoCode(ftInfo.getCoCode());

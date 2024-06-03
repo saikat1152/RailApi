@@ -7,13 +7,15 @@
 <CHANNELS>
     <CHANNEL>
         <NAME>ISOLIST</NAME>
-        <TIMEOUT>60</TIMEOUT>
+        <TIMEOUT>30</TIMEOUT>
         <ADAPTER>
             <TYPE>tcp</TYPE>
-            <PORT>7020</PORT>
+            <!-- <PORT>7020</PORT> -->
+            <PORT>9059</PORT>
             <SUPPLIER>
                 <INITIATOR>
-                    <HOSTNAME>10.180.10.60</HOSTNAME>
+                    <!-- <HOSTNAME>10.180.10.60</HOSTNAME> -->
+                    <HOSTNAME>172.18.18.64</HOSTNAME>
                 </INITIATOR>
             </SUPPLIER>
             <CONSUMER>
@@ -30,10 +32,10 @@
         <TIMEOUT>30</TIMEOUT>
         <ADAPTER>
             <TYPE>tcp</TYPE>
-            <PORT>7008</PORT>
+            <PORT>9060</PORT>
             <SUPPLIER>
                 <INITIATOR>
-                    <HOSTNAME>10.180.10.60</HOSTNAME>
+                    <HOSTNAME>172.18.18.64</HOSTNAME>
                 </INITIATOR>
             </SUPPLIER>
             <CONSUMER>
@@ -45,24 +47,5 @@
         </ADAPTER>
     </CHANNEL>
 
-    <CHANNEL>
-        <NAME>ABCD</NAME>
-        <TIMEOUT>120</TIMEOUT>
-        <ADAPTER>
-            <TYPE>tcp</TYPE>
-            <PORT>5151</PORT>
-            <SUPPLIER>
-                <INITIATOR>
-                    <HOSTNAME>10.180.10.12</HOSTNAME>
-                </INITIATOR>
-            </SUPPLIER>
-            <CONSUMER>
-                <MAX_SESSION>5</MAX_SESSION>
-                <ACCEPTOR>
-                    <BACKLOG>30</BACKLOG>
-                </ACCEPTOR>
-            </CONSUMER>
-        </ADAPTER>
-    </CHANNEL>
 
 </CHANNELS>

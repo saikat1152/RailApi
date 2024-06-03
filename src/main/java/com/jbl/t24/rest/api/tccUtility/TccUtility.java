@@ -3,6 +3,8 @@ package com.jbl.t24.rest.api.tccUtility;
 import java.io.IOException;
 import java.net.InetAddress;
 
+// import org.hibernate.annotations.common.util.impl.Log_.logger;
+
 import com.jbl.t24.rest.api.enums.CBSResponseStr;
 // import com.temenos.tocf.*;
 import com.temenos.tocf.tcc.*;
@@ -40,6 +42,8 @@ public class TccUtility {
 	}
 
 	public String sendRequest(String sRequest) {
+
+		System.out.println("------------CHANNEL NAME: " + channel+"-----------");
 		String sResponse = "400";
 
 		try {

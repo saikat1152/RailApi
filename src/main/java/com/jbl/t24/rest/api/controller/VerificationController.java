@@ -80,7 +80,7 @@ public class VerificationController {
 		signatureQueryInfo.setIp(remoteAddr);
 		signatureQueryInfo.setHostname(host);
 
-		TccUtility tccUtility = new TccUtility();
+		TccUtility tccUtility = new TccUtility("ISOLIST2");
 		logger.info("Fetching CBS image data");
 		String requestOFS = String.format(OfsSources.OFS_SIGN_CHECK_ENQUIRY, accountNo);
 		String responseData = tccUtility.sendRequest(requestOFS);
@@ -216,7 +216,7 @@ public class VerificationController {
 		accountQueryInfo.setIp(remoteAddr);
 		accountQueryInfo.setHostname(host);
 
-		TccUtility tccUtility = new TccUtility();
+		TccUtility tccUtility = new TccUtility("ISOLIST2");
 
 		String requestOFS = String.format(OfsSources.OFS_ACC_ENQUIRY, accountNo);
 		String responseData = tccUtility.sendRequest(requestOFS);

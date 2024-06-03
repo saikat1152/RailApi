@@ -11,7 +11,7 @@ public class RtgsUniqueIdTransactionCheck {
 
 	public static String checkTransactionByUniqueId(String uniqueTransactionId) {
 		try {
-			TccUtility tccUtility = new TccUtility();
+			TccUtility tccUtility = new TccUtility("ISOLIST2");
 			String requestOFS = String.format(OfsSources.UNIQUE_ID_ENQ_STRING, uniqueTransactionId);
 			String responseData = tccUtility.sendRequest(requestOFS);
 			if (responseData.startsWith("40")) {
