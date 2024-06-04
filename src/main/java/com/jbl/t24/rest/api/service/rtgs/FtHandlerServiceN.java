@@ -18,6 +18,7 @@ import com.jbl.t24.rest.api.enums.RTGSCategory;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.enums.utils.ErrorMessageGenerator;
 import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
+import com.jbl.t24.rest.api.enums.utils.TimeStampConverter;
 import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineInInfo;
@@ -177,7 +178,7 @@ public class FtHandlerServiceN {
 					ftResponse.status(HttpStatus.OK).uniqueRTGS(uniqueId).ftRef(cbsSuccessTrData.get("cbsFtNumber"))
 							.message(cbsSuccessTrData.get("message"))
 							.responseCode(Integer.parseInt(cbsSuccessTrData.get("responseCode")))
-							.timestamp(ftInfo.getIssueDate());
+							.timestamp(TimeStampConverter.getCbsHittingTimeStamp(cbsSuccessTrData.get("issueDate")));
 
 					String ftResponseStr = Mapper.mapToJsonString(ftResponse.build());
 					
