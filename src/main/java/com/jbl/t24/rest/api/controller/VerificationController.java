@@ -36,13 +36,12 @@ import com.jbl.t24.rest.api.constant.JwtErrorsCBS;
 import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.constant.RtgsTruncateString;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
+import com.jbl.t24.rest.api.enums.utils.ErrorMessageGenerator;
 import com.jbl.t24.rest.api.model.rtgs.AccountQueryInfo;
 import com.jbl.t24.rest.api.model.rtgs.SignatureQueryInfo;
 import com.jbl.t24.rest.api.service.rtgs.AccountQueryInfoService;
 import com.jbl.t24.rest.api.service.rtgs.SignQueryInfoService;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
-
-
 
 @RestController
 @CrossOrigin
@@ -220,11 +219,15 @@ public class VerificationController {
 
 		String requestOFS = String.format(OfsSources.OFS_ACC_ENQUIRY, accountNo);
 		String responseData = tccUtility.sendRequest(requestOFS);
+		// responseData = ",ALL.DATA::ALL.DATA,\"Successful~|200~|1~|0100001149495~|003336000642~|BANGLADESH PETROLEUM CORPORATION~|01701000003 01701000007~|767221182221~|TIN~|BD0010033~|S K Mujib Road Corp~|8346107661.96~|NO DATA~|NO DATA~|NO DATA~|BDT~|NA~|Special Notice Deposit~|6009\"";
 
 		accountQueryInfo.setOfsResponse(RtgsTruncateString.truncateString(responseData, 2000));
 
 		if (responseData.startsWith("40")) {
+			// JwtErrorResponse jwtErrorResponse =
+			// JwtErrorsCBS.getCbsJwtError(responseData);
 			JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(responseData);
+			jwtErrorResponse.setMessage("JBOSS server is unreacheable");
 			accountQueryInfo.setStatus("3");
 			logger.info("Account Query Error " + jwtErrorResponse.getMessage() + "account No:  " + accountNo);
 			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
@@ -242,7 +245,7 @@ public class VerificationController {
 						accountInfo.setAccountNo(secondPart[3]);
 						accountInfo.setLeagcyAccountNo(secondPart[4]);
 						accountInfo.setAccountTitle(secondPart[5]);
-						accountInfo.setCusMobNum(secondPart[6]);
+						accountInfo.setCusMobNum(secondPart[6].split(" ")[0]);
 						String[] allIdNumbersNames = secondPart[8].split("\n");
 						String[] allIds = secondPart[7].split("\n");
 
@@ -326,8 +329,8 @@ public class VerificationController {
 
 				accountQueryInfo.setStatus("3");
 
-				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ0.getText(),
-						ResponseStatus.FIVEZ0.getValue());
+				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
+						ErrorMessageGenerator.getErrorMessage(e), ResponseStatus.FIVEZ0.getValue());
 
 				AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(ResponseStatus.FIVEZ0.getText(),
 						ResponseStatus.FIVEZ0.getValue(), false);

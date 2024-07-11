@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
+
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoOutward;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
 
@@ -56,13 +57,15 @@ public class RtgsOutwardTransaction {
 		rtgsInfoOut.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
 		String debitAccNo = rtgsInfoOut.getDebitAccNo();
 		String currency = rtgsInfoOut.getCurrency();
-		String debitAmount = String.format("%.2f", rtgsInfoOut.getDebitAmount());
+		// String debitAmount = String.format("%.2f", rtgsInfoOut.getDebitAmount());
+		String debitAmount = rtgsInfoOut.getDebitAmountStr();
 		String creditAccNo = rtgsInfoOut.getCreditAccNo();
 		String debitDetails = rtgsInfoOut.getDebitDetails();
 		String creditDetails = rtgsInfoOut.getCreditDetails();
 		String commissionCode = rtgsInfoOut.getCommissionCode();
 		String commissionType = rtgsInfoOut.getCommissionType();
 		boolean isFc = rtgsInfoOut.getCurrency().contains("BDT") ? false : true;
+
 		rtgsInfoOut.setIsFc(isFc);
 		String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
 		Timestamp t = new Timestamp(new Date().getTime());
@@ -74,6 +77,10 @@ public class RtgsOutwardTransaction {
 		Objects.requireNonNull(debitAmount);
 		Objects.requireNonNull(creditAccNo);
 		Objects.requireNonNull(currency);
+
+		if (rtgsInfoOut.getReverseEnabled() != null) {
+			rtgsInfoOut.setReverseEnabled(true);
+		}
 
 		// String requestOFS = "";
 
@@ -98,7 +105,9 @@ public class RtgsOutwardTransaction {
 		rtgsInfoOut.setHostname(hostIpData.get("host"));
 		rtgsInfoOut.setIp(hostIpData.get("remoteAddr"));
 
-//		ResponseEntity<?> response = ftHandlerService.handleRtgsOutwardTransaction(requestOFS, rtgsInfoOut, httpServletRequest);
+		// ResponseEntity<?> response =
+		// ftHandlerService.handleRtgsOutwardTransaction(requestOFS, rtgsInfoOut,
+		// httpServletRequest);
 		ResponseEntity<?> response = ftHandlerServicen.handleFtTransaction(requestOFS, rtgsInfoOut, uniqueFtId);
 
 		System.out.println(response.getBody());

@@ -13,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.envers.Audited;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jbl.t24.rest.api.custom.validation.ValidTxCategory;
 
 import lombok.AllArgsConstructor;
@@ -59,8 +60,10 @@ public abstract class CommonFtInfo {
 	@NotNull(message = "Currency is Missing")
 	protected String currency;
 
+
 	@NotNull(message = "Debit Amount is Missing")
 	@Column(name = "debit_amount", length = 23)
+	@JsonProperty("amount")
 	protected double debitAmount;
 
 	@CreationTimestamp
@@ -122,8 +125,11 @@ public abstract class CommonFtInfo {
 	@Column(name = "transaction_type")
 	protected String txType;
 
-	@Column(name = "reverse_enabled")
-	protected boolean reverseEnabled = true;
+	// @Column(name = "reverse_enabled")
+	// protected boolean reverseEnabled = true;
+
+	@Column(name = "reverse_enabled", nullable = true)
+	protected Boolean reverseEnabled;
 
 
 

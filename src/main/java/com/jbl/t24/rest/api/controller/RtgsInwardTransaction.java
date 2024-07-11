@@ -48,7 +48,8 @@ public class RtgsInwardTransaction {
 		// String txType = rtgsInfoInward.getTxType();
 		String debitAccNo = rtgsInfoInward.getDebitAccNo();
 		String currency = rtgsInfoInward.getCurrency();
-		String debitAmount = String.format("%.2f", rtgsInfoInward.getDebitAmount());
+		// String debitAmount = String.format("%.2f", rtgsInfoInward.getDebitAmount());
+		String debitAmount = rtgsInfoInward.getDebitAmountStr();
 		String creditAccNo = rtgsInfoInward.getCreditAccNo();
 		String debitDetails = rtgsInfoInward.getDebitDetails();
 		String creditDetails = rtgsInfoInward.getCreditDetails();

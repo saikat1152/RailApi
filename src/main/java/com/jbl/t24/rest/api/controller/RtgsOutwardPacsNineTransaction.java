@@ -48,7 +48,8 @@ public class RtgsOutwardPacsNineTransaction {
 		rtgsInfoPacsNineOut.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
 		String debitAccNo = rtgsInfoPacsNineOut.getDebitAccNo();
 		String currency = rtgsInfoPacsNineOut.getCurrency();
-		String debitAmount = String.format("%.2f", rtgsInfoPacsNineOut.getDebitAmount());
+		// String debitAmount = String.format("%.2f", rtgsInfoPacsNineOut.getDebitAmount());
+		String debitAmount =  rtgsInfoPacsNineOut.getDebitAmountStr();
 		String creditAccNo = rtgsInfoPacsNineOut.getCreditAccNo();
 		String debitDetails = rtgsInfoPacsNineOut.getDebitDetails();
 		String creditDetails = rtgsInfoPacsNineOut.getCreditDetails();

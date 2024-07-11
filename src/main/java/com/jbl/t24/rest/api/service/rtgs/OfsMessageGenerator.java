@@ -90,7 +90,8 @@ public class OfsMessageGenerator {
 		// String txType = ftInfo.getTxType();
 		String debitAccNo = ftInfo.getDebitAccNo();
 		String currency = ftInfo.getCurrency();
-		String debitAmount = String.format("%.2f", ftInfo.getDebitAmount());
+		// String debitAmount = String.format("%.2f", ftInfo.getDebitAmount());
+		String debitAmount = ftInfo.getDebitAmountStr();
 		String creditAccNo = ftInfo.getCreditAccNo();
 		String debitDetails = ftInfo.getDebitDetails();
 		String creditDetails = ftInfo.getCreditDetails();

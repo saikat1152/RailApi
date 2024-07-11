@@ -30,6 +30,8 @@ import com.jbl.t24.rest.api.model.rtgs.RtgsInfoOutward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineInward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineOutward;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
+
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Map;
 
@@ -43,7 +45,8 @@ public class FtHandlerServiceN {
 	@Autowired
 	ResponseMessageProcessor processor = new ResponseMessageProcessor();
 
-	public static final int RTGS_OUWARD_PACS8_MIN_VALUE = 100000;
+	// public static final String RTGS_OUWARD_PACS8_MIN_VALUE = "100000";
+	public static final BigDecimal RTGS_OUWARD_PACS8_MIN_VALUE = new BigDecimal(100000);
 
 	public ResponseEntity<?> handleFtTransaction(String requestOFS, RtgsCommon ftInfo, String uniqueId)
 			throws Exception {
@@ -62,13 +65,13 @@ public class FtHandlerServiceN {
 			// RtgsInfoOutward temp = (RtgsInfoOutward) ftInfo;
 			ftSave = (RtgsInfoOutward) ftInfo;
 
-			// String category = ftInfo.getTxCategory();
-			// int category = ftInfo.getCategoryCode();
-
 			// if (category.equals(RTGSCategory.RTGSPACS8OUTBDT.getValue())
 
+			// if (ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTBDT.getText())
+			// && ftInfo.getDebitAmount() < RTGS_OUWARD_PACS8_MIN_VALUE) {
+			BigDecimal debitAmount = new BigDecimal(ftInfo.getDebitAmountStr());
 			if (ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTBDT.getText())
-					&& ftInfo.getDebitAmount() < RTGS_OUWARD_PACS8_MIN_VALUE) {
+					&& debitAmount.compareTo(RTGS_OUWARD_PACS8_MIN_VALUE) < 0) {
 				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
 						ResponseStatus.FOURZ26.getText(), ResponseStatus.FOURZ26.getValue());
 				return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
@@ -181,7 +184,7 @@ public class FtHandlerServiceN {
 							.timestamp(TimeStampConverter.getCbsHittingTimeStamp(cbsSuccessTrData.get("issueDate")));
 
 					String ftResponseStr = Mapper.mapToJsonString(ftResponse.build());
-					
+
 					ftExist.setIssueDate(ftInfo.getIssueDate());
 					ftExist.setStatus(2);
 					ftExist.setFtResponseStr(ftResponseStr);
@@ -197,8 +200,6 @@ public class FtHandlerServiceN {
 					return ResponseEntity.status(HttpStatus.OK).body(ftResponse.build());
 
 				}
-
-				
 
 				ftSave = ftExist;
 				ftSave.setCoCode(ftInfo.getCoCode());
