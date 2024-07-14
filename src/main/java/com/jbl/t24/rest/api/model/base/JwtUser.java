@@ -2,9 +2,12 @@ package com.jbl.t24.rest.api.model.base;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -26,6 +29,13 @@ public class JwtUser {
 	private String basic_token;
 
 	private Boolean status;
+
+	@ManyToOne(fetch = FetchType.LAZY
+    // cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+    //     CascadeType.REFRESH }
+        )
+	@JoinColumn(name = "company_id")
+    private Company company;
 
 	@Column(name = "whitelist_ip", length = 255)
 	private String whitelistIp;
@@ -88,4 +98,7 @@ public class JwtUser {
 		this.whitelistIp = whitelistIp;
 	}
 
+	public Company getCompany() {
+		return company;
+	}
 }

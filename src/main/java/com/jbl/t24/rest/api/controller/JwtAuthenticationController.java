@@ -110,7 +110,15 @@ public class JwtAuthenticationController {
 		final String requestTokenHeader = httpServletRequest.getHeader("Authorization");
 		if (requestTokenHeader != null && requestTokenHeader.startsWith("Basic ")) {
 			basicToken = requestTokenHeader.substring(6);
+
 			JwtUser jwtUser = jwtUserService.findByUserName(userName);
+			String companyName = jwtUser.getCompany().getCompanyName();
+			
+			if(!companyName.equals("RTGS")){
+				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.BAD_REQUEST,
+						ResponseStatus.FOURZ30.getText(), ResponseStatus.FOURZ30.getValue());
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jwtErrorResponse);
+			}
 			if (jwtUser != null && !basicToken.equals(jwtUser.getBasic_token())) {
 				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.BAD_REQUEST,
 						ResponseStatus.FOURZ6.getText(), ResponseStatus.FOURZ6.getValue());

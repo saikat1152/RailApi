@@ -30,6 +30,7 @@ public enum ResponseStatus {
 	FOURZ25(425, "Image Not Found!"), FOURZ26(426, "Amount cannot be less than 100000 for RTGS"),
 	FOURZ27(427, "Cannot Do New CBS Transaction Beacause An Transaction Is On Already Processing!"),
 	FOURZ28(428, "Transaction Category Incorrect"), FOURZ29(429, "Incorrect Cbs Ft number for Reversal!"),
+	FOURZ30(430, "Invalid RTGS Api User!"),
 
 	FIVEZ0(500, "Internal Server Error!"),
 	FIVEZ2(502, "REQUEST NOT VALID"),
