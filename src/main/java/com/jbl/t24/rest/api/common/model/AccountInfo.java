@@ -29,4 +29,6 @@ public class AccountInfo {
 	private String accountType;
 	private boolean isInactive;
 	private String accountCatCode;
+	private String binNumber;
+	private boolean isClosed;
 }

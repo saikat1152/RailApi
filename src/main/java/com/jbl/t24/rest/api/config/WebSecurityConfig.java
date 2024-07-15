@@ -74,6 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// .authorizeRequests().antMatchers("/employee").authenticated().//.authorizeRequests().antMatchers("/cbs/**").authenticated().
 
 				// only allow authenticate request without access token
+				.authorizeRequests(requests -> requests.antMatchers("/actuator","/actuator/**").permitAll())
 				.authorizeRequests(requests -> requests.antMatchers("/api/token").permitAll().
 				// all other requests need to be authenticated
 						anyRequest().authenticated())

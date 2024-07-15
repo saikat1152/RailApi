@@ -2,6 +2,7 @@ package com.jbl.t24.rest.api.controller;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
@@ -15,13 +16,19 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
 import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.constant.OfsSources;
+import com.jbl.t24.rest.api.enums.utils.ErrorMessageGenerator;
 import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineOutward;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerService;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
+import com.jbl.t24.rest.api.service.rtgs.RtgsInfoPacsNineOutwardService;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
+import com.twelvemonkeys.util.Time;
+import com.jbl.t24.rest.api.enums.ResponseStatus;
 
 @RestController
 @CrossOrigin
@@ -31,6 +38,9 @@ public class RtgsOutwardPacsNineTransaction {
 
 	@Autowired
 	private FtHandlerServiceN ftHandlerServiceN;
+
+	@Autowired
+	private RtgsInfoPacsNineOutwardService outwardService;
 
 
 	@PostMapping(value = "/pacs09/outward", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -77,28 +87,29 @@ public class RtgsOutwardPacsNineTransaction {
 		// String requestOFS = "";
 
 		issueDate = "20220506";
-//		final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
-//				+ companyCode
-//				+ ",,TRANSACTION.TYPE=" + txType + ","
-//				+ "DEBIT.ACCT.NO=" + debitAccNo + ","
-//				+ "DEBIT.CURRENCY=" + currency + ","
-//				+ "DEBIT.AMOUNT=" + debitAmount + ","
-//				+ "DEBIT.VALUE.DATE=" + issueDate + ","
-//				+ "CREDIT.ACCT.NO=" + creditAccNo + ","
-//				+ "ORDERING.BANK=JBL,PROFIT.CENTRE.DEPT=1,"
-//				+ "FT.DR.DETAILS=" + debitDetails + ","
-//				+ "FT.CR.DETAILS=" + creditDetails + ","
-//				+ "COMMISSION.CODE=" + commissionCode+ ","
-//				+ "COMMISSION.TYPE="+ commissionType +","
-//				+ "CHEQUE.NUMBER=,"
-//				+ "LOCAL.REF:3:1=,"
-//				+ "LOCAL.REF:94:1=" + uniqueFtId +","
-//				+ "LOCAL.REF:125:1=" + otherInfo +","
-//				+ "LOCAL.REF:126:1=" + billDescription +","
-//				+ "LOCAL.REF:127:1=" + lcNumber +","
-//				+ "LOCAL.REF:128:1=" + partyName +","
-//				+ "LOCAL.REF:129:1=" + instructionInfo +","
-//				+ "LOCAL.REF:130:1=" + tradeFinanceInfo;
+
+		RtgsInfoPacsNineOutward refrenceTx = null;
+
+		if(rtgsInfoPacsNineOut.getRefUniqueOutwardRtgsId() != null && 
+		!rtgsInfoPacsNineOut.getRefUniqueOutwardRtgsId().isBlank()){
+			refrenceTx = outwardService.findByUniqueOutwardRtgsId(rtgsInfoPacsNineOut.getRefUniqueOutwardRtgsId());
+
+			if(refrenceTx !=null ){
+				debitDetails = "RERVESE AGAINST "+refrenceTx.getCbsFtno();
+				refrenceTx.setStatus(4);
+				refrenceTx.setReverseDate(Timestamp.valueOf(LocalDateTime.now()));
+				outwardService.save(refrenceTx);
+			}else{
+				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.BAD_REQUEST,
+				ResponseStatus.FOURZ31.getText(), ResponseStatus.FOURZ31.getValue());
+				return ResponseEntity.badRequest().body(jwtErrorResponse);
+			}
+
+		}
+
+		
+
+		
 
 		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
 		rtgsInfoPacsNineOut.setHostname(hostIpData.get("host"));

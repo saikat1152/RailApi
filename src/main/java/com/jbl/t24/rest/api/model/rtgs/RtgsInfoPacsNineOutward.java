@@ -25,7 +25,6 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-@Builder
 @Audited
 public class RtgsInfoPacsNineOutward extends RtgsCommon {
 
@@ -69,5 +68,8 @@ public class RtgsInfoPacsNineOutward extends RtgsCommon {
 
 	@Column(name = "VAT", nullable = true, precision = 10, scale = 2)
 	protected double vat;
+
+	@Column(name = "ref_unique_id", unique = true, nullable = true, length = 23)
+	protected String refUniqueOutwardRtgsId;
 
 }

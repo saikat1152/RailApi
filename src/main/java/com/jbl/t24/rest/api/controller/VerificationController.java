@@ -51,7 +51,7 @@ public class VerificationController {
 
 	// Logger logger = LoggerFactory.getLogger("splunk.logger");
 
-	Logger logger = LogManager.getLogger("splunk.logger");
+	Logger logger = LogManager.getLogger(VerificationController.class);
 
 	@Autowired
 	AccountQueryInfoService accountQueryInfoService;
@@ -268,7 +268,13 @@ public class VerificationController {
 						accountInfo.setMessage(ResponseStatus.TWOZ0.getText());
 						accountInfo.setResponseCode(ResponseStatus.TWOZ0.getValue());
 						accountInfo.setAccountType(secondPart[17]);
-						accountInfo.setAccountCatCode(secondPart[18]);
+						accountInfo.setBinNumber(secondPart[18]);
+						accountInfo.setAccountCatCode(secondPart[19]);
+
+						if(secondPart.length >= 21){
+							boolean isClosed = secondPart[20].equals("CLOSED");
+							accountInfo.setClosed(isClosed);
+						}
 
 						if (flagValue.equals("1")) {
 							accountInfo.setInactive(false);
