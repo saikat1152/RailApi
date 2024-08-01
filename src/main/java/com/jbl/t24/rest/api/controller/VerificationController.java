@@ -84,10 +84,17 @@ public class VerificationController {
 		String requestOFS = String.format(OfsSources.OFS_SIGN_CHECK_ENQUIRY, accountNo);
 		String responseData = tccUtility.sendRequest(requestOFS);
 
+		logger.info("---Sign Query Response Data:----" +responseData);
+
 		if (responseData.startsWith("40")) {
 			JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(responseData);
 			signatureQueryInfo.setStatus("3");
-			logger.info("Account Query Error " + jwtErrorResponse.getMessage());
+			logger.info("Sign Query Error " + jwtErrorResponse.getMessage());
+
+			String response = Mapper.mapToJsonString(jwtErrorResponse);
+			signatureQueryInfo.setResponseData(response);
+
+			signQueryInfoService.save(signatureQueryInfo);
 			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 		}
 
@@ -219,17 +226,20 @@ public class VerificationController {
 
 		String requestOFS = String.format(OfsSources.OFS_ACC_ENQUIRY, accountNo);
 		String responseData = tccUtility.sendRequest(requestOFS);
-		// responseData = ",ALL.DATA::ALL.DATA,\"Successful~|200~|1~|0100001149495~|003336000642~|BANGLADESH PETROLEUM CORPORATION~|01701000003 01701000007~|767221182221~|TIN~|BD0010033~|S K Mujib Road Corp~|8346107661.96~|NO DATA~|NO DATA~|NO DATA~|BDT~|NA~|Special Notice Deposit~|6009\"";
 
+		// logger.info("---Account Query Response Data:----" +responseData);
 		accountQueryInfo.setOfsResponse(RtgsTruncateString.truncateString(responseData, 2000));
 
 		if (responseData.startsWith("40")) {
-			// JwtErrorResponse jwtErrorResponse =
-			// JwtErrorsCBS.getCbsJwtError(responseData);
 			JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(responseData);
 			jwtErrorResponse.setMessage("JBOSS server is unreacheable");
 			accountQueryInfo.setStatus("3");
 			logger.info("Account Query Error " + jwtErrorResponse.getMessage() + "account No:  " + accountNo);
+			
+			String response= Mapper.mapToJsonString(jwtErrorResponse);
+			accountQueryInfo.setResponseData(response);
+
+			accountQueryInfoService.save(accountQueryInfo);			
 			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 		} else {
 			try {
@@ -271,9 +281,10 @@ public class VerificationController {
 						accountInfo.setBinNumber(secondPart[18]);
 						accountInfo.setAccountCatCode(secondPart[19]);
 
-						if(secondPart.length >= 21){
-							boolean isClosed = secondPart[20].equals("CLOSED");
-							accountInfo.setClosed(isClosed);
+						// if(secondPart.length >= 21){
+							if(secondPart[20].equals("CLOSED")){
+							// boolean isClosed = secondPart[20].equals("CLOSED");
+							accountInfo.setClosed(true);
 						}
 
 						if (flagValue.equals("1")) {
