@@ -31,6 +31,10 @@ public class JwtErrorsCBS {
 			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ5.getText(),
 					ResponseStatus.FIVEZ5.getValue());
 			break;
+		case "408":
+			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ8.getText(),
+					ResponseStatus.FIVEZ8.getValue());
+			break;
 		default:
 			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ99.getText(),
 					ResponseStatus.FIVEZ99.getValue());

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,6 +58,8 @@ public class JwtAuthenticationController {
 
 	@Autowired
 	private ApiLogService apiLogService;
+
+	private final ConcurrentHashMap<String, String> tokenCache = new ConcurrentHashMap<>();
 
 	@PostMapping("/api/token")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody ApiToken apiToken,
@@ -142,7 +145,27 @@ public class JwtAuthenticationController {
 
 		final UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(userName);
 
-		final String token = jwtTokenUtil.generateToken(userDetails);
+		//final String token = jwtTokenUtil.generateToken(userDetails);
+
+		/**
+		 * Using tokenCache to check if there is alread a valid token
+		 * If so, no new token is retured
+		 * If not a new valid token is returned
+		 */
+
+		 String existingToken = tokenCache.get(userName);
+		 final String token;
+ 
+		 if(existingToken != null && jwtTokenUtil.validateToken(existingToken, userDetails)){
+ 
+			 token = existingToken;
+		 // JwtResponse jwtResponse = new JwtResponse(token, JwtTokenUtil.JWT_TOKEN_VALIDITY, token, userName, userName,
+		 // 		jwtTokenUtil.getIssuedAtDateFromToken(token), jwtTokenUtil.getExpirationDateFromToken(token));
+		 }else{
+			 token = jwtTokenUtil.generateToken(userDetails);
+			 tokenCache.put(userName, token);
+			 apiLogService.save(apiLog);
+		 }
 
 		JwtResponse jwtResponse = new JwtResponse(token, JwtTokenUtil.JWT_TOKEN_VALIDITY, token, userName, userName,
 				jwtTokenUtil.getIssuedAtDateFromToken(token), jwtTokenUtil.getExpirationDateFromToken(token));

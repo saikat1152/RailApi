@@ -22,6 +22,7 @@ public enum CBSResponseStr {
 	 */
 	invalidCompanyCodeAssigned("INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS"),
 	invalidOrNoSignOnNameSupplied("INVALID/ NO SIGN ON NAME SUPPLIED DURING SIGN ON PROCESS"),
+	securityViolationDuringSignon("SECURITY VIOLATION DURING SIGN ON PROCESS"),
 	uniqueIdNotFound("Unique ID not found");
 
 	private final String text;
