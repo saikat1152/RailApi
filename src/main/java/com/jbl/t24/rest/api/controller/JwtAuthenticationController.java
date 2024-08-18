@@ -35,6 +35,7 @@ import com.jbl.t24.rest.api.service.base.JwtUserService;
 import com.jbl.t24.rest.api.service.rtgs.ApiLogService;
 import com.jbl.t24.rest.api.service.rtgs.CustomUserDetailsService;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.impl.DefaultClaims;
 
 @RestController
@@ -144,28 +145,23 @@ public class JwtAuthenticationController {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password));
 
 		final UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(userName);
+		String existingToken = tokenCache.get(userName);
+		String token = "";
 
-		//final String token = jwtTokenUtil.generateToken(userDetails);
+		try {
+			if (existingToken != null && !jwtTokenUtil.isTokenExpired(existingToken)) {
 
-		/**
-		 * Using tokenCache to check if there is alread a valid token
-		 * If so, no new token is retured
-		 * If not a new valid token is returned
-		 */
-
-		 String existingToken = tokenCache.get(userName);
-		 final String token;
- 
-		 if(existingToken != null && jwtTokenUtil.validateToken(existingToken, userDetails)){
- 
-			 token = existingToken;
-		 // JwtResponse jwtResponse = new JwtResponse(token, JwtTokenUtil.JWT_TOKEN_VALIDITY, token, userName, userName,
-		 // 		jwtTokenUtil.getIssuedAtDateFromToken(token), jwtTokenUtil.getExpirationDateFromToken(token));
-		 }else{
-			 token = jwtTokenUtil.generateToken(userDetails);
-			 tokenCache.put(userName, token);
-			 apiLogService.save(apiLog);
-		 }
+				token = existingToken;
+			} else {
+				token = jwtTokenUtil.generateToken(userDetails);
+				tokenCache.put(userName, token);
+				apiLogService.save(apiLog);
+			}
+		} catch (ExpiredJwtException e) {
+			token = jwtTokenUtil.generateToken(userDetails);
+			tokenCache.put(userName, token);
+			apiLogService.save(apiLog);
+		}
 
 		JwtResponse jwtResponse = new JwtResponse(token, JwtTokenUtil.JWT_TOKEN_VALIDITY, token, userName, userName,
 				jwtTokenUtil.getIssuedAtDateFromToken(token), jwtTokenUtil.getExpirationDateFromToken(token));
