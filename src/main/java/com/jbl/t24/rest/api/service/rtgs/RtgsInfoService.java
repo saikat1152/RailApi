@@ -20,10 +20,12 @@ import com.jbl.t24.rest.api.model.rtgs.RtgsInfoInward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoOutward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineInward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineOutward;
+import com.jbl.t24.rest.api.model.rtgs.RtgsReconIndividual;
 import com.jbl.t24.rest.api.repository.rtgs.RtgsInfoInwardRepository;
 import com.jbl.t24.rest.api.repository.rtgs.RtgsInfoOutwardRepository;
 import com.jbl.t24.rest.api.repository.rtgs.RtgsInfoPacsNineInwardRepository;
 import com.jbl.t24.rest.api.repository.rtgs.RtgsInfoPacsNineOutwardRepository;
+import com.jbl.t24.rest.api.repository.rtgs.RtgsReconRepository;
 import com.jbl.t24.rest.api.repository.rtgs.RTGSSettlementInInfoRepository;
 import com.jbl.t24.rest.api.repository.rtgs.RTGSSettlementNineInInfoRepository;
 import com.jbl.t24.rest.api.repository.rtgs.RTGSSettlementNineOutInfoRepository;
@@ -53,6 +55,9 @@ public class RtgsInfoService {
 
 	@Autowired
 	private RTGSSettlementNineOutInfoRepository settlementNineOutInfoRepository;
+
+	@Autowired
+	private RtgsReconRepository rtgsReconRepository;
 
 	Logger logger = LogManager.getLogger(RtgsInfoService.class);
 
@@ -96,6 +101,8 @@ public class RtgsInfoService {
 			return infoPacsNineOutwardRepository.findByUniqueOutwardRtgsId(uniqueId);
 		} else if (ftInfo instanceof RTGSSettlementInInfo) {
 			return settlementInInfoRepository.findByUniqueSettlementtId(uniqueId);
+		} else if(ftInfo instanceof RtgsReconIndividual ){
+			return rtgsReconRepository.findByInidvidualReconUniqueId(uniqueId);
 		}
 		// (ftInfo instanceof SettlementOutInfo)
 		else {
@@ -145,6 +152,8 @@ public class RtgsInfoService {
 			settlementNineInInfoRepository.save((RTGSSettlementNineInInfo) entity);
 		} else if(entity instanceof RTGSSettlementNineOutInfo) {
 			settlementNineOutInfoRepository.save((RTGSSettlementNineOutInfo) entity);
+		} else if(entity instanceof RtgsReconIndividual) {
+			rtgsReconRepository.save((RtgsReconIndividual) entity);
 		} else {
 			// TODO: Error Msg Handling
 			logger.error("RtgsInfoService: Repository doesnot exists in - "+ getClass());

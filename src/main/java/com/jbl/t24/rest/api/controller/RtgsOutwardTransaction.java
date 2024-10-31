@@ -97,9 +97,22 @@ public class RtgsOutwardTransaction {
 		 * "LOCAL.REF:94:1=" + uniqueFtId;
 		 */
 
-		final String requestOFS = String.format(OfsSources.REQUEST_OFS_STRING, companyCode, txType, debitAccNo,
+
+		 final String requestOFS;
+ 
+		 if(rtgsInfoOut.getIbasId() == null) {
+
+			requestOFS = String.format(OfsSources.REQUEST_OFS_STRING, companyCode, txType, debitAccNo,
 				currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, commissionCode,
 				commissionType, uniqueFtId);
+		 } else {
+
+			String ibasId = rtgsInfoOut.getIbasId();
+
+			requestOFS = String.format(OfsSources.REQUEST_OFS_STRING_IBAS, companyCode, txType, debitAccNo,
+				currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, commissionCode,
+				commissionType, uniqueFtId, ibasId);
+		 }
 
 		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
 		rtgsInfoOut.setHostname(hostIpData.get("host"));

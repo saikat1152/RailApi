@@ -24,6 +24,7 @@ import com.jbl.t24.rest.api.common.model.FtTxResponse.FtTxResponseBuilder;
 import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
 import com.jbl.t24.rest.api.common.model.ResponseMsgProcessorWrapper;
 import com.jbl.t24.rest.api.config.Mapper;
+import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.enums.FtStatus;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
@@ -83,7 +84,9 @@ public class ReverseTxController {
 			ftResponse.setReverseTimestamp(rtgsOutward.getReverseDate());
 			return ResponseEntity.status(HttpStatus.OK).body(ftResponse);
 		}
-		String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/R/PROCESS//0,BD001" + rtgsOutward.getCoCode() + "," + cbsFtNo;
+		// String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/R/PROCESS//0,BD001" + rtgsOutward.getCoCode() + "," + cbsFtNo;
+
+		String requestOFS = OfsSources.REVERSE_OFS_STRING + rtgsOutward.getCoCode() + "," + cbsFtNo;
 
 		TccUtility tccUtility = new TccUtility();
 

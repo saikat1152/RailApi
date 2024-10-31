@@ -29,6 +29,7 @@ import com.jbl.t24.rest.api.model.rtgs.RtgsInfoInward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoOutward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineInward;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineOutward;
+import com.jbl.t24.rest.api.model.rtgs.RtgsReconIndividual;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
 import java.math.BigDecimal;
@@ -65,10 +66,6 @@ public class FtHandlerServiceN {
 			// RtgsInfoOutward temp = (RtgsInfoOutward) ftInfo;
 			ftSave = (RtgsInfoOutward) ftInfo;
 
-			// if (category.equals(RTGSCategory.RTGSPACS8OUTBDT.getValue())
-
-			// if (ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTBDT.getText())
-			// && ftInfo.getDebitAmount() < RTGS_OUWARD_PACS8_MIN_VALUE) {
 			BigDecimal debitAmount = new BigDecimal(ftInfo.getDebitAmountStr());
 			if (ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTBDT.getText())
 					&& debitAmount.compareTo(RTGS_OUWARD_PACS8_MIN_VALUE) < 0) {
@@ -95,7 +92,10 @@ public class FtHandlerServiceN {
 		} else if (ftInfo instanceof RTGSSettlementNineOutInfo) {
 			ftSave = new RTGSSettlementNineOutInfo();
 			ftExist = new RTGSSettlementNineOutInfo();
-		}
+		} else if (ftInfo instanceof RtgsReconIndividual) {
+			ftSave = new RtgsReconIndividual();
+			ftExist = new RtgsReconIndividual();
+		} 
 
 		TccUtility tccUtility = new TccUtility();
 

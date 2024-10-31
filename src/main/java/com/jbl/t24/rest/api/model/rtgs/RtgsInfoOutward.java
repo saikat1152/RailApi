@@ -24,7 +24,6 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-@Builder
 @Audited
 public class RtgsInfoOutward extends RtgsCommon {
 	// public class RtgsInfoOutward extends CommonFtInfo {
@@ -46,4 +45,6 @@ public class RtgsInfoOutward extends RtgsCommon {
 	@Column(name = "VAT", nullable = true, precision = 10, scale = 2)
 	protected double vat;
 
+	@Column(name = "ibas_id", length = 100, nullable = true)
+	protected String ibasId;
 }

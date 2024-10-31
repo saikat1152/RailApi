@@ -65,6 +65,8 @@ public class RtgsTransactionConstants {
 		rtgsConstants.put("FC_09_IN_JPY_S", ConstantValues.builder().transactionType("ACNI").code(7906).build());
 		rtgsConstants.put("FC_09_IN_CAD_S", ConstantValues.builder().transactionType("ACNI").code(7907).build());
 
+		rtgsConstants.put("RECON", ConstantValues.builder().transactionType("ACRT").code(4200).build());
+
 	}
 
 }

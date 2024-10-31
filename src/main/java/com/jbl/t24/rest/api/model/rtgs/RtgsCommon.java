@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 
 @Getter
@@ -23,7 +24,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @MappedSuperclass
 @Audited
-@Builder
+// @Builder
+@SuperBuilder
 public class RtgsCommon extends CommonFtInfo{
     
     @Column(name = "CATEGORY_CODE", nullable = true, length = 10)

@@ -59,8 +59,8 @@ public class VerificationController {
 	@Autowired
 	SignQueryInfoService signQueryInfoService;
 
-	@Value("${test.image.path}")
-	// @Value("${live.image.path}")
+	// @Value("${test.image.path}")
+	@Value("${live.image.path}")
 	private String ROOT_PATH;
 
 	@PostMapping(value = "/sign-check", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -306,7 +306,7 @@ public class VerificationController {
 
 						accountQueryInfoService.save(accountQueryInfo);
 						logger.info("Account Query Done", Mapper.mapToJsonString(accountQueryInfo));
-						System.out.println(accountQueryInfo);
+						// System.out.println(accountQueryInfo);
 						return ResponseEntity.status(HttpStatus.OK).body(accountInfo);
 
 					} else {

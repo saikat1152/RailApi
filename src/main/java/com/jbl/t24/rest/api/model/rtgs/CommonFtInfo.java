@@ -17,10 +17,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jbl.t24.rest.api.custom.validation.ValidTxCategory;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @MappedSuperclass
 @AllArgsConstructor
@@ -29,6 +31,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @Audited
+@SuperBuilder
 public abstract class CommonFtInfo {
 
 	/*
@@ -41,6 +44,7 @@ public abstract class CommonFtInfo {
 	@NotNull(message = "Branch Code Missing")
 	@Pattern(regexp = "^[0-9]{4}$", message = "Branch Code Pattern Not Valid", flags = Flag.CASE_INSENSITIVE)
 	protected String coCode;
+
 
 	@Column(name = "company_code", length = 10)
 	protected String companyCode = "BD001";
