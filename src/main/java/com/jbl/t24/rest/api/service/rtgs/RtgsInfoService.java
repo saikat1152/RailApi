@@ -103,6 +103,8 @@ public class RtgsInfoService {
 			return settlementInInfoRepository.findByUniqueSettlementtId(uniqueId);
 		} else if(ftInfo instanceof RtgsReconIndividual ){
 			return rtgsReconRepository.findByInidvidualReconUniqueId(uniqueId);
+		} else if(ftInfo instanceof RtgsReconIndividual ){
+			return rtgsReconRepository.findByInidvidualReconUniqueId(uniqueId);
 		}
 		// (ftInfo instanceof SettlementOutInfo)
 		else {

@@ -208,7 +208,7 @@ public class FtHandlerServiceN {
 			}
 		}
 
-		System.out.println(ftSave.toString());
+		// System.out.println(ftSave.toString());
 		ftSave.setStatus(FtStatus.PENDING.getValue());
 		ftSave.setOfsRequest(requestOFS);
 		service.save(ftSave);
@@ -244,7 +244,9 @@ public class FtHandlerServiceN {
 						// .timestamp(ftSave.getIssueDate());
 						.commission(wrapper.getCommission())
 						.vat(wrapper.getVat())
-						.timestamp(wrapper.getCbsHittingTime());
+						.timestamp(wrapper.getCbsHittingTime())
+						.localAmountBdt(wrapper.getLocalAmountBdt());
+
 			} catch (Exception e1) {
 
 				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,

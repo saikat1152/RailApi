@@ -6,6 +6,7 @@ import lombok.Data;
 
 
 public record IndividualReconcileDto(
+    String coCode,
     String debitAmount,
     String debitAccount,
     String creditAmount,

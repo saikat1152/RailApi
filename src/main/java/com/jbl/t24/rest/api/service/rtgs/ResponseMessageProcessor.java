@@ -46,6 +46,7 @@ public class ResponseMessageProcessor {
 				String ftRef = firstPart[0];
 				String uniqueOperationTransactionId = spiltData[20].split("=")[1];
 
+				String localDebitAmount = splitDataMap.get("LOC.AMT.DEBITED").split(":")[0];
 				// String cbsHittinTimeStr = spiltData[48].split("=")[1].replace("\"", "");
 				String cbsHittinTimeStr = splitDataMap.get("DATE.TIME");
 				String commissionAmount = splitDataMap.getOrDefault("COMMISSION.AMT", "");
@@ -61,6 +62,7 @@ public class ResponseMessageProcessor {
 						reverseFlag == 0 ? ResponseStatus.TWOZ0.getValue() : ResponseStatus.TWOZ5.getValue());
 				wrapper.setFtStatus(reverseFlag == 0 ? FtStatus.SUCCESS.getValue() : FtStatus.REVERSED.getValue());
 				wrapper.setUniqueOperationTransactionId(uniqueOperationTransactionId);
+				wrapper.setLocalAmountBdt(localDebitAmount);
 
 				break;
 

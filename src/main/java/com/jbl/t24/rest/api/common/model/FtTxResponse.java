@@ -32,6 +32,7 @@ public class FtTxResponse {
 	private String additionalInfo;
 	private Double commission;
 	private Double vat;
+	private String localAmountBdt;
 
 	// @JsonFormat(pattern = "E, dd MMM Y HH:mm:ss z", timezone = "GMT+06")
 	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss")

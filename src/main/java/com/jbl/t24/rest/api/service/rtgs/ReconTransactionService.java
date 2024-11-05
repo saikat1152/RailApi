@@ -79,7 +79,7 @@ public class ReconTransactionService {
         
         ResponseEntity<?> response = ftHandlerServicen.handleFtTransaction(requestOFS, reconIndividual, uniqueFtId);
 
-        System.out.println(response.getBody());
+        System.out.println("individual Status----->>>>" + reconIndividual.getStatus());
         
         return response;
 

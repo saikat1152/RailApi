@@ -1,6 +1,7 @@
 package com.jbl.t24.rest.api.controller;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,13 +60,21 @@ public class ReverseTxController {
 	public ResponseEntity<?> reverseTransactionHandle(@Valid @RequestBody Map<String, String> requestParams,
 			HttpServletRequest httpServletRequest) throws Exception {
 
+		// Capture the current timestamp
+		Instant instant = Instant.now();
+
+		// Convert the Instant to a java.sql.Timestamp
+		Timestamp currentHIttingTimeStamp = Timestamp.from(instant);
+
 		logger.info("Reverse Tx Performed");
 		String cbsFtNo = requestParams.get("ftNumber");
-		// CommonFtInfo rtgsOutward = infoService.findByCbsFtNo(requestParams.get("rtgs-version"), cbsFtNo);
+		// CommonFtInfo rtgsOutward =
+		// infoService.findByCbsFtNo(requestParams.get("rtgs-version"), cbsFtNo);
 
 		RtgsCommon rtgsOutward = infoService.findByCbsFtNo(requestParams.get("rtgs-version"), cbsFtNo);
 
-//        RtgsInfoOutward rtgsInfoOutward = rtgsInfoOutwardService.findByCbsFtno(cbsFtNo);
+		// RtgsInfoOutward rtgsInfoOutward =
+		// rtgsInfoOutwardService.findByCbsFtno(cbsFtNo);
 		if (rtgsOutward == null) {
 			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ29.getText(),
 					ResponseStatus.FOURZ29.getValue());
@@ -74,8 +83,9 @@ public class ReverseTxController {
 		if (rtgsOutward.getStatus() == FtStatus.REVERSED.getValue()) {
 
 			String ftResponseStr = rtgsOutward.getFtResponseStr();
-//          ObjectMapper mapper = new ObjectMapper();
-//          FtTxResponse savedFtResponse = mapper.readValue(ftResponseStr, FtTxResponse.class);
+			// ObjectMapper mapper = new ObjectMapper();
+			// FtTxResponse savedFtResponse = mapper.readValue(ftResponseStr,
+			// FtTxResponse.class);
 			FtTxResponse savedFtResponse = Mapper.readValue(ftResponseStr);
 			FtTxResponse ftResponse = savedFtResponse;
 			ftResponse.setMessage(ResponseStatus.TWOZ6.getText());
@@ -84,7 +94,8 @@ public class ReverseTxController {
 			ftResponse.setReverseTimestamp(rtgsOutward.getReverseDate());
 			return ResponseEntity.status(HttpStatus.OK).body(ftResponse);
 		}
-		// String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/R/PROCESS//0,BD001" + rtgsOutward.getCoCode() + "," + cbsFtNo;
+		// String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/R/PROCESS//0,BD001" +
+		// rtgsOutward.getCoCode() + "," + cbsFtNo;
 
 		String requestOFS = OfsSources.REVERSE_OFS_STRING + rtgsOutward.getCoCode() + "," + cbsFtNo;
 
@@ -106,10 +117,11 @@ public class ReverseTxController {
 				.status(HttpStatus.OK).uniqueRTGS(ftTxResponse.getUniqueRTGS());
 
 		rtgsOutward.setStatus(wrapper.getFtStatus());
-		rtgsOutward.setReverseDate(new Timestamp(System.currentTimeMillis()));
+		// rtgsOutward.setReverseDate(new Timestamp(System.currentTimeMillis()));
+		rtgsOutward.setReverseDate(currentHIttingTimeStamp);
 
-		ftResponse.timestamp(rtgsOutward.getIssueDate());
-		ftResponse.reverseTimestamp(rtgsOutward.getReverseDate());
+		ftResponse.timestamp(currentHIttingTimeStamp);
+		ftResponse.reverseTimestamp(currentHIttingTimeStamp);
 
 		String ftResponseStr = Mapper.mapToJsonString(ftResponse.build());
 		;

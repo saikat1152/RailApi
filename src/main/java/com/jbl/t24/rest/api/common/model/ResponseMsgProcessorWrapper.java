@@ -25,6 +25,7 @@ public class ResponseMsgProcessorWrapper {
 	private Timestamp cbsHittingTime;
 	private double commission;
 	private double vat;
+	private String localAmountBdt;
 
 	public void setWrapperValues(String ftRef, String message, int responseCode, int ftStatus) {
 		this.message = message;
