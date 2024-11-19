@@ -45,6 +45,6 @@ public class RtgsInfoOutward extends RtgsCommon {
 	@Column(name = "VAT", nullable = true, precision = 10, scale = 2)
 	protected double vat;
 
-	@Column(name = "ibas_id", length = 100, nullable = true)
-	protected String ibasId;
+	// @Column(name = "ibas_id", length = 100, nullable = true)
+	// protected String ibasId;
 }

@@ -3,6 +3,7 @@ package com.jbl.t24.rest.api.service.rtgs;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -47,8 +48,11 @@ public class FtHandlerServiceN {
 	ResponseMessageProcessor processor = new ResponseMessageProcessor();
 
 	// public static final String RTGS_OUWARD_PACS8_MIN_VALUE = "100000";
+	@Value("${channel.name.trx}")
+	private String channelNameTrx;
+	@Value("${channel.name.trx}")
+	private String channelNameEnq;
 	public static final BigDecimal RTGS_OUWARD_PACS8_MIN_VALUE = new BigDecimal(100000);
-
 	public ResponseEntity<?> handleFtTransaction(String requestOFS, RtgsCommon ftInfo, String uniqueId)
 			throws Exception {
 
@@ -126,7 +130,7 @@ public class FtHandlerServiceN {
 					logger.info("Resubmitted data mismatched block entered");
 
 					JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
-							ResponseStatus.FIVEZ28.getText(), ResponseStatus.FIVEZ28.getValue());
+							ResponseStatus.FOURZ33.getText(), ResponseStatus.FOURZ33.getValue());
 
 					// ftExist.setStatus(FtStatus.FAILED.getValue());
 					// ftExist.setIssueDate(ftInfo.getIssueDate());

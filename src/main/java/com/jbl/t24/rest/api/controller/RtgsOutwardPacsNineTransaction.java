@@ -20,14 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
 import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.constant.OfsSources;
-import com.jbl.t24.rest.api.enums.utils.ErrorMessageGenerator;
 import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoPacsNineOutward;
-import com.jbl.t24.rest.api.service.rtgs.FtHandlerService;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
 import com.jbl.t24.rest.api.service.rtgs.RtgsInfoPacsNineOutwardService;
-import com.jbl.t24.rest.api.tccUtility.TccUtility;
-import com.twelvemonkeys.util.Time;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
 
 @RestController
@@ -44,7 +40,6 @@ public class RtgsOutwardPacsNineTransaction {
 
 
 	@PostMapping(value = "/pacs09/outward", consumes = MediaType.APPLICATION_JSON_VALUE)
-
 	public ResponseEntity<?> rtgsTrasferOutward(@Valid @RequestBody RtgsInfoPacsNineOutward rtgsInfoPacsNineOut,
 			HttpServletRequest httpServletRequest) throws Exception {
 

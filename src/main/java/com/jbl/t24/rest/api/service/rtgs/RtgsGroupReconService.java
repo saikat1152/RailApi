@@ -16,5 +16,8 @@ public class RtgsGroupReconService {
         reconRepositoryGroup.save(groupReconcillation);
     }
 
+    public RtgsGroupReconcillation GroupReconUniqueId(String reconGroupUniqueID){
+        return reconRepositoryGroup.findByReconGroupUniqueID(reconGroupUniqueID);
+    }
     
 }

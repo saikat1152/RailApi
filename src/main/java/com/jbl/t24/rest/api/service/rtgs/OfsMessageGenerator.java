@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
-import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineInInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineOutInfo;

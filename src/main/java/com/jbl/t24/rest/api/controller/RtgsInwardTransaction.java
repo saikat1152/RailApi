@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,9 +18,7 @@ import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoInward;
-import com.jbl.t24.rest.api.service.rtgs.FtHandlerService;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
-import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
 @RestController
 @CrossOrigin
@@ -33,7 +30,6 @@ public class RtgsInwardTransaction {
 	private FtHandlerServiceN ftHandlerServiceN;
 
 	@PostMapping(value = "/inward", consumes = MediaType.APPLICATION_JSON_VALUE)
-
 	public ResponseEntity<?> rtgsTrasferInward(@Valid @RequestBody RtgsInfoInward rtgsInfoInward,
 			HttpServletRequest httpServletRequest) throws Exception {
 

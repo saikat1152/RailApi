@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jbl.t24.rest.api.common.model.FtTxResponse;
+import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
+import com.jbl.t24.rest.api.config.Mapper;
+import com.jbl.t24.rest.api.enums.FtStatus;
+import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.model.reconcileDtos.GroupReconResponse;
 import com.jbl.t24.rest.api.model.reconcileDtos.GroupReconcileDto;
 import com.jbl.t24.rest.api.model.reconcileDtos.IndividualReconcileDto;
@@ -48,38 +52,72 @@ public class RtgsReconController {
     public ResponseEntity<?> performReconcilation(@Valid @RequestBody GroupReconcileDto groupReconcileDto,
             HttpServletRequest httpServletRequest) throws Exception {
 
-        // if status is pending, not receive anything
+    
+        RtgsGroupReconcillation groupReconcillationExists = groupReconService
+                .GroupReconUniqueId(groupReconcileDto.groupReconUniqueId());
 
-        RtgsGroupReconcillation groupReconcillationEntity = DtoToModelMapper
-                .fromReconGroupDtoToReconModel(groupReconcileDto);
+        RtgsGroupReconcillation groupReconcillationEntity;
+        List<RtgsReconIndividual> individualEntities;
 
-        List<IndividualReconcileDto> individualAccountDtos = groupReconcileDto.individualReconcileDtos();
+        if (groupReconcillationExists != null) {
+            if (groupReconcillationExists.getStatus() == FtStatus.PENDING.getValue()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                        new JwtErrorResponse(HttpStatus.CONFLICT, ResponseStatus.FIVEZ27.getText(),
+                                ResponseStatus.FIVEZ27.getValue()));
+            } else if (groupReconcillationExists.getStatus() == FtStatus.SUCCESS.getValue()) {
+                GroupReconResponse groupReconResponse = Mapper
+                        .readGroupReconValue(groupReconcillationExists.getGroupResponse());
+                return ResponseEntity.status(HttpStatus.OK).body(groupReconResponse);
+            } else {
+                groupReconcillationEntity = groupReconcillationExists;
+                individualEntities = groupReconcillationEntity.getIndividualReconList();
+            }
 
-        List<RtgsReconIndividual> individualEntities = individualAccountDtos.stream()
-                .map(e -> DtoToModelMapper.fromIndiDtoToIndivModel(e, groupReconcillationEntity)).toList();
+        } else {
+            groupReconcillationEntity = DtoToModelMapper
+                    .fromReconGroupDtoToReconModel(groupReconcileDto);
+            List<IndividualReconcileDto> individualAccountDtos = groupReconcileDto.individualReconcileDtos();
+            individualEntities = individualAccountDtos.stream()
+                    .map(e -> DtoToModelMapper.fromIndiDtoToIndivModel(e, groupReconcillationEntity)).toList();
 
-        groupReconcillationEntity.setIndividualReconList(individualEntities);
+            groupReconcillationEntity.setIndividualReconList(individualEntities);
+            groupReconService.saveGroupRecon(groupReconcillationEntity);
+        }
+
+        // RtgsGroupReconcillation groupReconcillationEntity;
+
+        // if(!groupReconcileDto.groupReconUniqueId().isEmpty()){
+
+        // RtgsGroupReconcillation reconGroupUniqueId =
+        // groupReconService.GroupReconUniqueId(groupReconcileDto.groupReconUniqueId());
+        // GroupReconResponse groupReconResponse =
+        // Mapper.readGroupReconValue(reconGroupUniqueId.getGroupResponse());
+        // return ResponseEntity.status(HttpStatus.OK).body(groupReconResponse);
+
+        // }
+
+        // List<IndividualReconcileDto> individualAccountDtos =
+        // groupReconcileDto.individualReconcileDtos();
+
+        // List<RtgsReconIndividual> individualEntities = individualAccountDtos.stream()
+        // .map(e -> DtoToModelMapper.fromIndiDtoToIndivModel(e,
+        // groupReconcillationEntity)).toList();
 
         // Saving GroupRecon as Pending
-        groupReconService.saveGroupRecon(groupReconcillationEntity);
+        
 
         List<ResponseEntity<?>> responses = new ArrayList<>();
 
-        // for (int i = 0; i < 2; i++) {
-        //     responses.add(service.handleReconTransaction(individualEntities.get(i), httpServletRequest));
-        // }
-
         individualEntities.stream()
-                        .limit(2)
-                        .parallel()
-                        .forEach(e -> {
-
-                            try {
-                                responses.add(service.handleReconTransaction(e, httpServletRequest));
-                            } catch (Exception e1) {
-                                e1.printStackTrace();
-                            }
-                        });
+                .limit(2)
+                .parallel()
+                .forEach(e -> {
+                    try {
+                        responses.add(service.handleReconTransaction(e, httpServletRequest));
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                });
 
         for (var response : responses) {
             System.out.println(response);
@@ -98,26 +136,30 @@ public class RtgsReconController {
             String uniqueId = iReconcile.getInidvidualReconUniqueId();
             int status = statusFetcher.getTransactionStatus(iReconcile, uniqueId);
             Map<String, String> update = new HashMap<>();
-            update.put(uniqueId, status+"");
+            update.put(uniqueId, status + "");
             txStatusList.add(update);
             allTransactionStatus.add(status);
+            // iReconcile.setStatus(status);
         }
 
         if (allTransactionStatus.get(0) == 2 &&
-        allTransactionStatus.get(1) == 2 &&
-        allTransactionStatus.get(2) == 2) {
+                allTransactionStatus.get(1) == 2 &&
+                allTransactionStatus.get(2) == 2) {
             groupReconcillationEntity.setStatus(2);
 
         } else {
             groupReconcillationEntity.setStatus(3);
         }
 
-        groupReconService.saveGroupRecon(groupReconcillationEntity);
-
         GroupReconResponse groupReconResponse = new GroupReconResponse(
-            groupReconcileDto.groupReconUniqueId(), 
-            txStatusList, 
-            groupReconcillationEntity.getStatus()+"");
+                groupReconcileDto.groupReconUniqueId(),
+                txStatusList,
+                groupReconcillationEntity.getStatus() + "");
+
+        String groupResponse = Mapper.mapToJsonString(groupReconResponse);
+        groupReconcillationEntity.setGroupResponse(groupResponse);
+
+        groupReconService.saveGroupRecon(groupReconcillationEntity);
 
         return ResponseEntity.status(HttpStatus.OK).body(groupReconResponse);
 

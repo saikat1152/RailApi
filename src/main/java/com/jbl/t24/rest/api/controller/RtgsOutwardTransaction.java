@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -42,6 +43,11 @@ public class RtgsOutwardTransaction {
 	 * RTGS Outward PACS 09 FC ACIN ---> RTGS Inward PACS 09 FC
 	 */
 
+
+	 @Value("${use.fixed.issue.date}")
+	 private Boolean useFixedIssueDate;
+	 @Value("${fixed.issue.date}")
+	private String fixedIssueDate;
 	@PostMapping(value = "/outward", consumes = MediaType.APPLICATION_JSON_VALUE)
 
 	public ResponseEntity<?> rtgsTrasferOutward(@Valid @RequestBody RtgsInfoOutward rtgsInfoOut,
@@ -84,7 +90,11 @@ public class RtgsOutwardTransaction {
 
 		// String requestOFS = "";
 
-		issueDate = "20220506";
+		if(useFixedIssueDate && fixedIssueDate != null)
+		{
+			issueDate = fixedIssueDate;
+		}
+		// issueDate = "20220506";
 		/*
 		 * final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0," +
 		 * companyCode + ",,TRANSACTION.TYPE=" + txType + "," + "DEBIT.ACCT.NO=" +
@@ -100,19 +110,21 @@ public class RtgsOutwardTransaction {
 
 		 final String requestOFS;
  
-		 if(rtgsInfoOut.getIbasId() == null) {
+		//  if(rtgsInfoOut.getIbasId() == null) {
 
 			requestOFS = String.format(OfsSources.REQUEST_OFS_STRING, companyCode, txType, debitAccNo,
 				currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, commissionCode,
 				commissionType, uniqueFtId);
-		 } else {
+		//  } 
+		 
+		//  else {
 
-			String ibasId = rtgsInfoOut.getIbasId();
+		// 	String ibasId = rtgsInfoOut.getIbasId();
 
-			requestOFS = String.format(OfsSources.REQUEST_OFS_STRING_IBAS, companyCode, txType, debitAccNo,
-				currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, commissionCode,
-				commissionType, uniqueFtId, ibasId);
-		 }
+		// 	requestOFS = String.format(OfsSources.REQUEST_OFS_STRING_IBAS, companyCode, txType, debitAccNo,
+		// 		currency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, commissionCode,
+		// 		commissionType, uniqueFtId, ibasId);
+		//  }
 
 		Map<String, String> hostIpData = HostIpHandle.hostIp(httpServletRequest);
 		rtgsInfoOut.setHostname(hostIpData.get("host"));

@@ -24,8 +24,6 @@ import lombok.ToString;
 @Table(name = "rtgs_in_info")
 @Getter
 @Setter
-@ToString
-@Builder
 @Audited
 public class RtgsInfoInward extends RtgsCommon {
 

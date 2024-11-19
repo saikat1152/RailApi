@@ -3,6 +3,7 @@ package com.jbl.t24.rest.api.model.rtgs;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,11 +53,14 @@ public class RtgsGroupReconcillation
     // List<String> individualReconIds;
 
     @Column(name = "indiv_recons", length = 70)
-    @OneToMany(mappedBy = "reconGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "reconGroup", orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     List<RtgsReconIndividual> individualReconList;
 
 
     @Column(name = "status", length = 2)
 	protected int status;
+
+    @Column(name ="grp_response", length=2048)
+    protected String groupResponse;
 }

@@ -25,7 +25,6 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-@Builder
 @Audited
 public class RTGSSettlementNineOutInfo extends RtgsCommon {
 

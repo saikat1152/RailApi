@@ -32,18 +32,22 @@ public enum ResponseStatus {
 	FOURZ28(428, "Transaction Category Incorrect"), FOURZ29(429, "Incorrect Cbs Ft number for Reversal!"),
 	FOURZ30(430, "Invalid RTGS Api User!"),
 	FOURZ31(431, "Invalid PACS Nine Outwarad Reference Number is provided!"),
+	FOURZ32(432, "INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS!"),
+	FOURZ33(433, "Resubmitted data mismatched"),
+	
 
 	FIVEZ0(500, "Internal Server Error!"),
 	FIVEZ2(502, "REQUEST NOT VALID"),
 	FIVEZ3(503, "Service Unavailable!"),
 	FIVEZ4(504, "Response NONE Due to Unresponsive CBS!"),
-	FIVEZ5(505, "INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS!"),
+	// FIVEZ5(505, "INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS!"),
+	FIVEZ5(505, "TCC client exception.TOCF is unreachable"),
 	FIVEZ6(506, "INVALID/ NO SIGN ON NAME SUPPLIED DURING SIGN ON PROCESS!"),
 	FIVEZ7(507, "String Response Processing Results in Error"),
 	FIVEZ8(508, "CBS ERROR::SECURITY VIOLATION DURING SIGN ON PROCESS"),
 
 	FIVEZ27(527, "Cannot Do New CBS Transaction Beacause An Transaction Is On Already Processing!"),
-	FIVEZ28(528, "Resubmitted data mismatched"),
+	// FIVEZ28(528, "Resubmitted data mismatched"),
 	FIVEZ99(599, "CBS Transaction Error");
 
 	private final int value;

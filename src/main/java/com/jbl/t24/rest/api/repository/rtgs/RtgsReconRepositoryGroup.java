@@ -12,6 +12,6 @@ import com.jbl.t24.rest.api.model.rtgs.RtgsGroupReconcillation;
 public interface RtgsReconRepositoryGroup extends JpaRepository<RtgsGroupReconcillation, Long>,
 		JpaSpecificationExecutor<RtgsGroupReconcillation> {
 
-			RtgsGroupReconcillation findByGroupRtgsReconId(String groupRtgsReconId);
+			RtgsGroupReconcillation findByReconGroupUniqueID(String reconGroupUniqueID);
 
 }

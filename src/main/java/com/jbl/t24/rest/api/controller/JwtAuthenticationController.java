@@ -91,7 +91,9 @@ public class JwtAuthenticationController {
 		String host = httpServletRequest.getRemoteHost();
 
 		ApiLog apiLog = new ApiLog(protocol, remoteAddr, uri, host, jsonObject.toString());
-		apiLogService.save(apiLog);
+		//to be commented
+		//TODO: to be commented
+		// apiLogService.save(apiLog);
 
 		// check required value
 
@@ -150,7 +152,6 @@ public class JwtAuthenticationController {
 
 		try {
 			if (existingToken != null && !jwtTokenUtil.isTokenExpired(existingToken)) {
-
 				token = existingToken;
 			} else {
 				token = jwtTokenUtil.generateToken(userDetails);

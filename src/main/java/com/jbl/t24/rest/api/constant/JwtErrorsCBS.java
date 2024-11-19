@@ -20,16 +20,16 @@ public class JwtErrorsCBS {
 					ResponseStatus.FIVEZ2.getValue());
 			break;
 		case "403":
-			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ0.getText(),
-					ResponseStatus.FIVEZ0.getValue());
+			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ5.getText(),
+					ResponseStatus.FIVEZ5.getValue());
 			break;
 		case "404":
 			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ4.getText(),
 					ResponseStatus.FIVEZ4.getValue());
 			break;
 		case "405":
-			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ5.getText(),
-					ResponseStatus.FIVEZ5.getValue());
+			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ32.getText(),
+					ResponseStatus.FOURZ32.getValue());
 			break;
 		case "408":
 			jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FIVEZ8.getText(),

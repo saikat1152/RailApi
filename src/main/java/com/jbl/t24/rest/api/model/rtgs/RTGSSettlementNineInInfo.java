@@ -19,13 +19,11 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "rtgs_settlement_nine_in_info")
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 @ToString
-@Builder
 @Audited
 public class RTGSSettlementNineInInfo extends RtgsCommon {
 

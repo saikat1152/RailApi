@@ -4,8 +4,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-import java.util.Objects;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.jbl.t24.rest.api.config.HostIpHandle;
 import com.jbl.t24.rest.api.constant.OfsSources;
-import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 import com.jbl.t24.rest.api.model.rtgs.RtgsReconIndividual;
 
 @Service
