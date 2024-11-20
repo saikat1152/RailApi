@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +30,10 @@ public class RtgsInwardPacsNineTransaction {
 	@Autowired
 	private FtHandlerServiceN ftHandlerServiceN;
 
+	 @Value("${use.fixed.issue.date}")
+	 private Boolean useFixedIssueDate;
+	 @Value("${fixed.issue.date}")
+	private String fixedIssueDate;
 	@PostMapping(value = "/pacs09/inward", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> rtgsTrasferInward(@Valid @RequestBody RtgsInfoPacsNineInward rtgsInfoPacsNineIn,
 			HttpServletRequest httpServletRequest) throws Exception {
@@ -70,8 +75,11 @@ public class RtgsInwardPacsNineTransaction {
 		Objects.requireNonNull(currency);
 
 		// String requestOFS = "";
-
-		issueDate = "20220506";
+		if(useFixedIssueDate && fixedIssueDate != null && !fixedIssueDate.trim().isEmpty())
+		{
+			issueDate = fixedIssueDate;
+		}
+		
 //		final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0,"
 //				+ companyCode
 //				+ ",,TRANSACTION.TYPE=" + txType + ","

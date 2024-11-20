@@ -9,6 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,8 @@ import io.jsonwebtoken.impl.DefaultClaims;
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
+
+	private Logger logger = LoggerFactory.getLogger(JwtAuthenticationController.class);
 
 	@Autowired
 	private AuthenticationManager authenticationManager;

@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -56,6 +57,10 @@ public class ReverseTxController {
 	@Autowired
 	ResponseMessageProcessor processor = new ResponseMessageProcessor();
 
+	@Value("${channel.name.trx}")
+	private String transactionChannel;
+	@Value("${channel.name.trx}")
+	private String enquiryChannel;
 	@PostMapping("/reverse")
 	public ResponseEntity<?> reverseTransactionHandle(@Valid @RequestBody Map<String, String> requestParams,
 			HttpServletRequest httpServletRequest) throws Exception {
@@ -99,7 +104,7 @@ public class ReverseTxController {
 
 		String requestOFS = OfsSources.REVERSE_OFS_STRING + rtgsOutward.getCoCode() + "," + cbsFtNo;
 
-		TccUtility tccUtility = new TccUtility();
+		TccUtility tccUtility = new TccUtility(transactionChannel);
 
 		String responseData = tccUtility.sendRequest(requestOFS);
 		// String[] spiltDataOfs = ofsResponse.split(",");

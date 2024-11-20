@@ -4,14 +4,26 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.jbl.t24.rest.api.config.Mapper;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
+@Service
 public class RtgsUniqueIdTransactionCheck {
 
-	public static String checkTransactionByUniqueId(String uniqueTransactionId) {
+	
+	@Value("${channel.name.trx}")
+	private String transactionChannel;
+	@Value("${channel.name.enq}")
+	private String enquiryChannel;
+	public String checkTransactionByUniqueId(String uniqueTransactionId) {
 		try {
-			TccUtility tccUtility = new TccUtility("ISOLIST2");
+			// TccUtility tccUtility = new TccUtility("ISOLIST2");
+			TccUtility tccUtility = new TccUtility(enquiryChannel);
 			String requestOFS = String.format(OfsSources.UNIQUE_ID_ENQ_STRING, uniqueTransactionId);
 			String responseData = tccUtility.sendRequest(requestOFS);
 			if (responseData.startsWith("40")) {

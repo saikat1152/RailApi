@@ -15,8 +15,7 @@
             <SUPPLIER>
                 <INITIATOR>
                     <!-- <HOSTNAME>10.180.10.60</HOSTNAME> -->
-                    <HOSTNAME>172.18.18.64</HOSTNAME>
-                    <!-- <HOSTNAME>192.168.165.67</HOSTNAME> -->
+                    <HOSTNAME>192.168.165.67</HOSTNAME>
                 </INITIATOR>
             </SUPPLIER>
             <CONSUMER>
@@ -36,8 +35,7 @@
             <PORT>9060</PORT>
             <SUPPLIER>
                 <INITIATOR>
-                    <HOSTNAME>172.18.18.64</HOSTNAME>
-                    <!-- <HOSTNAME>192.168.165.67</HOSTNAME> -->
+                    <HOSTNAME>192.168.165.67</HOSTNAME>
                 </INITIATOR>
             </SUPPLIER>
             <CONSUMER>
@@ -54,7 +52,6 @@
         <TIMEOUT>30</TIMEOUT>
         <ADAPTER>
             <TYPE>tcp</TYPE>
-            <!-- <PORT>7020</PORT> -->
             <PORT>9059</PORT>
             <SUPPLIER>
                 <INITIATOR>
@@ -75,7 +72,6 @@
         <TIMEOUT>30</TIMEOUT>
         <ADAPTER>
             <TYPE>tcp</TYPE>
-            <!-- <PORT>7020</PORT> -->
             <PORT>9060</PORT>
             <SUPPLIER>
                 <INITIATOR>

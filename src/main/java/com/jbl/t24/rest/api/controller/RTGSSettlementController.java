@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,15 +38,19 @@ public class RTGSSettlementController {
 	FtHandlerServiceN ftHandlerServiceN;
 
 	Logger logger = LogManager.getLogger(RTGSSettlementController.class);
+	OfsMessageGenerator ofsMessageGenerator = new OfsMessageGenerator();
 
 
+	@Value("${use.fixed.issue.date}")
+	private Boolean useFixedIssueDate;
+	@Value("${fixed.issue.date}")
+	private String fixedIssueDate;
 	@PostMapping(value = "/settlement-in", consumes = MediaType.APPLICATION_JSON_VALUE)
-
 	public ResponseEntity<?> settlementInward(@Valid @RequestBody RTGSSettlementInInfo settlementInfo,
 			HttpServletRequest httpServletRequest) throws Exception {
 
-		final String requestOFS = OfsMessageGenerator.generateOfsMessage(settlementInfo,
-				settlementInfo.getUniqueSettlementtId(), httpServletRequest);
+		String requestOFS = ofsMessageGenerator.generateOfsMessage(settlementInfo,
+				settlementInfo.getUniqueSettlementtId(), httpServletRequest, useFixedIssueDate, fixedIssueDate);
 		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, settlementInfo,
 				settlementInfo.getUniqueSettlementtId());
 
@@ -62,8 +67,8 @@ public class RTGSSettlementController {
 	public ResponseEntity<?> settlementOutward(@Valid @RequestBody RTGSSettlementOutInfo settlementOutInfo,
 			HttpServletRequest httpServletRequest) throws Exception {
 
-		final String requestOFS = OfsMessageGenerator.generateOfsMessage(settlementOutInfo,
-				settlementOutInfo.getUniqueSettlementtId(),httpServletRequest);
+		final String requestOFS = ofsMessageGenerator.generateOfsMessage(settlementOutInfo,
+				settlementOutInfo.getUniqueSettlementtId(),httpServletRequest, useFixedIssueDate, fixedIssueDate);
 		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, settlementOutInfo,
 				settlementOutInfo.getUniqueSettlementtId());
 
@@ -79,8 +84,8 @@ public class RTGSSettlementController {
 	public ResponseEntity<?> settlementNineInward(@Valid @RequestBody RTGSSettlementNineInInfo settlementNineInfo,
 			HttpServletRequest httpServletRequest) throws Exception {
 	
-		final String requestOFS = OfsMessageGenerator.generateOfsMessage(settlementNineInfo,
-		settlementNineInfo.getUniqueSettlementtId(), httpServletRequest);
+		final String requestOFS = ofsMessageGenerator.generateOfsMessage(settlementNineInfo,
+		settlementNineInfo.getUniqueSettlementtId(), httpServletRequest, useFixedIssueDate, fixedIssueDate);
 		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, settlementNineInfo,
 		settlementNineInfo.getUniqueSettlementtId());
 
@@ -97,8 +102,8 @@ public class RTGSSettlementController {
 	public ResponseEntity<?> settlementNineOutward(@Valid @RequestBody RTGSSettlementNineOutInfo settlementNineOutInfo,
 			HttpServletRequest httpServletRequest) throws Exception {
 
-		final String requestOFS = OfsMessageGenerator.generateOfsMessage(settlementNineOutInfo,
-		settlementNineOutInfo.getUniqueSettlementtId(),httpServletRequest);
+		final String requestOFS = ofsMessageGenerator.generateOfsMessage(settlementNineOutInfo,
+		settlementNineOutInfo.getUniqueSettlementtId(),httpServletRequest, useFixedIssueDate, fixedIssueDate);
 		ResponseEntity<?> response = ftHandlerServiceN.handleFtTransaction(requestOFS, settlementNineOutInfo,
 		settlementNineOutInfo.getUniqueSettlementtId());
 

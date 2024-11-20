@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.jbl.t24.rest.api.config.HostIpHandle;
@@ -69,8 +70,9 @@ public class OfsMessageGenerator {
 
 	}
 
-	public static String generateOfsMessage(RtgsCommon ftInfo, String uniqueId, HttpServletRequest httpServletRequest) {
-
+	public String generateOfsMessage(RtgsCommon ftInfo, String uniqueId, HttpServletRequest httpServletRequest,
+	Boolean useFixedIssueDate, String fixedIssueDate) 
+	{
 		String uniqueFtId = "";
 
 		if (ftInfo instanceof RTGSSettlementInInfo) {
@@ -104,7 +106,11 @@ public class OfsMessageGenerator {
 		ftInfo.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
 
 		// * Comment it for later Live deployment*/
-		issueDate = "20220506";
+		if(useFixedIssueDate && fixedIssueDate != null)
+		{
+			issueDate = fixedIssueDate;
+		}
+		
 		// * Comment it for later Live deployment*/
 		Objects.requireNonNull(uniqueFtId);
 		Objects.requireNonNull(coCode);

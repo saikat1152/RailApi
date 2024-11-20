@@ -44,9 +44,9 @@ public class RtgsOutwardTransaction {
 	 */
 
 
-	 @Value("${use.fixed.issue.date}")
-	 private Boolean useFixedIssueDate;
-	 @Value("${fixed.issue.date}")
+	@Value("${use.fixed.issue.date}")
+	private Boolean useFixedIssueDate;
+	@Value("${fixed.issue.date}")
 	private String fixedIssueDate;
 	@PostMapping(value = "/outward", consumes = MediaType.APPLICATION_JSON_VALUE)
 
@@ -90,11 +90,11 @@ public class RtgsOutwardTransaction {
 
 		// String requestOFS = "";
 
-		if(useFixedIssueDate && fixedIssueDate != null)
+		if(useFixedIssueDate && fixedIssueDate != null && !fixedIssueDate.trim().isEmpty())
 		{
 			issueDate = fixedIssueDate;
 		}
-		// issueDate = "20220506";
+		
 		/*
 		 * final String requestOFS = "FUNDS.TRANSFER,BACH.EFT.RTGS/I/PROCESS//0," +
 		 * companyCode + ",,TRANSACTION.TYPE=" + txType + "," + "DEBIT.ACCT.NO=" +

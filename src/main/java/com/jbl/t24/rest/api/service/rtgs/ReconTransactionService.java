@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,10 @@ public class ReconTransactionService {
     @Autowired
 	private FtHandlerServiceN ftHandlerServicen;
 
+    @Value("${use.fixed.issue.date}")
+	private Boolean useFixedIssueDate;
+	@Value("${fixed.issue.date}")
+	private String fixedIssueDate;
     public ResponseEntity<?> handleReconTransaction(RtgsReconIndividual reconIndividual, HttpServletRequest httpServletRequest)
             throws Exception {
 
@@ -63,7 +68,11 @@ public class ReconTransactionService {
             reconIndividual.setReverseEnabled(true);
         }
 
-        issueDate = "20220506";
+        if(useFixedIssueDate && fixedIssueDate != null && !fixedIssueDate.trim().isEmpty())
+		{
+			issueDate = fixedIssueDate;
+		}
+        
 
         String  requestOFS = String.format(OfsSources.RECON_OFS_STRING, companyCode, txType, debitAccNo,
 				debitCurrency, debitAmount, issueDate, creditAccNo, debitDetails, creditDetails, commissionCode,

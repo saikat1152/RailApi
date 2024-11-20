@@ -23,7 +23,7 @@ public class TccUtility {
 	public TccUtility() throws IOException {
 
 		tcf = TCCFactory.getInstance();
-		channel = "ISOLIST";
+		channel = "TEST_TRX";
 	}
 
 	public TccUtility(String ch) throws IOException {

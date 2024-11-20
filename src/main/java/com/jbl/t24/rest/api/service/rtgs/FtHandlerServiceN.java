@@ -47,11 +47,14 @@ public class FtHandlerServiceN {
 	@Autowired
 	ResponseMessageProcessor processor = new ResponseMessageProcessor();
 
+	@Autowired
+	RtgsUniqueIdTransactionCheck rtgsUniqueIdTransactionCheck;
+
 	// public static final String RTGS_OUWARD_PACS8_MIN_VALUE = "100000";
 	@Value("${channel.name.trx}")
-	private String channelNameTrx;
+	private String transactionChannel;
 	@Value("${channel.name.trx}")
-	private String channelNameEnq;
+	private String enquiryChannel;
 	public static final BigDecimal RTGS_OUWARD_PACS8_MIN_VALUE = new BigDecimal(100000);
 	public ResponseEntity<?> handleFtTransaction(String requestOFS, RtgsCommon ftInfo, String uniqueId)
 			throws Exception {
@@ -101,7 +104,7 @@ public class FtHandlerServiceN {
 			ftExist = new RtgsReconIndividual();
 		} 
 
-		TccUtility tccUtility = new TccUtility();
+		TccUtility tccUtility = new TccUtility(transactionChannel);
 
 		ftSave = ftInfo;
 		ftExist = service.findByUniqueId(ftInfo, uniqueId);
@@ -156,7 +159,7 @@ public class FtHandlerServiceN {
 				ftExist.setStatus(FtStatus.PENDING.getValue());
 				service.save(ftExist);
 
-				String uniqueIdTransactioncheck = RtgsUniqueIdTransactionCheck.checkTransactionByUniqueId(uniqueId);
+				String uniqueIdTransactioncheck = rtgsUniqueIdTransactionCheck.checkTransactionByUniqueId(uniqueId);
 
 				if ((uniqueIdTransactioncheck.startsWith("40") && !uniqueIdTransactioncheck.equals("407"))
 						|| uniqueIdTransactioncheck.equals("499")) {

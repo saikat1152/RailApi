@@ -63,6 +63,10 @@ public class VerificationController {
 	@Value("${live.image.path}")
 	private String ROOT_PATH;
 
+	@Value("${channel.name.trx}")
+	private String transactionChannel;
+	@Value("${channel.name.enq}")
+	private String enquiryChannel;
 	@PostMapping(value = "/sign-check", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> signatureImage(@Valid @RequestBody SignatureQueryInfo signatureQueryInfo,
 			HttpServletRequest httpServletRequest) throws Exception {
@@ -79,7 +83,8 @@ public class VerificationController {
 		signatureQueryInfo.setIp(remoteAddr);
 		signatureQueryInfo.setHostname(host);
 
-		TccUtility tccUtility = new TccUtility("ISOLIST2");
+		// TccUtility tccUtility = new TccUtility("ISOLIST2");
+		TccUtility tccUtility = new TccUtility(enquiryChannel);
 		logger.info("Fetching CBS image data");
 		String requestOFS = String.format(OfsSources.OFS_SIGN_CHECK_ENQUIRY, accountNo);
 		String responseData = tccUtility.sendRequest(requestOFS);
@@ -222,7 +227,8 @@ public class VerificationController {
 		accountQueryInfo.setIp(remoteAddr);
 		accountQueryInfo.setHostname(host);
 
-		TccUtility tccUtility = new TccUtility("ISOLIST2");
+		// TccUtility tccUtility = new TccUtility("ISOLIST2");
+		TccUtility tccUtility = new TccUtility(enquiryChannel);
 
 		String requestOFS = String.format(OfsSources.OFS_ACC_ENQUIRY, accountNo);
 		String responseData = tccUtility.sendRequest(requestOFS);
