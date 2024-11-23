@@ -123,7 +123,7 @@ public abstract class CommonFtInfo {
 
 	// @CreationTimestamp
 	@Column(name = "reverse_date", columnDefinition = "TIMESTAMP", updatable = true, nullable = true)
-	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss", timezone = "GMT+06")
 	protected Timestamp reverseDate;
 
 	@Column(name = "transaction_type")

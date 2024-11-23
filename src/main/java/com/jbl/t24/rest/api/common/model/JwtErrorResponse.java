@@ -18,7 +18,7 @@ public class JwtErrorResponse {
 	private String message;
 	private int responseCode;
 
-	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss", timezone = "GMT+06")
 	private Timestamp timestamp = new Timestamp(new Date().getTime());
 	private List<String> errors;
 
