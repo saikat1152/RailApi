@@ -35,6 +35,7 @@ public enum ResponseStatus {
 	FOURZ32(432, "INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS!"),
 	FOURZ33(433, "Resubmitted data mismatched"),
 	
+	
 
 	FIVEZ0(500, "Internal Server Error!"),
 	FIVEZ2(502, "REQUEST NOT VALID"),
@@ -48,6 +49,7 @@ public enum ResponseStatus {
 
 	FIVEZ27(527, "Cannot Do New CBS Transaction Beacause An Transaction Is On Already Processing!"),
 	// FIVEZ28(528, "Resubmitted data mismatched"),
+	FIVEZ28(528, "Unexpect JDBC Error Occured!"),
 	FIVEZ99(599, "CBS Transaction Error");
 
 	private final int value;

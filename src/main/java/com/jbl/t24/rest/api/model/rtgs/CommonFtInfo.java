@@ -106,7 +106,7 @@ public abstract class CommonFtInfo {
 	@Column(name = "ofs_request", length = 1048)
 	protected String ofsRequest;
 
-	@Column(name = "ofs_response", length = 2048)
+	@Column(name = "ofs_response", length = 4000)
 	protected String ofsResponse;
 
 	@Column(name = "ip", length = 63)

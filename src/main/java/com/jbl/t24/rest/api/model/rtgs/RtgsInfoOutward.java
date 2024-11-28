@@ -10,6 +10,8 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.envers.Audited;
 
+import com.jbl.t24.rest.api.common.model.IWithVatCommission;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +27,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @Audited
-public class RtgsInfoOutward extends RtgsCommon {
+public class RtgsInfoOutward extends RtgsCommon implements IWithVatCommission {
 	// public class RtgsInfoOutward extends CommonFtInfo {
 
 	@Id
@@ -44,6 +46,26 @@ public class RtgsInfoOutward extends RtgsCommon {
 
 	@Column(name = "VAT", nullable = true, precision = 10, scale = 2)
 	protected double vat;
+
+	@Override
+	public Double getCommissionI() {
+		return commission;
+	}
+
+	@Override
+	public void setCommissionI(Double commision) {
+		this.commission = commision;
+	}
+
+	@Override
+	public Double getVatI() {
+	return vat;
+	}
+
+	@Override
+	public void setVatI(Double vat) {
+		this.vat = vat;
+	}
 
 	// @Column(name = "ibas_id", length = 100, nullable = true)
 	// protected String ibasId;

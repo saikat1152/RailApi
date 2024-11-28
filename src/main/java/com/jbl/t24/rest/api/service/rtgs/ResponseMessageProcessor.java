@@ -31,7 +31,12 @@ public class ResponseMessageProcessor {
 		// }
 
 		String additionalInfo_2nd_part = spiltData.length > 2 ? spiltData[2] : "NONE";
-		String additionalInfo = spiltData[1].split("=")[1] + " : " + additionalInfo_2nd_part;
+		String additionalInfo = "";
+		try {
+			additionalInfo = spiltData[1].split("=")[1] + " : " + additionalInfo_2nd_part;
+		} catch (Exception e) {
+			additionalInfo = spiltData[1];
+		}
 
 		switch (statusFlag) {
 			case "1":

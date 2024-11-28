@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.jbl.t24.rest.api.common.model.FtTxResponse;
+import com.jbl.t24.rest.api.common.model.IWithVatCommission;
 import com.jbl.t24.rest.api.common.model.JwtErrorResponse;
 import com.jbl.t24.rest.api.common.model.ResponseMsgProcessorWrapper;
 import com.jbl.t24.rest.api.common.model.FtTxResponse.FtTxResponseBuilder;
@@ -18,9 +21,8 @@ import com.jbl.t24.rest.api.enums.FtStatus;
 import com.jbl.t24.rest.api.enums.RTGSCategory;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
 import com.jbl.t24.rest.api.enums.utils.ErrorMessageGenerator;
-import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 import com.jbl.t24.rest.api.enums.utils.TimeStampConverter;
-import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
+import com.jbl.t24.rest.api.exception.TransactionSaveException;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineInInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineOutInfo;
@@ -34,6 +36,7 @@ import com.jbl.t24.rest.api.model.rtgs.RtgsReconIndividual;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Map;
 
@@ -56,6 +59,7 @@ public class FtHandlerServiceN {
 	@Value("${channel.name.trx}")
 	private String enquiryChannel;
 	public static final BigDecimal RTGS_OUWARD_PACS8_MIN_VALUE = new BigDecimal(100000);
+
 	public ResponseEntity<?> handleFtTransaction(String requestOFS, RtgsCommon ftInfo, String uniqueId)
 			throws Exception {
 
@@ -74,8 +78,11 @@ public class FtHandlerServiceN {
 			ftSave = (RtgsInfoOutward) ftInfo;
 
 			BigDecimal debitAmount = new BigDecimal(ftInfo.getDebitAmountStr());
-			if (ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTBDT.getText())
-					&& debitAmount.compareTo(RTGS_OUWARD_PACS8_MIN_VALUE) < 0) {
+
+			if (((ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTBDT.getText())
+			|| ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTEJNT.getText()))
+			&& debitAmount.compareTo(RTGS_OUWARD_PACS8_MIN_VALUE) < 0))
+			{
 				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
 						ResponseStatus.FOURZ26.getText(), ResponseStatus.FOURZ26.getValue());
 				return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
@@ -102,7 +109,7 @@ public class FtHandlerServiceN {
 		} else if (ftInfo instanceof RtgsReconIndividual) {
 			ftSave = new RtgsReconIndividual();
 			ftExist = new RtgsReconIndividual();
-		} 
+		}
 
 		TccUtility tccUtility = new TccUtility(transactionChannel);
 
@@ -185,10 +192,16 @@ public class FtHandlerServiceN {
 
 					FtTxResponseBuilder ftResponse = FtTxResponse.builder();
 
-					ftResponse.status(HttpStatus.OK).uniqueRTGS(uniqueId).ftRef(cbsSuccessTrData.get("cbsFtNumber"))
+					ftResponse.status(HttpStatus.OK)
+					.uniqueRTGS(uniqueId)
+					.ftRef(cbsSuccessTrData.get("cbsFtNumber"))
 							.message(cbsSuccessTrData.get("message"))
 							.responseCode(Integer.parseInt(cbsSuccessTrData.get("responseCode")))
-							.timestamp(TimeStampConverter.getCbsHittingTimeStamp(cbsSuccessTrData.get("issueDate")));
+							.timestamp(TimeStampConverter.getCbsHittingTimeStamp(cbsSuccessTrData.get("issueDate")))
+							.commission(Double.parseDouble(cbsSuccessTrData.get("commission")))
+							.vat(Double.parseDouble(cbsSuccessTrData.get("vat")))
+							.localAmountBdt(cbsSuccessTrData.get("localAmountBdt"));
+							
 
 					String ftResponseStr = Mapper.mapToJsonString(ftResponse.build());
 
@@ -197,7 +210,14 @@ public class FtHandlerServiceN {
 					ftExist.setFtResponseStr(ftResponseStr);
 					ftExist.setCbsFtno(cbsSuccessTrData.get("cbsFtNumber"));
 					ftExist.setOfsResponse(cbsSuccessTrData.get("ofsResponse"));
-					ftExist.setDebitAmount(Double.parseDouble(cbsSuccessTrData.get("ammount")));
+					// ftExist.setDebitAmount(Double.parseDouble(cbsSuccessTrData.get("ammount")));
+					ftExist.setDebitAmountStr(cbsSuccessTrData.get("ammount"));
+
+					if(ftExist instanceof IWithVatCommission){
+						IWithVatCommission withVatCommission = (IWithVatCommission) ftExist;
+						withVatCommission.setCommissionI(Double.parseDouble(cbsSuccessTrData.get("commission")));
+						withVatCommission.setVatI(Double.parseDouble(cbsSuccessTrData.get("vat")));
+					}
 
 					service.save(ftExist);
 
@@ -218,7 +238,9 @@ public class FtHandlerServiceN {
 		// System.out.println(ftSave.toString());
 		ftSave.setStatus(FtStatus.PENDING.getValue());
 		ftSave.setOfsRequest(requestOFS);
+
 		service.save(ftSave);
+
 		logger.info("FT saved as PENDING");
 
 		String responseData = tccUtility.sendRequest(requestOFS);
@@ -284,13 +306,38 @@ public class FtHandlerServiceN {
 			}
 
 			try {
-
+				ftSave.setOfsResponse(responseData);
 				service.save(ftSave);
 			} catch (Exception e) {
-				logger.info("-----::ERROR CHECKING----::" + ftSave);
+				ftSave.setStatus(FtStatus.FAILED.getValue());
+				ftSave.setOfsResponse("");
+
+				service.save(ftSave);
+
+				logger.info("-----::ERROR CHECKING----:: {} {}", ftSave.getTxCategory(), uniqueId);
 				logger.error(e.getMessage(), e);
 				logger.info("JPA Error Occured During Save: " + e.getMessage());
+
+				Throwable rootCause = e.getCause().getCause();
+				if (rootCause instanceof SQLException) {
+					SQLException hibernateEx =
+							(SQLException) rootCause;
+	
+					throw new TransactionSaveException(
+							"Data integrity violation",
+							hibernateEx.getMessage(),
+							hibernateEx.getSQLState(),
+							hibernateEx.getMessage()
+					);
 			}
+
+			throw new TransactionSaveException(
+                    "Unexpected database error",
+                    null,
+                    null,
+                    e.getMessage()
+            );
+		}
 
 			logger.info("FT Data Saved");
 			logger.info("Ft Handle Service Finished");

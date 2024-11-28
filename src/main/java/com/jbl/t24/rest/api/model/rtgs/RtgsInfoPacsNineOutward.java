@@ -11,6 +11,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.Audited;
 
+import com.jbl.t24.rest.api.common.model.IWithVatCommission;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +28,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @Audited
-public class RtgsInfoPacsNineOutward extends RtgsCommon {
+public class RtgsInfoPacsNineOutward extends RtgsCommon implements IWithVatCommission{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,5 +73,25 @@ public class RtgsInfoPacsNineOutward extends RtgsCommon {
 
 	@Column(name = "ref_unique_id", unique = true, nullable = true, length = 23)
 	protected String refUniqueOutwardRtgsId;
+
+	@Override
+	public Double getCommissionI() {
+		return commission;
+	}
+
+	@Override
+	public void setCommissionI(Double commision) {
+		this.commission = commision;
+	}
+
+	@Override
+	public Double getVatI() {
+	return vat;
+	}
+
+	@Override
+	public void setVatI(Double vat) {
+		this.vat = vat;
+	}
 
 }

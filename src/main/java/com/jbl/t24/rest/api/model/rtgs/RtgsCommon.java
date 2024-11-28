@@ -43,9 +43,13 @@ public class RtgsCommon extends CommonFtInfo{
     public boolean isEqual(RtgsCommon ftInfo){
 		if(this.debitAccNo.equals(ftInfo.debitAccNo)
 		&& this.creditAccNo.equals(ftInfo.creditAccNo)
-		&&DoubleEqualityCheck.isEqual(this.debitAmount, ftInfo.debitAmount)){
+		&& this.debitAmountStr.equals(ftInfo.debitAmountStr)
+		// &&DoubleEqualityCheck.isEqual(this.debitAmount, ftInfo.debitAmount)
+		){
+			System.out.println("debit amount " + ftInfo.debitAmountStr + " ll: "+ this.debitAmountStr);
 			return true;
 		}
+		System.out.println("debit amount " + ftInfo.debitAmountStr + " ll: "+ this.debitAmountStr);
 		return false;
 	}
 }

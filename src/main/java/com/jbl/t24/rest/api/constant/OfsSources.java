@@ -76,7 +76,8 @@ public class OfsSources {
 
 	public static final String OFS_SIGN_CHECK_ENQUIRY = "ENQUIRY.SELECT,,,IMAGE.VIEW.SIGN,IMAGE.REFERENCE:EQ=" + "%s";
 
-	public static final String UNIQUE_ID_ENQ_STRING = "ENQUIRY.SELECT,,,E.JBL.BBR.UNIQUE.ID,JBL.BBR.ID:EQ=" + "%s";
+	// public static final String UNIQUE_ID_ENQ_STRING = "ENQUIRY.SELECT,,,E.JBL.BBR.UNIQUE.ID,JBL.BBR.ID:EQ=" + "%s";
+	public static final String UNIQUE_ID_ENQ_STRING = "ENQUIRY.SELECT,,,E.RES.RTGS.UNIQUE.ID,JBL.BBR.ID:EQ=" + "%s";
 
 	public static final String REVERSE_OFS_STRING ="FUNDS.TRANSFER,RTGS.ONLY/R/PROCESS//0,BD001";
 }

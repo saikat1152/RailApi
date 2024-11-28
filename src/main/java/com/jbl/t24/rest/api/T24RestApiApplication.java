@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 //@EnableCircuitBreaker
 //@EnableHystrixDashboard
-@EnableAsync
+// @EnableAsync
 public class T24RestApiApplication {
 
 	public static void main(String[] args) {

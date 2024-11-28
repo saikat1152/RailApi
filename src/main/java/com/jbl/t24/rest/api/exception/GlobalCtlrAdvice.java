@@ -48,7 +48,9 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -295,7 +297,6 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler({ Exception.class })
 	public ResponseEntity<Object> handleAll(final Exception ex, final WebRequest request) {
-		
 
 		Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
 		final JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
@@ -304,6 +305,24 @@ public class GlobalCtlrAdvice extends ResponseEntityExceptionHandler {
 		logger.error("Global Control Error:: " + ErrorMessageGenerator(ex).toString());
 		ex.printStackTrace();
 		return new ResponseEntity<Object>(jwtErrorResponse, new HttpHeaders(), jwtErrorResponse.getStatus());
+	}
+
+	// Database Exception Handling
+
+	@ExceptionHandler(TransactionSaveException.class)
+	public ResponseEntity<?> handleDatabaseOperationException(TransactionSaveException ex) {
+
+		Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
+		final JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
+				ex.getMessage(), ResponseStatus.FIVEZ28.getValue(), timestamp, ex.getDetails());
+
+		logger.error("Global Control Cause:: {} ", ex.getDetails());
+		logger.error("Global Control Error:: {} ", ErrorMessageGenerator(ex).toString());
+
+		ex.printStackTrace();
+		return new ResponseEntity<Object>(jwtErrorResponse, new HttpHeaders(), jwtErrorResponse.getStatus());
+
+		// return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
 }

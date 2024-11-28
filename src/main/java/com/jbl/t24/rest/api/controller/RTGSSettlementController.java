@@ -23,7 +23,6 @@ import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementInInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineInInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementNineOutInfo;
 import com.jbl.t24.rest.api.model.rtgs.RTGSSettlementOutInfo;
-import com.jbl.t24.rest.api.service.rtgs.FtHandlerService;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
 import com.jbl.t24.rest.api.service.rtgs.OfsMessageGenerator;
 import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;

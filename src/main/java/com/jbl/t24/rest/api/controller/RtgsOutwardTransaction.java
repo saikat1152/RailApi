@@ -48,7 +48,7 @@ public class RtgsOutwardTransaction {
 	private Boolean useFixedIssueDate;
 	@Value("${fixed.issue.date}")
 	private String fixedIssueDate;
-	@PostMapping(value = "/outward", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = {"/outward", "/ejanata-out"}, consumes = MediaType.APPLICATION_JSON_VALUE)
 
 	public ResponseEntity<?> rtgsTrasferOutward(@Valid @RequestBody RtgsInfoOutward rtgsInfoOut,
 			HttpServletRequest httpServletRequest) throws Exception {

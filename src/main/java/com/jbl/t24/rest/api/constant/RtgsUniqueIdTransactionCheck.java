@@ -50,6 +50,9 @@ public class RtgsUniqueIdTransactionCheck {
 		processedData.put("creditAccNo", mainData[4]);
 		processedData.put("ammount", mainData[5]);
 		processedData.put("issueDate", mainData[6]);
+		processedData.put("commission", mainData[7].isBlank()? "0.0" : mainData[7].substring(3));
+		processedData.put("vat", mainData[8].isBlank()?"0.0" : mainData[8].substring(3));
+		processedData.put("localAmountBdt", mainData[9]);
 		processedData.put("ofsResponse", responseData);
 		return processedData;
 
