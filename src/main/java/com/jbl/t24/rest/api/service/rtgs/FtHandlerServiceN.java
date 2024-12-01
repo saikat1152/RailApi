@@ -219,6 +219,15 @@ public class FtHandlerServiceN {
 						withVatCommission.setVatI(Double.parseDouble(cbsSuccessTrData.get("vat")));
 					}
 
+					// if (ftInfo instanceof RtgsInfoOutward) {
+					// 	((RtgsInfoOutward) ftSave).setCommission(Double.parseDouble(cbsSuccessTrData.get("commission")));
+					// 	((RtgsInfoOutward) ftSave).setVat(Double.parseDouble(cbsSuccessTrData.get("vat")));
+		
+					// } else if (ftInfo instanceof RtgsInfoPacsNineOutward) {
+					// 	((RtgsInfoPacsNineOutward) ftSave).setCommission(Double.parseDouble(cbsSuccessTrData.get("commission")));
+					// 	((RtgsInfoPacsNineOutward) ftSave).setVat(Double.parseDouble(cbsSuccessTrData.get("vat")));
+					// }
+
 					service.save(ftExist);
 
 					logger.info("FT Transaction Data Saved");

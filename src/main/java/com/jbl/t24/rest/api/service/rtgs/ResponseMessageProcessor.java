@@ -16,10 +16,10 @@ import com.jbl.t24.rest.api.enums.utils.TimeStampConverter;
 
 @Service
 public class ResponseMessageProcessor {
-
-	ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
-
+	
 	public ResponseMsgProcessorWrapper handleResponseOfs(String responseData, int reverseFlag) throws ParseException {
+
+		ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
 
 		String[] spiltData = responseData.split(",");
 		String[] mapSplitDataArray = Arrays.copyOfRange(spiltData, 1, spiltData.length);
