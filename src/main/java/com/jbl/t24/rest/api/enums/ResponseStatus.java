@@ -34,6 +34,7 @@ public enum ResponseStatus {
 	FOURZ31(431, "Invalid PACS Nine Outwarad Reference Number is provided!"),
 	FOURZ32(432, "INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS!"),
 	FOURZ33(433, "Resubmitted data mismatched"),
+	FOURZ34(434, "Backdated Reversal is not allowed"),
 	
 	
 

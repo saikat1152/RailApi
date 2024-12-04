@@ -29,6 +29,7 @@ import com.jbl.t24.rest.api.config.Mapper;
 import com.jbl.t24.rest.api.constant.OfsSources;
 import com.jbl.t24.rest.api.enums.FtStatus;
 import com.jbl.t24.rest.api.enums.ResponseStatus;
+import com.jbl.t24.rest.api.enums.utils.TimeStampValidation;
 import com.jbl.t24.rest.api.model.rtgs.CommonFtInfo;
 import com.jbl.t24.rest.api.model.rtgs.RtgsCommon;
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoOutward;
@@ -83,6 +84,10 @@ public class ReverseTxController {
 		if (rtgsOutward == null) {
 			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ29.getText(),
 					ResponseStatus.FOURZ29.getValue());
+			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
+		} else if (TimeStampValidation.isWithinTimestampRange(rtgsOutward.getIssueDate(), currentHIttingTimeStamp)) {
+			JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK, ResponseStatus.FOURZ34.getText(),
+					ResponseStatus.FOURZ34.getValue());
 			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 		}
 		if (rtgsOutward.getStatus() == FtStatus.REVERSED.getValue()) {
