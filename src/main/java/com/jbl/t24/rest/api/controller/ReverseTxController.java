@@ -123,10 +123,12 @@ public class ReverseTxController {
 
 		rtgsOutward.setStatus(wrapper.getFtStatus());
 		// rtgsOutward.setReverseDate(new Timestamp(System.currentTimeMillis()));
+		rtgsOutward.setIssueDate(currentHIttingTimeStamp);
 		rtgsOutward.setReverseDate(currentHIttingTimeStamp);
+		rtgsOutward.setOfsResponse(responseData);
 
 		ftResponse.timestamp(currentHIttingTimeStamp);
-		ftResponse.reverseTimestamp(currentHIttingTimeStamp);
+		ftResponse.reverseTimestamp(wrapper.getCbsHittingTime());
 
 		String ftResponseStr = Mapper.mapToJsonString(ftResponse.build());
 		;

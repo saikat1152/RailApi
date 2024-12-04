@@ -175,7 +175,11 @@ public class RtgsInfoService {
 		if (flag.equals(RTGS_PACS08_REVERSE_TRANSACTION)) {
 			return infoOutwardRepository.findByCbsFtno(cbsFtNo);
 		} else if(flag.equals(RTGS_PACS09_REVERSE_TRANSACTION)) {
-			return infoPacsNineOutwardRepository.findByCbsFtno(cbsFtNo);
+			RtgsCommon pacs09Outward = infoPacsNineOutwardRepository.findByCbsFtno(cbsFtNo);
+			if (pacs09Outward != null) {
+				return pacs09Outward;
+			}
+			return infoPacsNineInwardRepository.findByCbsFtno(cbsFtNo);
 		} else {
 			// TODO: Error Msg Handling
 			logger.error("RtgsInfoService:  Version should be 8 0r 9 - "+ getClass());
