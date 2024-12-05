@@ -42,8 +42,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
 		}
 
 		if (authException instanceof InsufficientAuthenticationException) {
-			responsecode = ResponseStatus.FOURZ3.getValue();
-			message = ResponseStatus.FOURZ3.getText();
+			responsecode = ResponseStatus.FIVEZ30.getValue();
+			message = ResponseStatus.FIVEZ30.getText();
 		}
 
 		if (authException instanceof DisabledException) {

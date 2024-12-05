@@ -9,7 +9,8 @@ public enum ResponseStatus {
 	TWOZ6(206, "Already Reversed! Duplicate Unique Identifier!"),
 
 	FOURZ0(400, "Invalid Input Parameter Request!"), FOURZ1(401, "Username or Password doesn't match!"),
-	FOURZ2(402, "Authorization Key/Token Mismatch!"), FOURZ3(403, "Token Expired!"),
+	FOURZ2(402, "Authorization Key/Token Mismatch!"), 
+	// FOURZ3(403, "Token Expired!"),
 	FOURZ4(404, "The TOKEN is not valid!"), FOURZ5(405, "Method Not Allowed!"),
 	FOURZ6(406, "Please check authorization header value! Missing value or Mismatch format!"),
 	FOURZ7(407, "Credit A/C number mismatch or not found!"), 
@@ -51,6 +52,7 @@ public enum ResponseStatus {
 	FIVEZ27(527, "Cannot Do New CBS Transaction Beacause An Transaction Is On Already Processing!"),
 	// FIVEZ28(528, "Resubmitted data mismatched"),
 	FIVEZ28(528, "Unexpect JDBC Error Occured!"),
+	FIVEZ30(530, "Token Expired!"),
 	FIVEZ99(599, "CBS Transaction Error");
 
 	private final int value;
