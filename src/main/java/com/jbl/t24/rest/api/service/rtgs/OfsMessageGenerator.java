@@ -2,6 +2,10 @@ package com.jbl.t24.rest.api.service.rtgs;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
@@ -38,8 +42,15 @@ public class OfsMessageGenerator {
 		String creditAccNo = settlementOutInfo.getCreditAccNo();
 		String debitDetails = settlementOutInfo.getDebitDetails();
 		String creditDetails = settlementOutInfo.getCreditDetails();
-		String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
-		Timestamp t = new Timestamp(new Date().getTime());
+		// String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
+		// Timestamp t = new Timestamp(new Date().getTime());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+                                                       .withZone(ZoneId.systemDefault());
+		String issueDate = formatter.format(Instant.now());													   
+		
+		// Timestamp t = new Timestamp(new Date().getTime());
+		Instant instant = Instant.now();
+		Timestamp t =Timestamp.from(instant);
 		settlementOutInfo.setIssueDate(t);
 
 		Objects.requireNonNull(uniqueFtId);
@@ -96,8 +107,15 @@ public class OfsMessageGenerator {
 		String creditAccNo = ftInfo.getCreditAccNo();
 		String debitDetails = ftInfo.getDebitDetails();
 		String creditDetails = ftInfo.getCreditDetails();
-		String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
-		Timestamp t = new Timestamp(new Date().getTime());
+
+		
+		// String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+                                                       .withZone(ZoneId.systemDefault());
+		String issueDate = formatter.format(Instant.now());	
+		// Timestamp t = new Timestamp(new Date().getTime());
+		Instant instant = Instant.now();
+		Timestamp t =Timestamp.from(instant);
 		ftInfo.setIssueDate(t);
 
 		String txCategory = ftInfo.getTxCategory();

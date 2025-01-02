@@ -60,7 +60,7 @@ public class VerificationController {
 	SignQueryInfoService signQueryInfoService;
 
 	// @Value("${test.image.path}")
-	@Value("${live.image.path}")
+	@Value("${image.path}")
 	private String ROOT_PATH;
 
 	@Value("${channel.name.trx}")

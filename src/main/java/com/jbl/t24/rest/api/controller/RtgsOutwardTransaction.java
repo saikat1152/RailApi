@@ -2,6 +2,10 @@ package com.jbl.t24.rest.api.controller;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
@@ -73,9 +77,18 @@ public class RtgsOutwardTransaction {
 		boolean isFc = rtgsInfoOut.getCurrency().contains("BDT") ? false : true;
 
 		rtgsInfoOut.setIsFc(isFc);
-		String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
-		Timestamp t = new Timestamp(new Date().getTime());
+		
+		// String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+                                                       .withZone(ZoneId.systemDefault());
+		String issueDate = formatter.format(Instant.now());													   
+		
+		// Timestamp t = new Timestamp(new Date().getTime());
+		Instant instant = Instant.now();
+		Timestamp t =Timestamp.from(instant);
 		rtgsInfoOut.setIssueDate(t);
+
+		System.out.println("----- issue date ----?" + issueDate);
 
 		Objects.requireNonNull(uniqueFtId);
 		Objects.requireNonNull(coCode);

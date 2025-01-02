@@ -1,6 +1,7 @@
 package com.jbl.t24.rest.api.common.model;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class FtResponse {
 	private String additionalInfo;
 
 	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss", timezone = "GMT+06")
-	private Timestamp timestamp = new Timestamp(new Date().getTime());
+	private Timestamp timestamp = Timestamp.from(Instant.now());
 
 	public HttpStatus getStatus() {
 		return status;

@@ -2,7 +2,10 @@ package com.jbl.t24.rest.api.controller;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
@@ -73,8 +76,17 @@ public class RtgsOutwardPacsNineTransaction {
 		String partyName = rtgsInfoPacsNineOut.getPartyName();
 		String instructionInfo = rtgsInfoPacsNineOut.getInstructionInfo();
 		String tradeFinanceInfo = rtgsInfoPacsNineOut.getTradeFinanceInfo();
-		String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
-		Timestamp t = new Timestamp(new Date().getTime());
+		
+		// String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
+		// Timestamp t = new Timestamp(new Date().getTime());
+
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+                                                       .withZone(ZoneId.systemDefault());
+		String issueDate = formatter.format(Instant.now());													   
+		
+		// Timestamp t = new Timestamp(new Date().getTime());
+		Instant instant = Instant.now();
+		Timestamp t =Timestamp.from(instant);
 		rtgsInfoPacsNineOut.setIssueDate(t);
 
 		Objects.requireNonNull(uniqueFtId);

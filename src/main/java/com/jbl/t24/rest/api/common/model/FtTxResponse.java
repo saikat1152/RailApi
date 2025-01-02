@@ -1,6 +1,7 @@
 package com.jbl.t24.rest.api.common.model;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class FtTxResponse {
 
 	// @JsonFormat(pattern = "E, dd MMM Y HH:mm:ss z", timezone = "GMT+06")
 	@JsonFormat(pattern ="yyyy-MM-dd HH:mm:ss", timezone = "GMT+06")
-	private Timestamp timestamp = new Timestamp(new Date().getTime());
+	private Timestamp timestamp = Timestamp.from(Instant.now());
 
 	@JsonFormat(pattern ="yyyy-MM-dd HH:mm:ss", timezone = "GMT+06")
 	private Timestamp reverseTimestamp;

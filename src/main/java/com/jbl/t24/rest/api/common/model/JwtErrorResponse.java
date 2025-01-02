@@ -1,6 +1,7 @@
 package com.jbl.t24.rest.api.common.model;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,7 @@ public class JwtErrorResponse {
 	private int responseCode;
 
 	@JsonFormat(pattern ="yy-MM-dd HH:mm:ss", timezone = "GMT+06")
-	private Timestamp timestamp = new Timestamp(new Date().getTime());
+	private Timestamp timestamp = Timestamp.from(Instant.now());
 	private List<String> errors;
 
 	public JwtErrorResponse(HttpStatus status, String message, int responseCode) {
