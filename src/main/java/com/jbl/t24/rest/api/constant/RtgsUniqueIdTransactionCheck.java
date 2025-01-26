@@ -6,16 +6,20 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.jbl.t24.rest.api.config.Mapper;
+import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
 @Service
 public class RtgsUniqueIdTransactionCheck {
 
-	
+	Logger logger = LogManager.getLogger(RtgsUniqueIdTransactionCheck.class);
+
 	@Value("${channel.name.trx}")
 	private String transactionChannel;
 	@Value("${channel.name.enq}")
@@ -26,6 +30,7 @@ public class RtgsUniqueIdTransactionCheck {
 			TccUtility tccUtility = new TccUtility(enquiryChannel);
 			String requestOFS = String.format(OfsSources.UNIQUE_ID_ENQ_STRING, uniqueTransactionId);
 			String responseData = tccUtility.sendRequest(requestOFS);
+			logger.info("Unique ID Check response data:: {}",responseData);
 			if (responseData.startsWith("40")) {
 				return responseData;
 			} else {

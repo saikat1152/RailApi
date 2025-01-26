@@ -16,7 +16,7 @@ import com.jbl.t24.rest.api.enums.utils.TimeStampConverter;
 
 @Service
 public class ResponseMessageProcessor {
-	
+
 	public ResponseMsgProcessorWrapper handleResponseOfs(String responseData, int reverseFlag) throws ParseException {
 
 		ResponseMsgProcessorWrapper wrapper = new ResponseMsgProcessorWrapper();
@@ -40,13 +40,29 @@ public class ResponseMessageProcessor {
 
 		switch (statusFlag) {
 			case "1":
+				// Map<String, String> splitDataMap = Arrays.stream(mapSplitDataArray)
+				// .map(s -> s.split("="))
+				// .collect(Collectors.toMap(
+				// // arr -> arr[0].split(":1:1")[0],
+				// arr -> arr[0].split(":\\d+:")[0],
+				// arr -> arr[1],
+				// (e1, e2) -> e1,
+				// HashMap::new));
 				Map<String, String> splitDataMap = Arrays.stream(mapSplitDataArray)
 						.map(s -> s.split("="))
+						// .peek(arr -> System.out.println("Split Array: " + Arrays.toString(arr))) // Debug the split
+						.filter(arr -> arr.length == 2)															// result
 						.collect(Collectors.toMap(
-								// arr -> arr[0].split(":1:1")[0],
-								arr -> arr[0].split(":\\d+:")[0],
-								arr -> arr[1],
-								(e1, e2) -> e1,
+								arr -> {
+									String key = arr[0].split(":\\d+:")[0];
+									// System.out.println("Key: " + key); // Debug the key
+									return key;
+								},
+								arr -> {
+									// System.out.println("Value: " + arr[1]); // Debug the value
+									return arr[1];
+								},
+								(e1, e2) -> e1, // Handle duplicate keys
 								HashMap::new));
 				String ftRef = firstPart[0];
 				String uniqueOperationTransactionId = spiltData[20].split("=")[1];

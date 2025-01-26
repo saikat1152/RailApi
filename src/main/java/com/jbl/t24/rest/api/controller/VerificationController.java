@@ -67,6 +67,7 @@ public class VerificationController {
 	private String transactionChannel;
 	@Value("${channel.name.enq}")
 	private String enquiryChannel;
+
 	@PostMapping(value = "/sign-check", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> signatureImage(@Valid @RequestBody SignatureQueryInfo signatureQueryInfo,
 			HttpServletRequest httpServletRequest) throws Exception {
@@ -89,7 +90,7 @@ public class VerificationController {
 		String requestOFS = String.format(OfsSources.OFS_SIGN_CHECK_ENQUIRY, accountNo);
 		String responseData = tccUtility.sendRequest(requestOFS);
 
-		logger.info("---Sign Query Response Data:----" +responseData);
+		logger.info("---Sign Query Response Data:----" + responseData);
 
 		if (responseData.startsWith("40")) {
 			JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(responseData);
@@ -241,11 +242,11 @@ public class VerificationController {
 			jwtErrorResponse.setMessage("JBOSS server is unreacheable");
 			accountQueryInfo.setStatus("3");
 			logger.info("Account Query Error " + jwtErrorResponse.getMessage() + "account No:  " + accountNo);
-			
-			String response= Mapper.mapToJsonString(jwtErrorResponse);
+
+			String response = Mapper.mapToJsonString(jwtErrorResponse);
 			accountQueryInfo.setResponseData(response);
 
-			accountQueryInfoService.save(accountQueryInfo);			
+			accountQueryInfoService.save(accountQueryInfo);
 			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 		} else {
 			try {
@@ -288,7 +289,7 @@ public class VerificationController {
 						accountInfo.setAccountCatCode(secondPart[19]);
 
 						// if(secondPart.length >= 21){
-							if(secondPart[20].equals("CLOSED")){
+						if (secondPart[20].equals("CLOSED")) {
 							// boolean isClosed = secondPart[20].equals("CLOSED");
 							accountInfo.setClosed(true);
 						}
@@ -357,7 +358,8 @@ public class VerificationController {
 
 				AccountInfoNotFound accountInfoNotFound = new AccountInfoNotFound(ResponseStatus.FIVEZ0.getText(),
 						ResponseStatus.FIVEZ0.getValue(), false);
-				logger.info("Account Query Error " + jwtErrorResponse.getMessage());
+				logger.info("Verification Response :: {}" + responseData);
+				logger.error("Account Query Error " + jwtErrorResponse.getMessage());
 				String response = Mapper.mapToJsonString(jwtErrorResponse);
 				accountQueryInfo.setResponseData(response);
 

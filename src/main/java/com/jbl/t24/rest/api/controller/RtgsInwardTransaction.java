@@ -50,17 +50,24 @@ public class RtgsInwardTransaction {
 		rtgsInfoInward.setTxType(txType);
 		rtgsInfoInward.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
 		// String txType = rtgsInfoInward.getTxType();
-		String debitAccNo = rtgsInfoInward.getDebitAccNo();
+		String debitAccNo = rtgsInfoInward.getDebitAccNo().trim();
 		String currency = rtgsInfoInward.getCurrency();
 		// String debitAmount = String.format("%.2f", rtgsInfoInward.getDebitAmount());
-		String debitAmount = rtgsInfoInward.getDebitAmountStr();
-		String creditAccNo = rtgsInfoInward.getCreditAccNo();
-		String debitDetails = rtgsInfoInward.getDebitDetails();
-		String creditDetails = rtgsInfoInward.getCreditDetails();
+		String debitAmount = rtgsInfoInward.getDebitAmountStr().trim();
+		String creditAccNo = rtgsInfoInward.getCreditAccNo().trim();
+		String debitDetails = rtgsInfoInward.getDebitDetails().trim();
+		String creditDetails = rtgsInfoInward.getCreditDetails().trim();
 		String commissionCode = rtgsInfoInward.getCommissionCode();
 		String commissionType = rtgsInfoInward.getCommissionType();
 		boolean isFc = rtgsInfoInward.getCurrency().contains("BDT") ? false : true;
 		rtgsInfoInward.setIsFc(isFc);
+
+		rtgsInfoInward.setDebitAmountStr(debitAmount);
+		rtgsInfoInward.setDebitAccNo(debitAccNo);
+		rtgsInfoInward.setCreditAccNo(creditAccNo);
+		rtgsInfoInward.setDebitDetails(debitDetails);
+		rtgsInfoInward.setCreditDetails(creditDetails);
+
 		// String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
 		// Timestamp t = new Timestamp(new Date().getTime());
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd")

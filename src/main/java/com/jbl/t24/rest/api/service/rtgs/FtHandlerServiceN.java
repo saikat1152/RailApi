@@ -80,9 +80,8 @@ public class FtHandlerServiceN {
 			BigDecimal debitAmount = new BigDecimal(ftInfo.getDebitAmountStr());
 
 			if (((ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTBDT.getText())
-			|| ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTEJNT.getText()))
-			&& debitAmount.compareTo(RTGS_OUWARD_PACS8_MIN_VALUE) < 0))
-			{
+					|| ftInfo.getTxCategory().equals(RTGSCategory.RTGSPACS8OUTEJNT.getText()))
+					&& debitAmount.compareTo(RTGS_OUWARD_PACS8_MIN_VALUE) < 0)) {
 				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
 						ResponseStatus.FOURZ26.getText(), ResponseStatus.FOURZ26.getValue());
 				return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
@@ -193,15 +192,14 @@ public class FtHandlerServiceN {
 					FtTxResponseBuilder ftResponse = FtTxResponse.builder();
 
 					ftResponse.status(HttpStatus.OK)
-					.uniqueRTGS(uniqueId)
-					.ftRef(cbsSuccessTrData.get("cbsFtNumber"))
+							.uniqueRTGS(uniqueId)
+							.ftRef(cbsSuccessTrData.get("cbsFtNumber"))
 							.message(cbsSuccessTrData.get("message"))
 							.responseCode(Integer.parseInt(cbsSuccessTrData.get("responseCode")))
 							.timestamp(TimeStampConverter.getCbsHittingTimeStamp(cbsSuccessTrData.get("issueDate")))
 							.commission(Double.parseDouble(cbsSuccessTrData.get("commission")))
 							.vat(Double.parseDouble(cbsSuccessTrData.get("vat")))
 							.localAmountBdt(cbsSuccessTrData.get("localAmountBdt"));
-							
 
 					String ftResponseStr = Mapper.mapToJsonString(ftResponse.build());
 
@@ -213,19 +211,23 @@ public class FtHandlerServiceN {
 					// ftExist.setDebitAmount(Double.parseDouble(cbsSuccessTrData.get("ammount")));
 					ftExist.setDebitAmountStr(cbsSuccessTrData.get("ammount"));
 
-					if(ftExist instanceof IWithVatCommission){
+					if (ftExist instanceof IWithVatCommission) {
 						IWithVatCommission withVatCommission = (IWithVatCommission) ftExist;
 						withVatCommission.setCommissionI(Double.parseDouble(cbsSuccessTrData.get("commission")));
 						withVatCommission.setVatI(Double.parseDouble(cbsSuccessTrData.get("vat")));
 					}
 
 					// if (ftInfo instanceof RtgsInfoOutward) {
-					// 	((RtgsInfoOutward) ftSave).setCommission(Double.parseDouble(cbsSuccessTrData.get("commission")));
-					// 	((RtgsInfoOutward) ftSave).setVat(Double.parseDouble(cbsSuccessTrData.get("vat")));
-		
+					// ((RtgsInfoOutward)
+					// ftSave).setCommission(Double.parseDouble(cbsSuccessTrData.get("commission")));
+					// ((RtgsInfoOutward)
+					// ftSave).setVat(Double.parseDouble(cbsSuccessTrData.get("vat")));
+
 					// } else if (ftInfo instanceof RtgsInfoPacsNineOutward) {
-					// 	((RtgsInfoPacsNineOutward) ftSave).setCommission(Double.parseDouble(cbsSuccessTrData.get("commission")));
-					// 	((RtgsInfoPacsNineOutward) ftSave).setVat(Double.parseDouble(cbsSuccessTrData.get("vat")));
+					// ((RtgsInfoPacsNineOutward)
+					// ftSave).setCommission(Double.parseDouble(cbsSuccessTrData.get("commission")));
+					// ((RtgsInfoPacsNineOutward)
+					// ftSave).setVat(Double.parseDouble(cbsSuccessTrData.get("vat")));
 					// }
 
 					service.save(ftExist);
@@ -329,24 +331,21 @@ public class FtHandlerServiceN {
 
 				Throwable rootCause = e.getCause().getCause();
 				if (rootCause instanceof SQLException) {
-					SQLException hibernateEx =
-							(SQLException) rootCause;
-	
+					SQLException hibernateEx = (SQLException) rootCause;
+
 					throw new TransactionSaveException(
 							"Data integrity violation",
 							hibernateEx.getMessage(),
 							hibernateEx.getSQLState(),
-							hibernateEx.getMessage()
-					);
-			}
+							hibernateEx.getMessage());
+				}
 
-			throw new TransactionSaveException(
-                    "Unexpected database error",
-                    null,
-                    null,
-                    e.getMessage()
-            );
-		}
+				throw new TransactionSaveException(
+						"Unexpected database error",
+						null,
+						null,
+						e.getMessage());
+			}
 
 			logger.info("FT Data Saved");
 			logger.info("Ft Handle Service Finished");

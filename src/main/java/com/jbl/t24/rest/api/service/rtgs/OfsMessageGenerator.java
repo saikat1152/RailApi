@@ -36,12 +36,12 @@ public class OfsMessageGenerator {
 		String companyCode = settlementOutInfo.getCompanyCode() + coCode;
 		settlementOutInfo.setCompanyCode(companyCode);
 		String txType = settlementOutInfo.getTxType();
-		String debitAccNo = settlementOutInfo.getDebitAccNo();
+		String debitAccNo = settlementOutInfo.getDebitAccNo().trim();
 		String currency = settlementOutInfo.getCurrency();
-		String debitAmount = String.format("%.2f", settlementOutInfo.getDebitAmount());
-		String creditAccNo = settlementOutInfo.getCreditAccNo();
-		String debitDetails = settlementOutInfo.getDebitDetails();
-		String creditDetails = settlementOutInfo.getCreditDetails();
+		String debitAmount = String.format("%.2f", settlementOutInfo.getDebitAmount()).trim();
+		String creditAccNo = settlementOutInfo.getCreditAccNo().trim();
+		String debitDetails = settlementOutInfo.getDebitDetails().trim();
+		String creditDetails = settlementOutInfo.getCreditDetails().trim();
 		// String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
 		// Timestamp t = new Timestamp(new Date().getTime());
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
@@ -100,13 +100,19 @@ public class OfsMessageGenerator {
 		String companyCode = ftInfo.getCompanyCode() + coCode;
 		ftInfo.setCompanyCode(companyCode);
 		// String txType = ftInfo.getTxType();
-		String debitAccNo = ftInfo.getDebitAccNo();
+		String debitAccNo = ftInfo.getDebitAccNo().trim();
 		String currency = ftInfo.getCurrency();
 		// String debitAmount = String.format("%.2f", ftInfo.getDebitAmount());
-		String debitAmount = ftInfo.getDebitAmountStr();
-		String creditAccNo = ftInfo.getCreditAccNo();
-		String debitDetails = ftInfo.getDebitDetails();
-		String creditDetails = ftInfo.getCreditDetails();
+		String debitAmount = ftInfo.getDebitAmountStr().trim();
+		String creditAccNo = ftInfo.getCreditAccNo().trim();
+		String debitDetails = ftInfo.getDebitDetails().trim();
+		String creditDetails = ftInfo.getCreditDetails().trim();
+
+		ftInfo.setDebitAmountStr(debitAmount);
+		ftInfo.setDebitAccNo(debitAccNo);
+		ftInfo.setCreditAccNo(creditAccNo);
+		ftInfo.setDebitDetails(debitDetails);
+		ftInfo.setCreditDetails(creditDetails);
 
 		
 		// String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());

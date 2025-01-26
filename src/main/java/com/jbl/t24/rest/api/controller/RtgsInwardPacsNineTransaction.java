@@ -49,13 +49,13 @@ public class RtgsInwardPacsNineTransaction {
 		String txType = RtgsTransactionConstants.rtgsConstants.get(txCategory).getTransactionType();
 		rtgsInfoPacsNineIn.setTxType(txType);
 		rtgsInfoPacsNineIn.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
-		String debitAccNo = rtgsInfoPacsNineIn.getDebitAccNo();
+		String debitAccNo = rtgsInfoPacsNineIn.getDebitAccNo().trim();
 		String currency = rtgsInfoPacsNineIn.getCurrency();
 		// String debitAmount = String.format("%.2f", rtgsInfoPacsNineIn.getDebitAmount());
-		String debitAmount = rtgsInfoPacsNineIn.getDebitAmountStr();
-		String creditAccNo = rtgsInfoPacsNineIn.getCreditAccNo();
-		String debitDetails = rtgsInfoPacsNineIn.getDebitDetails();
-		String creditDetails = rtgsInfoPacsNineIn.getCreditDetails();
+		String debitAmount = rtgsInfoPacsNineIn.getDebitAmountStr().trim();
+		String creditAccNo = rtgsInfoPacsNineIn.getCreditAccNo().trim();
+		String debitDetails = rtgsInfoPacsNineIn.getDebitDetails().trim();
+		String creditDetails = rtgsInfoPacsNineIn.getCreditDetails().trim();
 		String commissionCode = rtgsInfoPacsNineIn.getCommissionCode();
 		String commissionType = rtgsInfoPacsNineIn.getCommissionType();
 		boolean isFc = rtgsInfoPacsNineIn.getCurrency().contains("BDT") ? false : true;
@@ -68,6 +68,12 @@ public class RtgsInwardPacsNineTransaction {
 		String tradeFinanceInfo = rtgsInfoPacsNineIn.getTradeFinanceInfo();
 		// String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
 		// Timestamp t = new Timestamp(new Date().getTime());
+
+		rtgsInfoPacsNineIn.setDebitAmountStr(debitAmount);
+		rtgsInfoPacsNineIn.setDebitAccNo(debitAccNo);
+		rtgsInfoPacsNineIn.setCreditAccNo(creditAccNo);
+		rtgsInfoPacsNineIn.setDebitDetails(debitDetails);
+		rtgsInfoPacsNineIn.setCreditDetails(creditDetails);
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
                                                        .withZone(ZoneId.systemDefault());

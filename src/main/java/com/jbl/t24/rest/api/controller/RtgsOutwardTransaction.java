@@ -25,6 +25,7 @@ import com.jbl.t24.rest.api.enums.utils.RtgsTransactionConstants;
 
 import com.jbl.t24.rest.api.model.rtgs.RtgsInfoOutward;
 import com.jbl.t24.rest.api.service.rtgs.FtHandlerServiceN;
+import com.jbl.t24.rest.api.service.rtgs.RtgsInfoService;
 
 @RestController
 @CrossOrigin
@@ -34,6 +35,8 @@ public class RtgsOutwardTransaction {
 
 	@Autowired
 	private FtHandlerServiceN ftHandlerServicen;
+	@Autowired
+	RtgsInfoService service;
 
 	/**
 	 * BEFT , RTGS, BACH Current Timestamp YYYYMMDD HH:MM:SS Unique ID
@@ -65,18 +68,23 @@ public class RtgsOutwardTransaction {
 		String txType = RtgsTransactionConstants.rtgsConstants.get(txCategory).getTransactionType();
 		rtgsInfoOut.setTxType(txType);
 		rtgsInfoOut.setCategoryCode(RtgsTransactionConstants.rtgsConstants.get(txCategory).getCode());
-		String debitAccNo = rtgsInfoOut.getDebitAccNo();
+		String debitAccNo = rtgsInfoOut.getDebitAccNo().trim();
 		String currency = rtgsInfoOut.getCurrency();
 		// String debitAmount = String.format("%.2f", rtgsInfoOut.getDebitAmount());
-		String debitAmount = rtgsInfoOut.getDebitAmountStr();
-		String creditAccNo = rtgsInfoOut.getCreditAccNo();
-		String debitDetails = rtgsInfoOut.getDebitDetails();
-		String creditDetails = rtgsInfoOut.getCreditDetails();
+		String debitAmount = rtgsInfoOut.getDebitAmountStr().trim();
+		String creditAccNo = rtgsInfoOut.getCreditAccNo().trim();
+		String debitDetails = rtgsInfoOut.getDebitDetails().trim();
+		String creditDetails = rtgsInfoOut.getCreditDetails().trim();
 		String commissionCode = rtgsInfoOut.getCommissionCode();
 		String commissionType = rtgsInfoOut.getCommissionType();
 		boolean isFc = rtgsInfoOut.getCurrency().contains("BDT") ? false : true;
 
 		rtgsInfoOut.setIsFc(isFc);
+		rtgsInfoOut.setDebitAmountStr(debitAmount);
+		rtgsInfoOut.setDebitAccNo(debitAccNo);
+		rtgsInfoOut.setCreditAccNo(creditAccNo);
+		rtgsInfoOut.setDebitDetails(debitDetails);
+		rtgsInfoOut.setCreditDetails(creditDetails);
 		
 		// String issueDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
@@ -146,7 +154,14 @@ public class RtgsOutwardTransaction {
 		// ResponseEntity<?> response =
 		// ftHandlerService.handleRtgsOutwardTransaction(requestOFS, rtgsInfoOut,
 		// httpServletRequest);
-		ResponseEntity<?> response = ftHandlerServicen.handleFtTransaction(requestOFS, rtgsInfoOut, uniqueFtId);
+		ResponseEntity<?> response = null;
+		try {
+			response = ftHandlerServicen.handleFtTransaction(requestOFS, rtgsInfoOut, uniqueFtId);
+		} catch (Exception e) {
+			rtgsInfoOut.setStatus(3);
+			service.save(rtgsInfoOut);
+			throw e;
+		}
 
 		System.out.println(response.getBody());
 		// return ResponseEntity.status(HttpStatus.OK).body(response);
