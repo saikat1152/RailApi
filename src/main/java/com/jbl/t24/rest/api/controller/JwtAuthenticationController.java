@@ -81,6 +81,8 @@ public class JwtAuthenticationController {
 		String remoteAddr = httpServletRequest.getHeader("X-FORWARDED-FOR");
 		if (remoteAddr == null) {
 			remoteAddr = httpServletRequest.getRemoteAddr();
+		}else{
+			remoteAddr = remoteAddr.split(",")[0].trim();
 		}
 
 		// save log data
@@ -151,7 +153,8 @@ public class JwtAuthenticationController {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password));
 
 		final UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(userName);
-		String existingToken = tokenCache.get(userName);
+		// String existingToken = tokenCache.get(userName);
+		String existingToken = tokenCache.get(remoteAddr);
 		String token = "";
 
 		try {
@@ -159,12 +162,14 @@ public class JwtAuthenticationController {
 				token = existingToken;
 			} else {
 				token = jwtTokenUtil.generateToken(userDetails);
-				tokenCache.put(userName, token);
+				// tokenCache.put(userName, token);
+				tokenCache.put(remoteAddr, token);
 				apiLogService.save(apiLog);
 			}
 		} catch (ExpiredJwtException e) {
 			token = jwtTokenUtil.generateToken(userDetails);
-			tokenCache.put(userName, token);
+			// tokenCache.put(userName, token);
+			tokenCache.put(remoteAddr, token);
 			apiLogService.save(apiLog);
 		}
 

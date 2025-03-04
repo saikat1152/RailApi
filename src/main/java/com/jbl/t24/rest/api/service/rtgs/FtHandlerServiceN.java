@@ -63,7 +63,7 @@ public class FtHandlerServiceN {
 	public ResponseEntity<?> handleFtTransaction(String requestOFS, RtgsCommon ftInfo, String uniqueId)
 			throws Exception {
 
-		logger.info("Ft Handle Service Started");
+		logger.info("Ft Handle Service Started for ID :: {}", uniqueId);
 		RtgsCommon ftSave;
 		RtgsCommon ftExist;
 
@@ -118,6 +118,7 @@ public class FtHandlerServiceN {
 		int statusExist = ftExist == null ? 0 : ftExist.getStatus();
 
 		if (ftExist != null) {
+			logger.info("RTGS id already exists :: {} ID :: {}", ftExist.getTxCategory(), uniqueId);
 
 			if (statusExist == FtStatus.SUCCESS.getValue() || statusExist == FtStatus.REVERSED.getValue()) {
 
@@ -136,7 +137,7 @@ public class FtHandlerServiceN {
 			else {
 
 				if (!ftInfo.isEqual(ftExist)) {
-					logger.info("Resubmitted data mismatched block entered");
+					logger.info("Resubmitted data mismatched block entered for id :: {} category :: {}", uniqueId, ftExist.getTxCategory());
 
 					JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
 							ResponseStatus.FOURZ33.getText(), ResponseStatus.FOURZ33.getValue());
@@ -150,18 +151,19 @@ public class FtHandlerServiceN {
 					return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 				}
 
-				logger.info("FT Alreeady Exists but Failed or Pending");
+				logger.info("RTGS FT already exists but failed or pending for ID :: {} category :: {}", uniqueId, ftExist.getTxCategory());
 
 				if (statusExist == FtStatus.PENDING.getValue()) {
 					logger.info("FT Alreeady Exists but Pending-Transaction Is On Already Processing");
+					logger.info("RTGS FT already exists but Pending for ID :: {} category :: {}", uniqueId, ftExist.getTxCategory());
 					JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.OK,
 							ResponseStatus.FIVEZ27.getText(), ResponseStatus.FIVEZ27.getValue());
 					return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 				}
 
-				logger.info("FT Alreeady Exists but Failed");
+				logger.info("RTGS FT already exists but failed for ID :: {} category :: {}", uniqueId, ftExist.getTxCategory());
 				// TODO: Pending issue in pacs9 inward
-				logger.info(ftExist.getClass().getSimpleName() + " is being saved as Pending before re-CBS Checking");
+				logger.info(ftExist.getClass().getSimpleName() + " is being saved as Pending before re-CBS Checking for ID :: {}", uniqueId);
 				ftExist.setStatus(FtStatus.PENDING.getValue());
 				service.save(ftExist);
 
@@ -171,7 +173,7 @@ public class FtHandlerServiceN {
 						|| uniqueIdTransactioncheck.equals("499")) {
 
 					JwtErrorResponse jwtErrorResponse = JwtErrorsCBS.getCbsJwtError(uniqueIdTransactioncheck);
-
+					logger.error("CBS rechecking failed for RTGS with FAILED Status ID :: {}", uniqueId);
 					ftExist.setStatus(FtStatus.FAILED.getValue());
 					ftExist.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
 					ftExist.setOfsResponse(uniqueIdTransactioncheck);
@@ -180,11 +182,13 @@ public class FtHandlerServiceN {
 
 					service.save(ftExist);
 
-					logger.error("Server Error:: " + jwtErrorResponse);
+					logger.error("Jboss Server Error with ID :: {} :: \n error :: {}", uniqueId, jwtErrorResponse);
 
 					return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 
 				} else if (uniqueIdTransactioncheck.contains("cbsFtNumber")) {
+
+					logger.info("CBS rechecking for FAILED status is SUCCESSFUL with RTGS ID :: {}", uniqueId);
 
 					Map<String, String> cbsSuccessTrData = Mapper.readValueForMap(uniqueIdTransactioncheck);
 					// ftSave = ftExist;
@@ -217,22 +221,9 @@ public class FtHandlerServiceN {
 						withVatCommission.setVatI(Double.parseDouble(cbsSuccessTrData.get("vat")));
 					}
 
-					// if (ftInfo instanceof RtgsInfoOutward) {
-					// ((RtgsInfoOutward)
-					// ftSave).setCommission(Double.parseDouble(cbsSuccessTrData.get("commission")));
-					// ((RtgsInfoOutward)
-					// ftSave).setVat(Double.parseDouble(cbsSuccessTrData.get("vat")));
-
-					// } else if (ftInfo instanceof RtgsInfoPacsNineOutward) {
-					// ((RtgsInfoPacsNineOutward)
-					// ftSave).setCommission(Double.parseDouble(cbsSuccessTrData.get("commission")));
-					// ((RtgsInfoPacsNineOutward)
-					// ftSave).setVat(Double.parseDouble(cbsSuccessTrData.get("vat")));
-					// }
-
 					service.save(ftExist);
 
-					logger.info("FT Transaction Data Saved");
+					logger.info("RTGS FT Transaction Data updated and Saved for :: {} with ID :: {}", ftExist.getTxType(), uniqueId);
 					logger.info("Ft Handle Service Finished");
 
 					return ResponseEntity.status(HttpStatus.OK).body(ftResponse.build());
@@ -252,7 +243,7 @@ public class FtHandlerServiceN {
 
 		service.save(ftSave);
 
-		logger.info("FT saved as PENDING");
+		logger.info("RTGS FT saved as PENDING for :: {} category :: {}", uniqueId, ftSave.getTxCategory());
 
 		String responseData = tccUtility.sendRequest(requestOFS);
 		System.out.println(responseData);
@@ -267,7 +258,7 @@ public class FtHandlerServiceN {
 			ftSave.setOfsResponse(responseData);
 			service.save(ftSave);
 
-			logger.error("Server Error:: " + jwtErrorResponse);
+			logger.error("Jboss Server Error for :: {}",uniqueId + "::\n"+ jwtErrorResponse);
 
 			return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 		} else {
@@ -295,8 +286,8 @@ public class FtHandlerServiceN {
 				ftSave.setFtResponseStr(Mapper.mapToJsonString(jwtErrorResponse));
 				ftSave.setOfsResponse(responseData);
 
-				logger.error("Server error----: " + jwtErrorResponse);
 				service.save(ftSave);
+				logger.error("Jboss Server error----for ::{}",uniqueId + "::\n" + jwtErrorResponse);
 				return ResponseEntity.status(HttpStatus.OK).body(jwtErrorResponse);
 			}
 
@@ -347,8 +338,8 @@ public class FtHandlerServiceN {
 						e.getMessage());
 			}
 
-			logger.info("FT Data Saved");
-			logger.info("Ft Handle Service Finished");
+			logger.info("RTGS FT Data Saved for ::{} with category :: {}", uniqueId, ftSave.getTxCategory());
+			logger.info("Ft Handle Service Finished for ID ::{}",uniqueId);
 
 			return ResponseEntity.status(HttpStatus.OK).body(ftResponse.build());
 

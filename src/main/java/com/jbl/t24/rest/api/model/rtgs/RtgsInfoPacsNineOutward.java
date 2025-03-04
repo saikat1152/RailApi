@@ -42,27 +42,27 @@ public class RtgsInfoPacsNineOutward extends RtgsCommon implements IWithVatCommi
 	private String uniqueOutwardRtgsId;
 
 	// @NotNull(message = "Bill Description is Missing")
-	@Column(name = "bill_description", nullable = true, length = 23)
+	@Column(name = "bill_description", nullable = true, length = 35)
 	private String billDescription;
 
 	// @NotNull(message = "LC NUmber is Missing")
-	@Column(name = "lc_number", nullable = true, length = 23)
+	@Column(name = "lc_number", nullable = true, length = 35)
 	private String lcNumber;
 
 	// @NotNull(message = "Party Name is Missing")
-	@Column(name = "party_name", nullable = true, length = 23)
+	@Column(name = "party_name", nullable = true, length = 35)
 	private String partyName;
 
 	// @NotNull(message = "Instruction Info is Missing")
-	@Column(name = "instruction_info", nullable = true, length = 23)
+	@Column(name = "instruction_info", nullable = true, length = 35)
 	private String instructionInfo;
 
 	// @NotNull(message = "Trade Finance Info is Missing")
-	@Column(name = "trade_finance_info", nullable = true, length = 23)
+	@Column(name = "trade_finance_info", nullable = true, length = 35)
 	private String tradeFinanceInfo;
 
 	// @NotNull(message = "Other Info is Missing")
-	@Column(name = "other_info", nullable = true, length = 23)
+	@Column(name = "other_info", nullable = true, length = 35)
 	private String otherInfo;
 
 	@Column(name = "COMMISSION", nullable = true, precision = 10, scale = 2)

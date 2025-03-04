@@ -38,7 +38,7 @@ public class RtgsInfoOutward extends RtgsCommon implements IWithVatCommission {
 	@NotBlank(message = "Unique ID is Blank")
 	// @Pattern(regexp = "^(RTGS)[0-9]{16}$", message = "RTGS Unique ID Length Not
 	// Valid")
-	@Column(name = "out_unique_id", unique = true, nullable = false, length = 23)
+	@Column(name = "out_unique_id", unique = true, nullable = false, length = 30)
 	private String uniqueOutwardRtgsId;
 
 	@Column(name = "COMMISSION", nullable = true, precision = 10, scale = 2)

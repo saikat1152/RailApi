@@ -266,7 +266,12 @@ public class VerificationController {
 						String[] allIdNumbersNames = secondPart[8].split("\n");
 						String[] allIds = secondPart[7].split("\n");
 
-						accountInfo.setCusNidNum(secondPart[16]);
+						// accountInfo.setCusNidNum(secondPart[16]);
+						if("NO DATA".equals(secondPart[7])){
+							accountInfo.setCusNidNum(secondPart[16]);
+						}else{
+							accountInfo.setCusNidNum(secondPart[7]);
+						}
 						accountInfo.setCoCode(secondPart[9].replace("BD001", ""));
 						accountInfo.setCoName(secondPart[10].replace("\"", ""));
 						accountInfo.setAccBalance(secondPart[11]);
