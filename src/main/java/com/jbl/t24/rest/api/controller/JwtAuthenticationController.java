@@ -126,7 +126,7 @@ public class JwtAuthenticationController {
 			JwtUser jwtUser = jwtUserService.findByUserName(userName);
 			String companyName = jwtUser.getCompany().getCompanyName();
 			
-			if(!companyName.equals("RTGS")){
+			if(!companyName.equals("Bkash")){
 				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.BAD_REQUEST,
 						ResponseStatus.FOURZ30.getText(), ResponseStatus.FOURZ30.getValue());
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jwtErrorResponse);

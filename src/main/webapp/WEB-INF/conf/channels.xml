@@ -52,10 +52,11 @@
         <TIMEOUT>30</TIMEOUT>
         <ADAPTER>
             <TYPE>tcp</TYPE>
-            <PORT>9059</PORT>
+            <PORT>7020</PORT>
             <SUPPLIER>
                 <INITIATOR>
-                    <HOSTNAME>172.18.18.64</HOSTNAME>
+                    <!-- <HOSTNAME>172.18.18.64</HOSTNAME> -->
+                    <HOSTNAME>10.180.10.101</HOSTNAME>
                 </INITIATOR>
             </SUPPLIER>
             <CONSUMER>
@@ -72,10 +73,10 @@
         <TIMEOUT>30</TIMEOUT>
         <ADAPTER>
             <TYPE>tcp</TYPE>
-            <PORT>9060</PORT>
+            <PORT>7020</PORT>
             <SUPPLIER>
                 <INITIATOR>
-                    <HOSTNAME>172.18.18.64</HOSTNAME>
+                    <HOSTNAME>10.180.10.101</HOSTNAME>
                 </INITIATOR>
             </SUPPLIER>
             <CONSUMER>

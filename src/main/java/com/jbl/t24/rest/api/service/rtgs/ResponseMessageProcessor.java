@@ -65,25 +65,32 @@ public class ResponseMessageProcessor {
 								(e1, e2) -> e1, // Handle duplicate keys
 								HashMap::new));
 				String ftRef = firstPart[0];
-				String uniqueOperationTransactionId = spiltData[20].split("=")[1];
-
-				String localDebitAmount = splitDataMap.get("LOC.AMT.DEBITED").split(":")[0];
+				// String uniqueOperationTransactionId = spiltData[20].split("=")[1];
+				String uniqueOperationTransactionId = splitDataMap.getOrDefault("AT.UNIQUE.ID", "NODATA").split(":")[0];
+				
 				// String cbsHittinTimeStr = spiltData[48].split("=")[1].replace("\"", "");
 				String cbsHittinTimeStr = splitDataMap.get("DATE.TIME");
-				String commissionAmount = splitDataMap.getOrDefault("COMMISSION.AMT", "");
-				commissionAmount = commissionAmount.isBlank() ? "0" : commissionAmount.substring(3);
-				String vat = splitDataMap.getOrDefault("TAX.AMT", "");
-				vat = vat.isBlank() ? "0" : vat.substring(3);
+
+				// String localDebitAmount = splitDataMap.get("LOC.AMT.DEBITED").split(":")[0];
+				// String commissionAmount = splitDataMap.getOrDefault("COMMISSION.AMT", "");
+				// commissionAmount = commissionAmount.isBlank() ? "0" : commissionAmount.substring(3);
+				// String vat = splitDataMap.getOrDefault("TAX.AMT", "");
+				// vat = vat.isBlank() ? "0" : vat.substring(3);
+
+				
+		
+				// wrapper.setCommission(Double.parseDouble(commissionAmount));
+				// wrapper.setVat(Double.parseDouble(vat));
+				// wrapper.setLocalAmountBdt(localDebitAmount);
+
 				wrapper.setCbsHittingTime(TimeStampConverter.getCbsHittingTimeStamp(cbsHittinTimeStr));
-				wrapper.setCommission(Double.parseDouble(commissionAmount));
-				wrapper.setVat(Double.parseDouble(vat));
 				wrapper.setFtRef(ftRef);
 				wrapper.setMessage(reverseFlag == 0 ? ResponseStatus.TWOZ0.getText() : ResponseStatus.TWOZ5.getText());
 				wrapper.setResponseCode(
 						reverseFlag == 0 ? ResponseStatus.TWOZ0.getValue() : ResponseStatus.TWOZ5.getValue());
 				wrapper.setFtStatus(reverseFlag == 0 ? FtStatus.SUCCESS.getValue() : FtStatus.REVERSED.getValue());
 				wrapper.setUniqueOperationTransactionId(uniqueOperationTransactionId);
-				wrapper.setLocalAmountBdt(localDebitAmount);
+				
 
 				break;
 
