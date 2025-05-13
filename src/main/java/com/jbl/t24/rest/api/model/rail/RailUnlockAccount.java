@@ -1,5 +1,7 @@
 package com.jbl.t24.rest.api.model.rail;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,9 +19,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@MappedSuperclass
 @AllArgsConstructor
-// @NoArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "rail_unlock_info")
 @Setter
@@ -45,5 +46,13 @@ public class RailUnlockAccount extends RailCommon {
 	// Valid")
 	@Column(name = "at_unique_id", unique = true, nullable = false, length = 30)
 	private String atUniqueId;
+
+	 @Column(name = "request_time", columnDefinition = "TIMESTAMP", updatable = true, nullable = true)
+	// @JsonFormat(pattern ="yy-MM-dd HH:mm:ss", timezone = "GMT+06")
+	protected Timestamp requestTime;
+
+    @Column(name = "response_time", columnDefinition = "TIMESTAMP", updatable = true, nullable = true)
+	// @JsonFormat(pattern ="yy-MM-dd HH:mm:ss", timezone = "GMT+06")
+	protected Timestamp responseTime;
 
 }

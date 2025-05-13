@@ -37,4 +37,16 @@ public class RailCommon {
 	@Column(name = "hostname", length = 127)
 	protected String hostname;
 
+	@Column(name = "status", length = 2)
+	protected int status;
+
+	@Column(name = "ofs_request", length = 1048)
+	protected String ofsRequest;
+
+	@Column(name = "ofs_response", length = 4000)
+	protected String ofsResponse;
+
+	@Column(name = "ft_response_str", length = 512)
+	protected String ftResponseStr;
+
 }

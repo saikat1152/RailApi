@@ -45,10 +45,10 @@ public class ApiLog {
 	@Column(name = "hostname", length = 127)
 	private String hostName;
 
-	@Column(name = "http_request", columnDefinition = "JSON")
+	@Column(name = "http_request", columnDefinition = "CLOB")
 	private String httpRequest;
 
-	@Column(name = "http_response", columnDefinition = "JSON")
+	@Column(name = "http_response", columnDefinition = "CLOB")
 	private String httpResponse;
 
 	@Column(name = "request_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)

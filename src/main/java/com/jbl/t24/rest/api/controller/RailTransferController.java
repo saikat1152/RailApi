@@ -48,11 +48,10 @@ import com.jbl.t24.rest.api.model.rail.RailFundTransfer;
 import com.jbl.t24.rest.api.model.rail.RailLockAccount;
 import com.jbl.t24.rest.api.model.rail.RailUnlockAccount;
 import com.jbl.t24.rest.api.model.rtgs.AccountQueryInfo;
-import com.jbl.t24.rest.api.model.rtgs.RtgsInfoOutward;
-import com.jbl.t24.rest.api.model.rtgs.SignatureQueryInfo;
+
 import com.jbl.t24.rest.api.service.rail.RailServiceHandler;
 import com.jbl.t24.rest.api.service.rtgs.AccountQueryInfoService;
-import com.jbl.t24.rest.api.service.rtgs.SignQueryInfoService;
+
 import com.jbl.t24.rest.api.tccUtility.TccUtility;
 
 @RestController

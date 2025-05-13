@@ -41,7 +41,7 @@ public enum ResponseStatus {
 	FOURZ27(427, "Cannot Do New CBS Transaction Beacause An Transaction Is On Already Processing!"),
 	FOURZ28(428, "Transaction Category Incorrect"), 
 	FOURZ29(429, "Incorrect Cbs Ft number for Reversal!"),
-	FOURZ30(430, "Invalid RTGS Api User!"),
+	FOURZ30(430, "Invalid RAIL Api User!"),
 	FOURZ31(431, "Invalid PACS Nine Outwarad Reference Number is provided!"),
 	FOURZ32(432, "INVALID COMPANY SPECIFIED DURING SIGN ON PROCESS!"),
 	FOURZ33(433, "Resubmitted data mismatched"),

@@ -48,11 +48,8 @@ public class Company implements Serializable{
     @Column(name = "company_name", length = 60)
     private String companyName;
 
-    @Column(name = "covered_account", length = 45)
-    private String coveredAccount;
-
     @Column(name = "country_name", length = 63)
-    private String CountryName;
+    private String countryName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_type", nullable = false)

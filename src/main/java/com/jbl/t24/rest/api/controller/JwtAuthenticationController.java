@@ -126,7 +126,7 @@ public class JwtAuthenticationController {
 			JwtUser jwtUser = jwtUserService.findByUserName(userName);
 			String companyName = jwtUser.getCompany().getCompanyName();
 			
-			if(!companyName.equals("Bkash")){
+			if(!companyName.equals("Janata Bank Ltd")){
 				JwtErrorResponse jwtErrorResponse = new JwtErrorResponse(HttpStatus.BAD_REQUEST,
 						ResponseStatus.FOURZ30.getText(), ResponseStatus.FOURZ30.getValue());
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jwtErrorResponse);
@@ -206,6 +206,7 @@ public class JwtAuthenticationController {
 
 	private boolean checkRequestIP(String username, String remoteAddr) {
 		try {
+			var jwtUserList = jwtUserService.findAll();
 			JwtUser jwtUser = jwtUserService.findByUserName(username);
 			String allowIP = jwtUser.getWhitelistIp().trim();
 			String[] spiltData = allowIP.split(",");

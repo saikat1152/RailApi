@@ -53,7 +53,7 @@ public class RailFundTransfer extends RailCommon {
 	@Column(name = "debit_amount", length = 30)
     protected double debitAmount;
   
-     @CreationTimestamp
+    @CreationTimestamp
     @Column(name = "issue_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ", updatable = true, nullable = false)
     protected Timestamp issueDate;
 
@@ -71,9 +71,6 @@ public class RailFundTransfer extends RailCommon {
 
     @Column(name = "credit_details", unique = false, nullable = true, length = 256)
     protected String creditDetails;
-
-    @Column(name = "status", length = 2)
-    protected int status;
 
     @Column(name = "ofs_request", length = 1048)
     protected String ofsRequest;

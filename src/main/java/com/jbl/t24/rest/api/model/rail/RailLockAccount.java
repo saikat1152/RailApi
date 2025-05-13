@@ -27,7 +27,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@MappedSuperclass
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
